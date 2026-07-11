@@ -1,26 +1,14 @@
-import { LoginForm } from "@/components/auth/login-form"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-
 export default function LoginPage() {
   return (
-    <main className="flex min-h-svh items-center justify-center bg-muted/30 p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
-          <CardDescription>
-            Log in with the email and password you registered.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <LoginForm />
-        </CardContent>
-      </Card>
+    <main className="flex min-h-svh items-center justify-center p-6">
+      <div className="max-w-md space-y-2 text-center">
+        <h1 className="font-heading text-3xl font-semibold">
+          Welcome to FoodIO
+        </h1>
+        <p className="text-muted-foreground">
+          LoginPage has not been configured yet.
+        </p>
+      </div>
     </main>
   )
 }
