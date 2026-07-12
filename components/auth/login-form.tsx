@@ -41,7 +41,7 @@ export function LoginForm() {
       })
       const data = (await response.json()) as {
         error?: string
-        profile?: { name: string; username: string; role: string }
+        profile?: { name: string; username: string }
       }
 
       if (!response.ok || !data.profile) {
@@ -53,7 +53,7 @@ export function LoginForm() {
       }
 
       setMessage({
-        text: `Logged in as ${data.profile.name} (@${data.profile.username}), role: ${data.profile.role}.`,
+        text: `Logged in as ${data.profile.name} (@${data.profile.username}).`,
         type: "success",
       })
     },
@@ -122,7 +122,6 @@ export function LoginForm() {
                 ? "text-sm text-emerald-700"
                 : "text-sm text-destructive"
             }
-            role="status"
           >
             {message.text}
           </p>
@@ -152,7 +151,10 @@ export function LoginForm() {
 
         <p className="text-center text-sm text-muted-foreground">
           Need an account?{" "}
-          <Link href="/signup" className="font-medium text-foreground underline">
+          <Link
+            href="/signup"
+            className="font-medium text-foreground underline"
+          >
             Sign up
           </Link>
         </p>

@@ -33,7 +33,6 @@ const testDetails = {
   username: "foodio_test_user",
   email: "foodio.test@example.com",
   password: "FoodIOTest123!",
-  role: "USER" as const,
 }
 
 export function SignupForm() {
@@ -47,7 +46,6 @@ export function SignupForm() {
       username: "",
       email: "",
       password: "",
-      role: "USER" as "USER" | "RESTAURANT_OWNER",
     },
     validators: {
       onSubmit: signupFormSchema,
@@ -61,7 +59,7 @@ export function SignupForm() {
       })
       const data = (await response.json()) as {
         error?: string
-        profile?: { username: string; role: string }
+        profile?: { username: string }
       }
 
       if (!response.ok || !data.profile) {
@@ -73,7 +71,7 @@ export function SignupForm() {
       }
 
       setMessage({
-        text: `Account @${data.profile.username} created as ${data.profile.role}.`,
+        text: `Account @${data.profile.username} created.`,
         type: "success",
       })
     },
@@ -103,7 +101,7 @@ export function SignupForm() {
                   onChange={(event) => field.handleChange(event.target.value)}
                   aria-invalid={isInvalid}
                   autoComplete="name"
-                  placeholder="Aryan Sharma"
+                  placeholder="Aryan "
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
@@ -126,7 +124,7 @@ export function SignupForm() {
                   onChange={(event) => field.handleChange(event.target.value)}
                   aria-invalid={isInvalid}
                   autoComplete="username"
-                  placeholder="aryan_sharma"
+                  placeholder="username001"
                 />
                 <FieldDescription>
                   Use 3 to 30 letters, numbers, or underscores.
@@ -185,7 +183,7 @@ export function SignupForm() {
           }}
         </form.Field>
 
-        <Collapsible className="rounded-2xl border bg-muted/30 p-4">
+        {/*<Collapsible className="rounded-2xl border bg-muted/30 p-4">
           <CollapsibleTrigger className="flex w-full items-center justify-between text-sm font-medium">
             Advanced
             <ChevronDownIcon className="size-4" />
@@ -231,7 +229,7 @@ export function SignupForm() {
               }}
             </form.Field>
           </CollapsibleContent>
-        </Collapsible>
+        </Collapsible>*/}
 
         {message && (
           <p
@@ -261,7 +259,6 @@ export function SignupForm() {
                   form.setFieldValue("username", testDetails.username)
                   form.setFieldValue("email", testDetails.email)
                   form.setFieldValue("password", testDetails.password)
-                  form.setFieldValue("role", testDetails.role)
                   setMessage(undefined)
                 }}
               >

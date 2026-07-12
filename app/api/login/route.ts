@@ -6,7 +6,9 @@ import { db } from "@/lib/db/drizzle"
 import { profiles } from "@/lib/db/schema/schema"
 
 export async function POST(request: Request) {
-  const parsed = loginFormSchema.safeParse(await request.json().catch(() => null))
+  const parsed = loginFormSchema.safeParse(
+    await request.json().catch(() => null)
+  )
 
   if (!parsed.success) {
     return Response.json(
@@ -25,7 +27,7 @@ export async function POST(request: Request) {
     .limit(1)
 
   const passwordMatches = profile
-    ? await verify(profile.passwordHash, parsed.data.password).catch(() => false)
+    ? await verify(profile.password, parsed.data.password).catch(() => false)
     : false
 
   if (!profile || !passwordMatches) {
@@ -41,7 +43,6 @@ export async function POST(request: Request) {
       name: profile.name,
       username: profile.username,
       email: profile.email,
-      role: profile.role,
     },
   })
 }

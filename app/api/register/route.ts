@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     )
   }
 
-  const { name, email, password, role } = parsed.data
+  const { name, email, password } = parsed.data
   const username = parsed.data.username.toLowerCase()
   const [existingProfile] = await db
     .select({ email: profiles.email, username: profiles.username })
@@ -39,13 +39,12 @@ export async function POST(request: Request) {
   const passwordHash = await hash(password)
   const [profile] = await db
     .insert(profiles)
-    .values({ name, username, email, passwordHash, role })
+    .values({ name, username, email, password: passwordHash })
     .returning({
       id: profiles.id,
       name: profiles.name,
       username: profiles.username,
       email: profiles.email,
-      role: profiles.role,
     })
 
   return Response.json({ profile }, { status: 201 })

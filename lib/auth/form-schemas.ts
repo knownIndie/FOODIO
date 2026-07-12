@@ -1,6 +1,13 @@
 import * as z from "zod"
 
-export const roles = ["USER", "RESTAURANT_OWNER"] as const
+export const roles = [
+  "CUSTOMER",
+  "RESTAURANT_OWNER",
+  "RESTAURANT_STAFF",
+  "DELIVERY_PARTNER",
+  "ADMIN",
+  "SUPPORT",
+] as const
 
 export const signupFormSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters."),
@@ -18,7 +25,6 @@ export const signupFormSchema = z.object({
     .string()
     .min(8, "Password must be at least 8 characters.")
     .max(128, "Password must be at most 128 characters."),
-  role: z.enum(roles),
 })
 
 export const loginFormSchema = z.object({
