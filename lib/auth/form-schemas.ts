@@ -1,14 +1,5 @@
 import * as z from "zod"
 
-export const roles = [
-  "CUSTOMER",
-  "RESTAURANT_OWNER",
-  "RESTAURANT_STAFF",
-  "DELIVERY_PARTNER",
-  "ADMIN",
-  "SUPPORT",
-] as const
-
 export const signupFormSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters."),
   username: z

@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "08b4a298-94f5-4fd6-aec0-3b0ff88ce48f",
+  "id": "a3742aad-35fe-443d-a8a3-0f722a5c3a72",
   "prevIds": [
-    "2f1fedfb-492b-4d0c-927a-2670ce0dcea3"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
@@ -72,7 +72,7 @@
       "generated": null,
       "identity": {
         "type": "always",
-        "name": "profiles_profile_id_seq",
+        "name": "profiles_id_seq",
         "increment": "1",
         "startWith": "1",
         "minValue": "1",
@@ -80,7 +80,7 @@
         "cache": 1,
         "cycle": false
       },
-      "name": "profile_id",
+      "name": "id",
       "entityType": "columns",
       "schema": "public",
       "table": "profiles"
@@ -193,11 +193,11 @@
       "schemaTo": "public",
       "tableTo": "profiles",
       "columnsTo": [
-        "profile_id"
+        "id"
       ],
       "onUpdate": "NO ACTION",
       "onDelete": "CASCADE",
-      "name": "profile_roles_profile_id_profiles_profile_id_fkey",
+      "name": "profile_roles_profile_id_profiles_id_fkey",
       "entityType": "fks",
       "schema": "public",
       "table": "profile_roles"
@@ -232,7 +232,7 @@
     },
     {
       "columns": [
-        "profile_id"
+        "id"
       ],
       "nameExplicit": false,
       "name": "profiles_pkey",

@@ -2,15 +2,9 @@
 
 import { useState } from "react"
 import { useForm } from "@tanstack/react-form"
-import { ChevronDownIcon } from "lucide-react"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import {
   Field,
   FieldDescription,
@@ -19,13 +13,6 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { signupFormSchema } from "@/lib/auth/form-schemas"
 
 const testDetails = {
@@ -182,54 +169,6 @@ export function SignupForm() {
             )
           }}
         </form.Field>
-
-        {/*<Collapsible className="rounded-2xl border bg-muted/30 p-4">
-          <CollapsibleTrigger className="flex w-full items-center justify-between text-sm font-medium">
-            Advanced
-            <ChevronDownIcon className="size-4" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="pt-4">
-            <form.Field name="role">
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor="signup-role">Role</FieldLabel>
-                    <Select
-                      name={field.name}
-                      value={field.state.value}
-                      onValueChange={(value) => {
-                        if (value) field.handleChange(value)
-                      }}
-                    >
-                      <SelectTrigger
-                        id="signup-role"
-                        className="w-full"
-                        aria-invalid={isInvalid}
-                      >
-                        <SelectValue placeholder="Select a role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="USER">User</SelectItem>
-                        <SelectItem value="RESTAURANT_OWNER">
-                          Restaurant owner
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FieldDescription>
-                      User is selected by default. Change it if you are creating
-                      a restaurant owner account.
-                    </FieldDescription>
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                )
-              }}
-            </form.Field>
-          </CollapsibleContent>
-        </Collapsible>*/}
 
         {message && (
           <p
