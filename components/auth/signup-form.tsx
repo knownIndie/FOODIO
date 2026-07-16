@@ -13,7 +13,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { signupFormSchema } from "@/lib/auth/form-schemas"
+import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
 
 const testDetails = {
   name: "FoodIO Test User",

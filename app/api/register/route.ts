@@ -1,7 +1,7 @@
 import { hash } from "argon2"
 import { eq, or } from "drizzle-orm"
 
-import { signupFormSchema } from "@/lib/auth/form-schemas"
+import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
 import { db } from "@/lib/db/drizzle"
 import { profiles } from "@/lib/db/schema/schema"
 

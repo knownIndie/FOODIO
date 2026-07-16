@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/neon-http"
-import { PLATFORM_ROLES } from "../auth/roles"
+import { PLATFORM_ROLES } from "../auth/schema/roles"
 
 import { roles } from "./schema/schema"
 

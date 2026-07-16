@@ -12,7 +12,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { loginFormSchema } from "@/lib/auth/form-schemas"
+import { loginFormSchema } from "@/lib/auth/schema/form-schemas"
 
 const testDetails = {
   email: "foodio.test@example.com",

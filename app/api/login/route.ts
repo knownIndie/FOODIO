@@ -1,7 +1,7 @@
 import { verify } from "argon2"
 import { eq } from "drizzle-orm"
 
-import { loginFormSchema } from "@/lib/auth/form-schemas"
+import { loginFormSchema } from "@/lib/auth/schema/form-schemas"
 import { db } from "@/lib/db/drizzle"
 import { profiles } from "@/lib/db/schema/schema"
 
