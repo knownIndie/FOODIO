@@ -34,19 +34,20 @@ export const registerProfile = async (input: RegisterProfileInput) => {
   if (existingProfile) {
     throw new Error(
       existingProfile.email === email // if
-        ? "email already exist" // if true
-        : "username already exist" // else -> false
+        ? "EMAIL_ALREADY_EXISTS" // if true
+        : "USERNAME_ALREADY_EXISTS" // else -> false
     )
     /*
    - since this is a buisness function we dont do anything related to http
    - we throw errors internally
     */
   }
+
   const hashedPassword = await hash(input.password)
 
   return db.transaction(async (tx) => {
     const roleRows = await tx
-      .select({ roleid: roles.id, role: roles.role })
+      .select({ roleId: roles.id, role: roles.role })
       .from(roles)
       .where(inArray(roles.role, requestedRoles))
 
@@ -68,7 +69,7 @@ export const registerProfile = async (input: RegisterProfileInput) => {
       })
     await tx.insert(profileRoles).values(
       roleRows.map((role) => ({
-        roleId: role.roleid,
+        roleId: role.roleId,
         profileId: createProfile.id,
       }))
     )
