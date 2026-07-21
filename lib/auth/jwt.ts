@@ -1,5 +1,6 @@
 import "server-only";
 import * as jose from "jose";
+import type { NextResponse } from "next/server";
 
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
@@ -21,4 +22,17 @@ export async function signAccessToken(profileId: number): Promise<string> {
 
     .sign(jwtSecretBytes);
   return token;
+}
+
+export function setResponseCookie(
+  token: string,
+  response: NextResponse,
+  accessTokenMsg: string,
+) {
+  response.cookies.set(accessTokenMsg, token, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+  });
 }

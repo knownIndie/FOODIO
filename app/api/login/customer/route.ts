@@ -1,4 +1,4 @@
-import { signAccessToken } from "@/lib/auth/jwt";
+import { setResponseCookie, signAccessToken } from "@/lib/auth/jwt";
 import { loginProfile } from "@/lib/auth/login-profile";
 import { loginFormSchema } from "@/lib/auth/schema/form-schemas";
 import { NextResponse } from "next/server";
@@ -29,12 +29,7 @@ export async function POST(request: Request) {
       { success: true, profile: profile, token: token },
       { status: 200 },
     );
-    response.cookies.set("foodio_access_token", token, {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      secure: process.env.NODE_ENV === "production",
-    });
+    setResponseCookie(token, response, "foodio_access_token");
     return response;
   } catch (error) {
     if (error instanceof Error) {
