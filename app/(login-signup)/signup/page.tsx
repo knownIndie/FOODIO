@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-
+// default customer signup page
 export default function SignupPage() {
   return (
     <main className="flex min-h-svh items-center justify-center bg-muted/30 p-6">
@@ -18,7 +18,7 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <SignupForm />
+          <SignupForm endpoint="/api/register/customer" />
         </CardContent>
       </Card>
     </main>

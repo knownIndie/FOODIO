@@ -17,12 +17,14 @@ import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
 
 const testDetails = {
   name: "FoodIO Test User",
-  username: "foodio_test_user",
-  email: "foodio.test@example.com",
+  username: "foodio_test_user1",
+  email: "foodio.test1@example.com",
   password: "FoodIOTest123!",
 }
-
-export function SignupForm() {
+type signupEndpoint = {
+  endpoint: string
+}
+export function SignupForm({ endpoint }: signupEndpoint) {
   const [message, setMessage] = useState<{
     text: string
     type: "error" | "success"
@@ -39,7 +41,7 @@ export function SignupForm() {
     },
     onSubmit: async ({ value }) => {
       setMessage(undefined)
-      const response = await fetch("/api/register", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(value),

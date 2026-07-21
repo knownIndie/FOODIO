@@ -1,5 +1,4 @@
 "use client"
-
 import { useState } from "react"
 import { useForm } from "@tanstack/react-form"
 import Link from "next/link"
@@ -15,11 +14,14 @@ import { Input } from "@/components/ui/input"
 import { loginFormSchema } from "@/lib/auth/schema/form-schemas"
 
 const testDetails = {
-  email: "foodio.test@example.com",
+  email: "foodio.test1@example.com",
   password: "FoodIOTest123!",
 }
+type loginEndpoint = {
+  endpoint: string
+}
 
-export function LoginForm() {
+export function LoginForm({ endpoint }: loginEndpoint) {
   const [message, setMessage] = useState<{
     text: string
     type: "error" | "success"
@@ -34,7 +36,7 @@ export function LoginForm() {
     },
     onSubmit: async ({ value }) => {
       setMessage(undefined)
-      const response = await fetch("/api/login", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(value),
