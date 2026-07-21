@@ -9,7 +9,6 @@
     "s": "next start",
     "l": "biome lint .",
     "f": "biome format --write .",
-    "fc": "biome format .",
     "typec": "tsc --noEmit",
     "dbg": "drizzle-kit generate",
     "dbm": "drizzle-kit migrate",
