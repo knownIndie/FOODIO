@@ -6,4 +6,3 @@ export const PLATFORM_ROLES = [
   "SUPPORT",
 ] as const
 export type PlatformRole = (typeof PLATFORM_ROLES)[number]
-
