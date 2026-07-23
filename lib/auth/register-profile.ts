@@ -1,9 +1,9 @@
 import "server-only"
 import { hash } from "argon2"
-import type { PlatformRole } from "./schema/roles"
+import { eq, inArray, or } from "drizzle-orm"
 import { db } from "../db/drizzle"
 import { profileRoles, profiles, roles } from "../db/schema/schema"
-import { eq, inArray, or } from "drizzle-orm"
+import type { PlatformRole } from "./schema/roles"
 
 type RegisterProfileInput = {
   username: string

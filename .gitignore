@@ -34,4 +34,7 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-AUTH_PLAN.md
+
+# local auth planning and handover files
+/AUTH_PLAN.md
+/AUTH_HANDOVER.md
