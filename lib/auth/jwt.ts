@@ -49,7 +49,7 @@ export async function verifyAccessToken(token: string): Promise<number> {
     throw new Error("INVALID_ACCESS_TOKEN");
   }
   const profileId = Number(payload.sub);
-  if (Number.isSafeInteger(profileId)) {
+  if (!Number.isSafeInteger(profileId)) {
     throw new Error("INVALID_ACCESS_TOKEN");
   }
   return profileId;
