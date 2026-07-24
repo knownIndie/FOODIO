@@ -43,14 +43,14 @@ export function setResponseCookie(
 export async function verifyAccessToken(
   token: string,
 ): Promise<verifyAccessTokenType> {
-  const verifyResult = await jose.jwtVerify(token, jwtSecretBytes, {
-    algorithms: ["HS256"],
-    issuer: "foodio",
-    audience: "foodio-web",
-    requiredClaims: ["sub", "iat", "exp", "tokenType"],
-  });
-  const { payload } = verifyResult;
   try {
+    const verifyResult = await jose.jwtVerify(token, jwtSecretBytes, {
+      algorithms: ["HS256"],
+      issuer: "foodio",
+      audience: "foodio-web",
+      requiredClaims: ["sub", "iat", "exp", "tokenType"],
+    });
+    const { payload } = verifyResult;
     if (payload.tokenType !== "access" || typeof payload.sub !== "string") {
       throw new Error("INVALID_ACCESS_TOKEN");
     }

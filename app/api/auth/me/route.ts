@@ -7,19 +7,11 @@ export async function GET() {
   if (!token) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
-  try {
-    const isVerified = await verifyAccessToken(token);
-    if (!isVerified.success) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    const { profileId } = isVerified;
-
-    return Response.json({ status: 200, msg: "Authorized", profileId });
-  } catch (error) {
-    if (error instanceof Error)
-      return Response.json(
-        { error: "we coudn't verify your account" },
-        { status: 401 },
-      );
+  const isVerified = await verifyAccessToken(token);
+  if (!isVerified.authentication) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const { profileId } = isVerified;
+
+  return Response.json({ authentication: true, profileId }, { status: 200 });
 }
