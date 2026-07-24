@@ -1,6 +1,9 @@
 import "server-only";
 import * as jose from "jose";
 import type { NextResponse } from "next/server";
+type verifyAccessTokenType =
+  | { authentication: false }
+  | { authentication: true; profileId: number };
 
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
@@ -37,7 +40,9 @@ export function setResponseCookie(
   });
 }
 
-export async function verifyAccessToken(token: string): Promise<number> {
+export async function verifyAccessToken(
+  token: string,
+): Promise<verifyAccessTokenType> {
   const verifyResult = await jose.jwtVerify(token, jwtSecretBytes, {
     algorithms: ["HS256"],
     issuer: "foodio",
@@ -45,12 +50,16 @@ export async function verifyAccessToken(token: string): Promise<number> {
     requiredClaims: ["sub", "iat", "exp", "tokenType"],
   });
   const { payload } = verifyResult;
-  if (payload.tokenType !== "access" || typeof payload.sub !== "string") {
-    throw new Error("INVALID_ACCESS_TOKEN");
+  try {
+    if (payload.tokenType !== "access" || typeof payload.sub !== "string") {
+      throw new Error("INVALID_ACCESS_TOKEN");
+    }
+    const profileId = Number(payload.sub);
+    if (!Number.isSafeInteger(profileId)) {
+      throw new Error("INVALID_ACCESS_TOKEN");
+    }
+    return { authentication: true, profileId };
+  } catch (_error) {
+    return { authentication: false };
   }
-  const profileId = Number(payload.sub);
-  if (!Number.isSafeInteger(profileId)) {
-    throw new Error("INVALID_ACCESS_TOKEN");
-  }
-  return profileId;
 }

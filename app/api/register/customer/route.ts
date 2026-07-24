@@ -28,7 +28,8 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof Error) {
       /*
-      the error can be anything, but to access the error message we need to know it's actually an Error object. that's why we check instanceof Error first, so we don't crash trying to read .message on something like a string or undefined */
+        the error can be anything, but to access the error message we need to know it's actually an Error object. that's why we check instanceof Error first, so we don't crash trying to read .message on something like a string or undefined 
+      */
       if (error.message === "EMAIL_ALREADY_EXISTS") {
         return Response.json(
           { error: "That email is already registered." },
