@@ -1,17 +1,17 @@
-import { verifyAccessToken } from "@/lib/auth/jwt";
-import { cookies } from "next/headers";
+import { cookies } from "next/headers"
+import { verifyAccessToken } from "@/lib/auth/jwt"
 
 export async function GET() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("foodio_access_token")?.value;
+  const cookieStore = await cookies()
+  const token = cookieStore.get("foodio_access_token")?.value
   if (!token) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorized" }, { status: 401 })
   }
-  const isVerified = await verifyAccessToken(token);
+  const isVerified = await verifyAccessToken(token)
   if (!isVerified.authentication) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
+    return Response.json({ error: "Unauthorized" }, { status: 401 })
   }
-  const { profileId } = isVerified;
+  const { profileId } = isVerified
 
-  return Response.json({ authentication: true, profileId }, { status: 200 });
+  return Response.json({ authentication: true, profileId }, { status: 200 })
 }

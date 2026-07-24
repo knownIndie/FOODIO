@@ -1,16 +1,17 @@
-import "server-only";
-import * as jose from "jose";
-import type { NextResponse } from "next/server";
+import "server-only"
+import * as jose from "jose"
+import type { NextResponse } from "next/server"
+
 type verifyAccessTokenType =
   | { authentication: false }
-  | { authentication: true; profileId: number };
+  | { authentication: true; profileId: number }
 
-const jwtSecret = process.env.JWT_SECRET;
+const jwtSecret = process.env.JWT_SECRET
 if (!jwtSecret) {
-  throw new Error("startup/configuration error : verification not possible");
+  throw new Error("startup/configuration error : verification not possible")
 }
 
-const jwtSecretBytes = new TextEncoder().encode(jwtSecret);
+const jwtSecretBytes = new TextEncoder().encode(jwtSecret)
 
 export async function signAccessToken(profileId: number): Promise<string> {
   const token = new jose.SignJWT({
@@ -23,25 +24,25 @@ export async function signAccessToken(profileId: number): Promise<string> {
     .setIssuedAt()
     .setExpirationTime("1m")
 
-    .sign(jwtSecretBytes);
-  return token;
+    .sign(jwtSecretBytes)
+  return token
 }
 
 export function setResponseCookie(
   token: string,
   response: NextResponse,
-  accessTokenMsg: string,
+  accessTokenMsg: string
 ) {
   response.cookies.set(accessTokenMsg, token, {
     httpOnly: true,
     sameSite: "lax",
     path: "/",
     secure: process.env.NODE_ENV === "production",
-  });
+  })
 }
 
 export async function verifyAccessToken(
-  token: string,
+  token: string
 ): Promise<verifyAccessTokenType> {
   try {
     const verifyResult = await jose.jwtVerify(token, jwtSecretBytes, {
@@ -49,17 +50,17 @@ export async function verifyAccessToken(
       issuer: "foodio",
       audience: "foodio-web",
       requiredClaims: ["sub", "iat", "exp", "tokenType"],
-    });
-    const { payload } = verifyResult;
+    })
+    const { payload } = verifyResult
     if (payload.tokenType !== "access" || typeof payload.sub !== "string") {
-      throw new Error("INVALID_ACCESS_TOKEN");
+      throw new Error("INVALID_ACCESS_TOKEN")
     }
-    const profileId = Number(payload.sub);
+    const profileId = Number(payload.sub)
     if (!Number.isSafeInteger(profileId)) {
-      throw new Error("INVALID_ACCESS_TOKEN");
+      throw new Error("INVALID_ACCESS_TOKEN")
     }
-    return { authentication: true, profileId };
+    return { authentication: true, profileId }
   } catch (_error) {
-    return { authentication: false };
+    return { authentication: false }
   }
 }
