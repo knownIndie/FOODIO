@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   AudioLinesIcon,
@@ -11,27 +11,28 @@ import {
   Settings2Icon,
   TerminalIcon,
   TerminalSquareIcon,
-} from "lucide-react";
-import type * as React from "react";
-import { NavMain } from "@/components/ui/nav-main";
-import { NavProjects } from "@/components/ui/nav-projects";
-import { NavUser } from "@/components/ui/nav-user";
-import { TeamSwitcher } from "@/components/ui/team-switcher";
+} from "lucide-react"
+import type * as React from "react"
+import { NavMain } from "@/components/ui/nav-main"
+import { NavProjects } from "@/components/ui/nav-projects"
+import { NavUser } from "@/components/ui/nav-user"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar";
-import { currentProfileType } from "@/lib/type";
+} from "@/components/ui/sidebar"
+import { TeamSwitcher } from "@/components/ui/team-switcher"
+import type { currentProfileType } from "@/lib/type"
 
 // This is sample data.
 
 export function AppSidebar({
+  profile,
   ...props
 }: React.ComponentProps<typeof Sidebar> & { profile: currentProfileType }) {
-  const { id, name, email, roles, username } = props.profile;
+  const { id, name, email, roles, username } = profile
 
   const data = {
     user: {
@@ -162,7 +163,7 @@ export function AppSidebar({
         icon: <MapIcon />,
       },
     ],
-  };
+  }
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -177,5 +178,5 @@ export function AppSidebar({
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

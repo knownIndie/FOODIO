@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
-import { AppSidebar } from "@/components/ui/app-sidebar";
+import { redirect } from "next/navigation"
+import { AppSidebar } from "@/components/ui/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,19 +7,19 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { currentProfile } from "@/lib/auth/current-profile";
+} from "@/components/ui/sidebar"
+import { currentProfile } from "@/lib/auth/current-profile"
 
 export default async function Page() {
-  const profile = await currentProfile();
+  const profile = await currentProfile()
   if (!profile) {
-    redirect("/login");
+    redirect("/login")
   }
   return (
     <SidebarProvider>
@@ -52,9 +52,9 @@ export default async function Page() {
             <div className="aspect-video rounded-xl bg-muted/50" />
             <div className="aspect-video rounded-xl bg-muted/50" />
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+          <div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min" />
         </div>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }
