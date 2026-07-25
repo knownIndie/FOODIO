@@ -35,6 +35,7 @@ export async function currentProfile() {
   if (!profile) {
     return null
   }
+
   const profileCurrentRoles = await db
     .select({ role: roles.role })
     .from(profileRoles)
