@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { AppSidebar } from "@/components/ui/app-sidebar";
 import {
   Breadcrumb,
@@ -14,7 +15,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { currentProfile } from "@/lib/auth/current-profile";
-import { redirect } from "next/navigation";
 
 export default async function Page() {
   const profile = await currentProfile();
@@ -23,7 +23,7 @@ export default async function Page() {
   }
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar profile={profile} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center gap-2 px-3">
@@ -35,9 +35,7 @@ export default async function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    {`Setting > ${profile.username}`}
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="#">{profile.username}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
