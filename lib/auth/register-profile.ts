@@ -22,6 +22,7 @@ export const registerProfile = async (input: RegisterProfileInput) => {
   const username = input.username.trim().toLowerCase()
   const name = input.name.trim()
   const requestedRoles = [...new Set(input.roles)]
+
   const [existingProfile] = await db
     .select({
       email: profiles.email,

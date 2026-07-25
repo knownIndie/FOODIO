@@ -52,6 +52,7 @@ export async function verifyAccessToken(
       requiredClaims: ["sub", "iat", "exp", "tokenType"],
     })
     const { payload } = verifyResult
+
     if (payload.tokenType !== "access" || typeof payload.sub !== "string") {
       throw new Error("INVALID_ACCESS_TOKEN")
     }

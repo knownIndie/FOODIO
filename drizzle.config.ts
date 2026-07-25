@@ -1,6 +1,6 @@
 /*
  - drizzle.config.ts: Defines the connection details, schema path, and migration settings for Drizzle ORM CLI.
- - This config file is required for running Drizzle tools like migrations and code generation.
+ - This config file is required for running Drizzle tools like migrations and  generation.
 */
 import { defineConfig } from "drizzle-kit"
 
