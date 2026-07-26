@@ -33,6 +33,7 @@ export const registerProfile = async (input: RegisterProfileInput) => {
     .limit(1)
 
   if (existingProfile) {
+    // make changes here for restaurant signup and delivery signup given they have already signed up
     throw new Error(
       existingProfile.email === email // if
         ? "EMAIL_ALREADY_EXISTS" // if true
@@ -68,6 +69,7 @@ export const registerProfile = async (input: RegisterProfileInput) => {
         username: profiles.username,
         email: profiles.email,
       })
+
     await tx.insert(profileRoles).values(
       roleRows.map((role) => ({
         roleId: role.roleId,
@@ -75,5 +77,25 @@ export const registerProfile = async (input: RegisterProfileInput) => {
       }))
     )
     return createProfile
+  })
+}
+
+export const addProfileRole = async (profileId: number, role: PlatformRole) => {
+  return await db.transaction(async (tx) => {
+    const [roleId] = await tx
+      .select({ id: roles.id })
+      .from(roles)
+      .where(eq(roles.role, role))
+      .limit(1)
+    if (!roleId) {
+      throw new Error("REGISTRATION_ROLE_NOT_SEEDED")
+    }
+    await tx
+      .insert(profileRoles)
+      .values({
+        profileId: profileId,
+        roleId: roleId.id,
+      })
+      .onConflictDoNothing()
   })
 }

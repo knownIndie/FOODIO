@@ -24,7 +24,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { TeamSwitcher } from "@/components/ui/team-switcher"
-import type { currentProfileType } from "@/lib/type"
+import type { currentProfileType } from "@/lib/types/type"
 
 // This is sample data.
 

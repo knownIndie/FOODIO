@@ -1,7 +1,20 @@
 "use client"
 
+import {
+  BellIcon,
+  CheckIcon,
+  GlobeIcon,
+  HomeIcon,
+  KeyboardIcon,
+  LinkIcon,
+  LockIcon,
+  MenuIcon,
+  MessageCircleIcon,
+  PaintbrushIcon,
+  SettingsIcon,
+  VideoIcon,
+} from "lucide-react"
 import * as React from "react"
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -28,93 +41,56 @@ import {
   SidebarMenuItem,
   SidebarProvider,
 } from "@/components/ui/sidebar"
-import { BellIcon, MenuIcon, HomeIcon, PaintbrushIcon, MessageCircleIcon, GlobeIcon, KeyboardIcon, CheckIcon, VideoIcon, LinkIcon, LockIcon, SettingsIcon } from "lucide-react"
 
 const data = {
   nav: [
     {
       name: "Notifications",
-      icon: (
-        <BellIcon
-        />
-      ),
+      icon: <BellIcon />,
     },
     {
       name: "Navigation",
-      icon: (
-        <MenuIcon
-        />
-      ),
+      icon: <MenuIcon />,
     },
     {
       name: "Home",
-      icon: (
-        <HomeIcon
-        />
-      ),
+      icon: <HomeIcon />,
     },
     {
       name: "Appearance",
-      icon: (
-        <PaintbrushIcon
-        />
-      ),
+      icon: <PaintbrushIcon />,
     },
     {
       name: "Messages & media",
-      icon: (
-        <MessageCircleIcon
-        />
-      ),
+      icon: <MessageCircleIcon />,
     },
     {
       name: "Language & region",
-      icon: (
-        <GlobeIcon
-        />
-      ),
+      icon: <GlobeIcon />,
     },
     {
       name: "Accessibility",
-      icon: (
-        <KeyboardIcon
-        />
-      ),
+      icon: <KeyboardIcon />,
     },
     {
       name: "Mark as read",
-      icon: (
-        <CheckIcon
-        />
-      ),
+      icon: <CheckIcon />,
     },
     {
       name: "Audio & video",
-      icon: (
-        <VideoIcon
-        />
-      ),
+      icon: <VideoIcon />,
     },
     {
       name: "Connected accounts",
-      icon: (
-        <LinkIcon
-        />
-      ),
+      icon: <LinkIcon />,
     },
     {
       name: "Privacy & visibility",
-      icon: (
-        <LockIcon
-        />
-      ),
+      icon: <LockIcon />,
     },
     {
       name: "Advanced",
-      icon: (
-        <SettingsIcon
-        />
-      ),
+      icon: <SettingsIcon />,
     },
   ],
 }
@@ -142,7 +118,7 @@ export function SettingsDialog() {
                           render={<a href="#" />}
                         >
                           {item.icon}
-                     <span>{item.name}</span>
+                          <span>{item.name}</span>
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     ))}

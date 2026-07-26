@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "d": "next dev",
+    "dev": "next dev",
     "b": "next build",
     "s": "next start",
     "l": "biome check .",
