@@ -21,7 +21,7 @@ const testDetails = {
   email: "foodio.test1@example.com",
   password: "FoodIOTest123!",
 }
-type signupEndpoint = {
+export type signupEndpoint = {
   endpoint: string
 }
 export function SignupForm({ endpoint }: signupEndpoint) {

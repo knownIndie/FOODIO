@@ -1,4 +1,5 @@
-import { AppSidebar } from "@/components/ui/app-sidebar";
+import { redirect } from "next/navigation"
+import { AppSidebar } from "@/components/ui/app-sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,24 +7,23 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { currentProfile } from "@/lib/auth/current-profile";
-import { redirect } from "next/navigation";
+} from "@/components/ui/sidebar"
+import { currentProfile } from "@/lib/auth/current-profile"
 
 export default async function Page() {
-  const profile = await currentProfile();
+  const profile = await currentProfile()
   if (!profile) {
-    redirect("/login");
+    redirect("/login")
   }
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar profile={profile} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center gap-2 px-3">
@@ -35,9 +35,7 @@ export default async function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    {profile.username}
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="#">{profile.username}</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
@@ -54,9 +52,9 @@ export default async function Page() {
             <div className="aspect-video rounded-xl bg-muted/50" />
             <div className="aspect-video rounded-xl bg-muted/50" />
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+          <div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min" />
         </div>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }

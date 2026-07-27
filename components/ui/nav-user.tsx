@@ -75,6 +75,7 @@ export function NavUser({
               </DropdownMenuLabel>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            {/*
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <SparklesIcon />
@@ -97,6 +98,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            */}
             <DropdownMenuItem>
               <LogOutIcon />
               Log out
