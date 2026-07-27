@@ -26,7 +26,6 @@ export default function HomePage() {
             {" "}
             Sign Up restraurant{" "}
             {/* 
-              - make db call work even if the email is registerd 
               - make email otp based account verification -> needs schema changes
               - happens for restraurant owner and delivery , customer -> ?
               - widget to show account verification status
