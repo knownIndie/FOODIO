@@ -1,5 +1,5 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   return (
@@ -25,15 +25,27 @@ export default function HomePage() {
           <Button variant="link" size="lg">
             {" "}
             Sign Up restraurant{" "}
-            {/* 
+            {/*
               - make email otp based account verification -> needs schema changes
               - happens for restraurant owner and delivery , customer -> ?
               - widget to show account verification status
-              
+
+              */}
+          </Button>
+        </Link>
+        <Link href="/signup/delivery">
+          <Button variant="link" size="lg">
+            {" "}
+            Sign Up delivery partner{" "}
+            {/*
+              - make email otp based account verification -> needs schema changes
+              - happens for restraurant owner and delivery , customer -> ?
+              - widget to show account verification status
+
               */}
           </Button>
         </Link>
       </div>
     </main>
-  )
+  );
 }

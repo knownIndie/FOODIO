@@ -1,14 +1,15 @@
 import { currentProfile } from "@/lib/auth/current-profile";
 import { addProfileRole, registerProfile } from "@/lib/auth/register-profile";
 import { signupFormSchema } from "@/lib/auth/schema/form-schemas";
+import { treeifyError } from "zod";
 
 export async function POST(request: Request) {
   try {
     const profile = await currentProfile();
     if (profile) {
-      await addProfileRole(profile.id, "RESTAURANT_OWNER");
+      await addProfileRole(profile.id, "DELIVERY_PARTNER");
       return Response.json(
-        { message: "restaurant profile registered successfully." },
+        { message: "delivery partner profile registered successfully." },
         { status: 200 },
       );
     } else {
@@ -20,18 +21,18 @@ export async function POST(request: Request) {
           return Response.json(
             {
               error: "data entered is invalid",
-              fields: parsed.error.flatten().fieldErrors,
+              fields: treeifyError(parsed.error).errors,
             },
             { status: 400 },
           );
         }
         const result = await registerProfile({
           ...parsed.data,
-          roles: ["RESTAURANT_OWNER"],
+          roles: ["DELIVERY_PARTNER"],
         });
         if (result) {
           return Response.json(
-            { message: "restaurant profile registered successfully." },
+            { message: "delivery partner profile registered successfully." },
             { status: 201 },
           );
         }
@@ -64,7 +65,7 @@ export async function POST(request: Request) {
       }
     }
   } catch (error) {
-    console.error(`[ ${error} ] \n : from register/restaurant route`);
+    console.error(`[ ${error} ] \n : from register/delivery route`);
     return Response.json(
       { error: "Unable to register your profile." },
       { status: 500 },

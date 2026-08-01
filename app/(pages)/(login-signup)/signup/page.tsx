@@ -1,11 +1,11 @@
-import { SignupForm } from "@/components/auth/signup-form"
+import { SignupForm } from "@/components/auth/signup-form";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 // default customer signup page
 export default function SignupPage() {
   return (
@@ -18,9 +18,9 @@ export default function SignupPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <SignupForm endpoint="/api/register/customer" />
+          <SignupForm endpoint="/api/register" />
         </CardContent>
       </Card>
     </main>
-  )
+  );
 }

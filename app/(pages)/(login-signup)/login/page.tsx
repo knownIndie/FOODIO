@@ -16,7 +16,7 @@ export default function LoginPage() {
           <CardDescription>Enter your details to continue.</CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm endpoint="/api/login/customer" />
+          <LoginForm endpoint="/api/login" />
         </CardContent>
       </Card>
     </main>

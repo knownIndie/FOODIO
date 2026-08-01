@@ -1,34 +1,34 @@
-"use client"
+"use client";
 
-import { useForm } from "@tanstack/react-form"
-import Link from "next/link"
-import { useState } from "react"
+import { useForm } from "@tanstack/react-form";
+import Link from "next/link";
+import { useState } from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { signupFormSchema } from "@/lib/auth/schema/form-schemas";
 
 const testDetails = {
   name: "FoodIO Test User",
   username: "foodio_test_user1",
   email: "foodio.test1@example.com",
   password: "FoodIOTest123!",
-}
+};
 export type signupEndpoint = {
-  endpoint: string
-}
+  endpoint: string;
+};
 export function SignupForm({ endpoint }: signupEndpoint) {
   const [message, setMessage] = useState<{
-    text: string
-    type: "error" | "success"
-  }>()
+    text: string;
+    type: "error" | "success";
+  }>();
   const form = useForm({
     defaultValues: {
       name: "",
@@ -40,45 +40,60 @@ export function SignupForm({ endpoint }: signupEndpoint) {
       onSubmit: signupFormSchema,
     },
     onSubmit: async ({ value }) => {
-      setMessage(undefined)
+      setMessage(undefined);
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(value),
-      })
+      });
       const data = (await response.json()) as {
-        error?: string
-        profile?: { username: string }
-      }
+        msg?: "ACCOUNT_ALREADY_EXISTS" | "USERNAME_ALREADY_EXISTS";
+        next?: string;
+        error?: string;
+        profile?: { username: string };
+      };
 
       if (!response.ok || !data.profile) {
+        if (data.msg === "ACCOUNT_ALREADY_EXISTS") {
+          setMessage({
+            text: "Account already exists. Log in to continue.",
+            type: "error",
+          });
+          return;
+        }
+        if (data.msg === "USERNAME_ALREADY_EXISTS") {
+          setMessage({
+            text: "Username already taken. Choose another.",
+            type: "error",
+          });
+          return;
+        }
         setMessage({
           text: data.error ?? "Registration failed.",
           type: "error",
-        })
-        return
+        });
+        return;
       }
-
       setMessage({
         text: `Account @${data.profile.username} created.`,
         type: "success",
-      })
+      });
     },
-  })
+  });
 
   return (
     <form
       noValidate
       onSubmit={(event) => {
-        event.preventDefault()
-        void form.handleSubmit()
+        event.preventDefault();
+        void form.handleSubmit();
       }}
     >
       <FieldGroup>
         <form.Field name="name">
           {(field) => {
             const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid
+              field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Name</FieldLabel>
@@ -94,14 +109,14 @@ export function SignupForm({ endpoint }: signupEndpoint) {
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
-            )
+            );
           }}
         </form.Field>
 
         <form.Field name="username">
           {(field) => {
             const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid
+              field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Username</FieldLabel>
@@ -120,14 +135,14 @@ export function SignupForm({ endpoint }: signupEndpoint) {
                 </FieldDescription>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
-            )
+            );
           }}
         </form.Field>
 
         <form.Field name="email">
           {(field) => {
             const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid
+              field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Email</FieldLabel>
@@ -144,14 +159,14 @@ export function SignupForm({ endpoint }: signupEndpoint) {
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
-            )
+            );
           }}
         </form.Field>
 
         <form.Field name="password">
           {(field) => {
             const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid
+              field.state.meta.isTouched && !field.state.meta.isValid;
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>Password</FieldLabel>
@@ -168,7 +183,7 @@ export function SignupForm({ endpoint }: signupEndpoint) {
                 <FieldDescription>Use at least 8 characters.</FieldDescription>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
-            )
+            );
           }}
         </form.Field>
 
@@ -196,11 +211,11 @@ export function SignupForm({ endpoint }: signupEndpoint) {
                 variant="outline"
                 disabled={isSubmitting}
                 onClick={() => {
-                  form.setFieldValue("name", testDetails.name)
-                  form.setFieldValue("username", testDetails.username)
-                  form.setFieldValue("email", testDetails.email)
-                  form.setFieldValue("password", testDetails.password)
-                  setMessage(undefined)
+                  form.setFieldValue("name", testDetails.name);
+                  form.setFieldValue("username", testDetails.username);
+                  form.setFieldValue("email", testDetails.email);
+                  form.setFieldValue("password", testDetails.password);
+                  setMessage(undefined);
                 }}
               >
                 Fill test details
@@ -217,5 +232,5 @@ export function SignupForm({ endpoint }: signupEndpoint) {
         </p>
       </FieldGroup>
     </form>
-  )
+  );
 }
