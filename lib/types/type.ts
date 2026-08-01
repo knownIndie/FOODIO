@@ -3,5 +3,6 @@ export type currentProfileType = {
   username: string
   roles: string[]
   email: string
+  emailVerifiedAt: Date | null
   name: string
 }

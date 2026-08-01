@@ -27,6 +27,7 @@ export async function currentProfile() {
       name: profiles.name,
       username: profiles.username,
       email: profiles.email,
+      emailVerifiedAt: profiles.emailVerifiedAt,
     })
     .from(profiles)
     .where(eq(profiles.id, profileId))
@@ -46,6 +47,7 @@ export async function currentProfile() {
     username: profile.username,
     roles: profileCurrentRoles.map((row) => row.role),
     email: profile.email,
+    emailVerifiedAt: profile.emailVerifiedAt,
     name: profile.name,
   }
 }

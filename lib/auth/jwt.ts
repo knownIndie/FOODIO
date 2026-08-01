@@ -41,6 +41,20 @@ export function setResponseCookie(
   })
 }
 
+export function clearResponseCookie(
+  response: NextResponse,
+  accessTokenMsg: string
+) {
+  response.cookies.set(accessTokenMsg, "", {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    expires: new Date(0),
+    maxAge: 0,
+  })
+}
+
 export async function verifyAccessToken(
   token: string
 ): Promise<verifyAccessTokenType> {

@@ -1,6 +1,7 @@
 "use client"
 import { useForm } from "@tanstack/react-form"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -19,9 +20,11 @@ const testDetails = {
 }
 type loginEndpoint = {
   endpoint: string
+  returnTo?: string
 }
 
-export function LoginForm({ endpoint }: loginEndpoint) {
+export function LoginForm({ endpoint, returnTo }: loginEndpoint) {
+  const router = useRouter()
   const [message, setMessage] = useState<{
     text: string
     type: "error" | "success"
@@ -45,6 +48,8 @@ export function LoginForm({ endpoint }: loginEndpoint) {
         error?: string
         profile?: { name: string; username: string }
         token?: string
+        verificationRequired?: boolean
+        next?: string
       }
 
       if (!response.ok || !data.profile) {
@@ -55,10 +60,16 @@ export function LoginForm({ endpoint }: loginEndpoint) {
         return
       }
 
-      setMessage({
-        text: `Logged in as ${data.profile.name} (@${data.profile.username}). token: ${data.token}∑`,
-        type: "success",
-      })
+      const verifiedDestination = returnTo ?? data.next ?? "/dashboard"
+      const verificationDestination = returnTo
+        ? `/verify-email?returnTo=${encodeURIComponent(returnTo)}`
+        : "/verify-email"
+
+      router.replace(
+        data.verificationRequired
+          ? verificationDestination
+          : verifiedDestination
+      )
     },
   })
 

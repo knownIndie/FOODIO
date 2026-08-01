@@ -26,7 +26,13 @@ export async function POST(request: Request) {
     const token = await signAccessToken(profile.id)
 
     const response = NextResponse.json(
-      { success: true, profile: profile, token: token },
+      {
+        success: true,
+        profile,
+        token,
+        verificationRequired: !profile.emailVerifiedAt,
+        next: profile.emailVerifiedAt ? "/dashboard" : "/verify-email",
+      },
       { status: 200 }
     )
     setResponseCookie(token, response, "foodio_access_token")

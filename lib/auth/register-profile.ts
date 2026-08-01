@@ -34,6 +34,7 @@ export const registerProfile = async (input: RegisterProfileInput) => {
 
   if (existingProfile) {
     // make changes here for restaurant signup and delivery signup given they have already signed up
+    console.log(`from registerProfile -> ${existingProfile.email}`);
     throw new Error(
       existingProfile.email === email // if
         ? "EMAIL_ALREADY_EXISTS" // if true

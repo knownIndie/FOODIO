@@ -1,4 +1,5 @@
 import { registerProfile } from "@/lib/auth/register-profile"
+import { registrationVerificationResponse } from "@/lib/auth/registration-verification-response"
 import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
 
 export async function POST(request: Request) {
@@ -21,10 +22,7 @@ export async function POST(request: Request) {
       ...parsed.data,
       roles: ["CUSTOMER"],
     })
-    console.log(
-      `profile created successfully for the user ${profile.username} with email:${profile.email}`
-    )
-    return Response.json({ profile }, { status: 201 })
+    return registrationVerificationResponse(profile)
   } catch (error) {
     if (error instanceof Error) {
       /*
@@ -32,12 +30,20 @@ export async function POST(request: Request) {
       */
       if (error.message === "EMAIL_ALREADY_EXISTS") {
         return Response.json(
-          { error: "That email is already registered." },
+          {
+            code: "ACCOUNT_ALREADY_EXISTS",
+            error:
+              "A FoodIO account already exists with this email. Log in instead.",
+            next: "/login",
+          },
           { status: 409 }
         )
       } else if (error.message === "USERNAME_ALREADY_EXISTS") {
         return Response.json(
-          { error: "That username is already registered." },
+          {
+            code: "USERNAME_ALREADY_EXISTS",
+            error: "That username is already registered.",
+          },
           { status: 409 }
         )
       }

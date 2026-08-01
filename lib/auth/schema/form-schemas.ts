@@ -22,3 +22,10 @@ export const loginFormSchema = z.object({
   email: z.string().trim().toLowerCase().email("Enter a valid email address."),
   password: z.string().min(1, "Enter your password."),
 })
+
+export const emailVerificationCodeSchema = z.object({
+  code: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, "Enter the six-digit verification code."),
+})

@@ -21,6 +21,9 @@ export default async function Page() {
   if (!profile) {
     redirect("/login")
   }
+  if (!profile.emailVerifiedAt) {
+    redirect("/verify-email?returnTo=/dashboard")
+  }
   return (
     <SidebarProvider>
       <AppSidebar profile={profile} />

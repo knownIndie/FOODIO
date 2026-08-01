@@ -1,13 +1,8 @@
 "use client"
 
-import {
-  BadgeCheckIcon,
-  BellIcon,
-  ChevronsUpDownIcon,
-  CreditCardIcon,
-  LogOutIcon,
-  SparklesIcon,
-} from "lucide-react"
+import { ChevronsUpDownIcon, LogOutIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
@@ -35,6 +30,27 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const router = useRouter()
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  async function logout() {
+    setIsLoggingOut(true)
+
+    try {
+      const response = await fetch("/api/logout", { method: "POST" })
+
+      if (!response.ok) {
+        setIsLoggingOut(false)
+        return
+      }
+
+      router.replace("/login")
+      router.refresh()
+    } catch {
+      setIsLoggingOut(false)
+    }
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -99,9 +115,12 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             */}
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={isLoggingOut}
+              onClick={() => void logout()}
+            >
               <LogOutIcon />
-              Log out
+              {isLoggingOut ? "Logging out..." : "Log out"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -2,7 +2,6 @@ import { redirect } from "next/navigation"
 import type { JSX } from "react/jsx-runtime"
 import { SignupForm } from "@/components/auth/signup-form"
 import { RestaurantRegistrationButton } from "@/components/login-signup/RestaurantRegistrationButton"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -18,6 +17,10 @@ export default async function SignupPage() {
   let content: JSX.Element
   if (!profile) {
     content = <SignupForm endpoint="/api/register/restraurant" />
+  } else if (!profile.emailVerifiedAt) {
+    redirect(
+      `/verify-email?returnTo=${encodeURIComponent("/signup/restraurant")}`
+    )
   } else if (profile.roles.includes("RESTAURANT_OWNER")) {
     content = <p>You already have restaurant owner access.</p>
 

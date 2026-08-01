@@ -1,22 +1,26 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import type { signupEndpoint } from "../auth/signup-form";
-import { Button } from "../ui/button";
+import { useRouter } from "next/navigation"
+import type { SignupEndpoint } from "../auth/signup-form"
+import { Button } from "../ui/button"
 
-export function RestaurantRegistrationButton({ endpoint }: signupEndpoint) {
-  const router = useRouter();
+export function RestaurantRegistrationButton({ endpoint }: SignupEndpoint) {
+  const router = useRouter()
   const handleClick = async () => {
-    const response = await fetch(endpoint, { method: "POST" });
+    const response = await fetch(endpoint, { method: "POST" })
+    const data = (await response.json()) as { next?: string }
     if (!response.ok) {
-      return;
+      if (data.next) {
+        router.replace(data.next)
+      }
+      return
     }
-    router.replace("/");
-  };
+    router.replace(data.next ?? "/dashboard")
+  }
 
   return (
     <Button onClick={handleClick}>
       Apply for FoodIO Restaurant Owner Account
     </Button>
-  );
+  )
 }

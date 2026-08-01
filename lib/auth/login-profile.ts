@@ -32,5 +32,6 @@ export const loginProfile = async (input: loginInputType) => {
     name: profile.name,
     username: profile.username,
     email: profile.email,
+    emailVerifiedAt: profile.emailVerifiedAt,
   }
 }

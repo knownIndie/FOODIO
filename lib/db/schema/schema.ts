@@ -11,8 +11,20 @@ export const profiles = pgTable("profiles", {
   username: text("username").notNull().unique(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
+  emailVerifiedAt: timestamp("email_verified_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   password: text("password").notNull(),
+})
+
+export const emailVerificationOtps = pgTable("email_verification_otps", {
+  profileId: integer("profile_id")
+    .primaryKey()
+    .references(() => profiles.id, { onDelete: "cascade" }),
+  codeHash: text("code_hash").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  failedAttempts: integer("failed_attempts").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  lastSentAt: timestamp("last_sent_at").notNull().defaultNow(),
 })
 
 export const roles = pgTable("roles", {
