@@ -39,3 +39,4 @@ next-env.d.ts
 # local auth planning and handover files
 /AUTH_PLAN.md
 /AUTH_HANDOVER.md
+foodio-auth-change-walkthrough.html

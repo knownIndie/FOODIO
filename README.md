@@ -1,0 +1,13 @@
+- nextjs frontend sent as parser -> apk - [research]
+  - https://capacitorjs.com/
+  - https://nextjs.org/docs/app/guides/progressive-web-apps
+- add rate limiting
+- flow fro adding new restraurant - make interactive - onboarding form (only when you dont have any) 
+  - name of restaurant
+  - logo
+  - addr detsils - google map ( current location) / type - get auto complete via gmaps [browser se location then 15 km under then franchise]
+  - menu - photos 
+  - availability - ( breakfast , dinner , lunch)
+  - prices - for items 
+  - dishes and price - gsheet like cms
+- db design look into it 
