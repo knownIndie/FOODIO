@@ -2,6 +2,9 @@ import { NextResponse } from "next/server"
 import { setResponseCookie, signAccessToken } from "@/lib/auth/jwt"
 import { loginProfile } from "@/lib/auth/login-profile"
 import { loginFormSchema } from "@/lib/auth/schema/form-schemas"
+import { checkRateLimit } from "@/lib/rate-limit/check-rate-limit"
+import { createEmailRateLimitIdentifier } from "@/lib/rate-limit/identifier"
+import { loginEmailLimiter } from "@/lib/rate-limit/limiters"
 
 export async function POST(request: Request) {
   const parsed = loginFormSchema.safeParse(
@@ -19,6 +22,23 @@ export async function POST(request: Request) {
   }
 
   try {
+    const identifier = createEmailRateLimitIdentifier(parsed.data.email)
+    const decision = await checkRateLimit(loginEmailLimiter, identifier)
+    if (!decision.allowed) {
+      return Response.json(
+        {
+          code: "LOGIN_RATE_LIMITED",
+          error: "Too many login attempts. Try again later.",
+          retryAfterSeconds: decision.retryAfterSeconds,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": decision.retryAfterSeconds.toString(),
+          },
+        }
+      )
+    }
     const profile = await loginProfile(parsed.data)
     console.log(
       `Login successfully for the user ${profile.username} with email:${profile.email}`
