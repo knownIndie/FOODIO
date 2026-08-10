@@ -1,7 +1,6 @@
 import { currentProfile } from "@/lib/auth/current-profile"
 import { db } from "@/lib/db/drizzle"
 import { restaurantMembers, restaurants } from "@/lib/db/schema/schema"
-import { getProfileRestaurant } from "@/lib/restaurants/get-profile-restaurant"
 import { restaurantFormSchema } from "@/lib/restaurants/restaurant-form-schema"
 
 export async function POST(request: Request) {
@@ -22,18 +21,6 @@ export async function POST(request: Request) {
     return Response.json(
       { error: "Restaurant owner access is required." },
       { status: 403 }
-    )
-  }
-
-  const existingRestaurant = await getProfileRestaurant(profile.id)
-
-  if (existingRestaurant) {
-    return Response.json(
-      {
-        code: "RESTAURANT_ALREADY_EXISTS",
-        error: "Your account already belongs to a restaurant.",
-      },
-      { status: 409 }
     )
   }
 
@@ -77,7 +64,9 @@ export async function POST(request: Request) {
         })
 
       if (!createdRestaurant) {
-        throw new Error("Restaurant insert returned no row.")
+        throw new Error(
+          "Restaurant insert returned no row, we could not create the restaurant."
+        )
       }
 
       await tx.insert(restaurantMembers).values({

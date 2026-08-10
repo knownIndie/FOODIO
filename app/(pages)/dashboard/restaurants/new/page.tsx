@@ -11,7 +11,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { currentProfile } from "@/lib/auth/current-profile"
-import { getProfileRestaurant } from "@/lib/restaurants/get-profile-restaurant"
 
 export default async function NewRestaurantPage() {
   const profile = await currentProfile()
@@ -22,12 +21,6 @@ export default async function NewRestaurantPage() {
 
   if (!profile.roles.includes("RESTAURANT_OWNER")) {
     redirect("/signup/restraurant")
-  }
-
-  const existingRestaurant = await getProfileRestaurant(profile.id)
-
-  if (existingRestaurant) {
-    redirect("/dashboard")
   }
 
   return (
