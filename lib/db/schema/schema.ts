@@ -8,6 +8,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core"
 
+
 export const restaurantStatusEnum = pgEnum("restaurant_status", [
   "DRAFT",
   "PENDING_REVIEW",
@@ -100,3 +101,13 @@ export const restaurantMembers = pgTable(
     }),
   ]
 )
+
+
+export const menuItems = pgTable("menu_items", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  restaurantId: integer("restaurant_id")
+    .notNull()
+    .references(() => restaurants.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  price: integer("price").notNull(),
+})

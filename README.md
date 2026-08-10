@@ -1,28 +1,51 @@
-- nextjs frontend sent as parser -> apk - [research]
-  - https://capacitorjs.com/
-  - https://nextjs.org/docs/app/guides/progressive-web-apps
+# TODO
 
-- add rate limiting 
-  - working for login page email - foodio1.test1@example.com
-  - [question]
-    - ask where else should this be put 
-    - [docker]
-      - do we want to continue using the online i.e neon and redis or locally some thing for docer setup
-      - what it means when say one command bootup all 
+## App packaging and research
 
-  
-- flow fro adding new restraurant - make interactive - onboarding form (only when you dont have any) 
-  - name of restaurant
-  - logo
-  - addr detsils - google map ( current location) / type - get auto complete via gmaps
-   [browser se location then 15 km under then franchise]
-  - menu - photos 
-  - availability - ( breakfast , dinner , lunch)
-  - prices - for items 
-  - dishes and price - gsheet like cms
-- db design look into it 
-[current idea for implementation]
-  - restaurant - db - baisc info as of now 
-  - restaurant - table - profile and its role , the individual creating it becomes owner and gets added 
-  in a transaction
-  - 
+- [x] Research how to package the Next.js frontend as an Android APK.
+  - [x] Review [Capacitor](https://capacitorjs.com/).
+  - [x] Review the [Next.js Progressive Web Apps guide](https://nextjs.org/docs/app/guides/progressive-web-apps).
+
+### Docker setup questions
+
+- [x] Decide whether Docker should continue using the hosted Neon database and Redis, or run local database and Redis services.
+  - setup everything locally -> docker [ plugin ans everything]
+- [ ] Define what a one-command startup should boot and document that command.
+
+## This week
+
+- [ ] Allow one owner to manage multiple restaurants.
+- [ ] make maps interactive accordinf to sid req
+- [ ] make the multiple steps for restaurant to work 
+- [ ] ask if we want the auto approve after 24 h { given we have all the provided docs }or manual review
+- [ ] get docker work
+
+## Restaurant onboarding
+
+- [ ] aLLOW Upload a restaurant logo.
+- [x] Collect address details.
+- [ ] Add Google Maps support:
+  - [ ] Use browser geolocation for the current location.
+  - [ ] Add Google Maps address autocomplete.
+  - [ ] Show the map in the onboarding flow.
+  - [ ] Explore the 15 km radius and franchise behavior.[later]
+- [ ] Add menu photo uploads.
+- [ ] Capture availability for breakfast, lunch, and dinner.
+- [ ] Capture item prices.
+- [ ] Build a Google Sheets-like CMS for managing dishes and prices.
+
+## Database design
+
+- [ ] Review and finalize the restaurant database design.
+- [ ] Start with basic restaurant information.
+- [ ] Link each restaurant to the creating profile and its role.
+- [ ] Add the creator as the restaurant owner inside a database transaction.
+- [ ] Support one owner having multiple restaurants.
+
+## Payments and plans
+
+- [ ] Confirm the pricing and account limits.
+- [ ] Paid plan: `$100` signup, up to 50 restaurant listings, and 3 staff accounts.
+- [ ] Free plan: up to 3 restaurant listings and no staff accounts.
+
+
