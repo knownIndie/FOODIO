@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { currentProfile } from "@/lib/auth/current-profile"
+import { RestaurantFirstSetupForm } from "@/components/restaurants/restaurant-FirstSetupForm"
 
 export default async function NewRestaurantPage() {
   const profile = await currentProfile()
@@ -24,7 +25,7 @@ export default async function NewRestaurantPage() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 py-4">
+    <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 py-4">
       <Button
         variant="ghost"
         className="w-fit"
@@ -34,18 +35,19 @@ export default async function NewRestaurantPage() {
         Back to dashboard
       </Button>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Register your restaurant</CardTitle>
-          <CardDescription>
+
+        <CardHeader className="text-center  mb-3">
+          <CardTitle className="text-2xl">Register your restaurant</CardTitle>
+          {/*<CardDescription>
             This creates the restaurant identity and saves it as a private
             draft. Verification documents and menu setup come later.
-          </CardDescription>
+          </CardDescription>*/}
         </CardHeader>
         <CardContent>
-          <RestaurantOnboardingForm />
+          {/*<RestaurantOnboardingForm />*/}
+          <RestaurantFirstSetupForm />
         </CardContent>
-      </Card>
+
     </div>
   )
 }

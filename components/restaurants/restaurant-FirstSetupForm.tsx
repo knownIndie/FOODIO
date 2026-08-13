@@ -21,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card"
+import { restaurantFirstSetupSchema } from "@/lib/restaurants/restaurant-basic-schema"
 
 type FormMessage = {
   text: string
@@ -42,12 +43,14 @@ export function RestaurantFirstSetupForm() {
       description: "",
     },
     validators: {
-      onSubmit: restaurantFormSchema,
+      onSubmit: restaurantFirstSetupSchema,
     },
     onSubmit: async ({ value }) => {
       setMessage(undefined)
 
       try {
+        console.log(value)
+        console.log("here from restaurant-FirstSetupForm.tsx")
         const response = await fetch("/api/restaurants", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -83,7 +86,7 @@ export function RestaurantFirstSetupForm() {
   })
 
   return (
-    <Card className="w-full sm:max-w-md">
+    <Card className="w-full sm:max-w-md mx-auto">
       <CardHeader>
         <CardTitle>Restaurant Setup</CardTitle>
         <CardDescription>
