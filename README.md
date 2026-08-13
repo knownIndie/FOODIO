@@ -15,7 +15,7 @@
 ## This week
 
 - [x] Allow one owner to manage multiple restaurants.
-- [ ] make maps interactive accordinf to sid req
+- [ ] make maps interactive accordinf to sid req [ coudn't figure it out ]
 - [ ] make the multiple steps for restaurant to work 
 - [ ] ask if we want the auto approve after 24 h { given we have all the provided docs }or manual review
 - [ ] get docker work

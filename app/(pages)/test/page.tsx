@@ -1,10 +1,13 @@
 import { Card } from "@/components/ui/card"
+import { LeafletLocationPicker } from "@/lib/restaurants/leaflet-location-picker"
 
 export default function TestPage() {
   return (
-    <div>
-      <Card className="items-center mb-3 mx-auto">Test Page</Card>
-      <Card></Card>
+    <div className="mx-auto max-w-7xl space-y-3 p-4">
+      <Card className="p-4">Leaflet location picker</Card>
+      <Card className="p-4">
+        <LeafletLocationPicker />
+      </Card>
     </div>
   )
 }

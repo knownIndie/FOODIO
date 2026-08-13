@@ -1,7 +1,6 @@
 "use client"
 
 import { useForm } from "@tanstack/react-form"
-import { LocateFixedIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { LeafletLocationPicker } from "@/lib/restaurants/leaflet-location-picker"
 import { restaurantFormSchema } from "@/lib/restaurants/restaurant-form-schema"
 
 type FormMessage = {
@@ -34,7 +34,6 @@ const testRestaurantDetails = {
 export function RestaurantOnboardingForm() {
   const router = useRouter()
   const [message, setMessage] = useState<FormMessage>()
-  const [isLocating, setIsLocating] = useState(false)
 
   const form = useForm({
     defaultValues: {
@@ -87,44 +86,11 @@ export function RestaurantOnboardingForm() {
     },
   })
 
-  function useCurrentLocation() {
-    setMessage(undefined)
-
-    if (!navigator.geolocation) {
-      setMessage({
-        text: "This browser does not support location access.",
-        type: "error",
-      })
-      return
-    }
-
-    setIsLocating(true)
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        form.setFieldValue("latitude", position.coords.latitude.toFixed(6))
-        form.setFieldValue("longitude", position.coords.longitude.toFixed(6))
-        setIsLocating(false)
-        setMessage({
-          text: "Current coordinates added. Confirm the written address.",
-          type: "success",
-        })
-      },
-      () => {
-        setIsLocating(false)
-        setMessage({
-          text: "Location permission was denied or unavailable.",
-          type: "error",
-        })
-      },
-      { enableHighAccuracy: true, timeout: 10_000 }
-    )
-  }
-
   return (
     <form
-      noValidate
+      noValidate // disable browser validation
       onSubmit={(event) => {
-        event.preventDefault()
+        event.preventDefault() // prevent default form submission
         void form.handleSubmit()
       }}
     >
@@ -232,25 +198,26 @@ export function RestaurantOnboardingForm() {
         </form.Field>
 
         <div className="rounded-2xl border bg-muted/20 p-4">
-          <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="font-medium">Map location</p>
-              <p className="text-sm text-muted-foreground">
-                Use the restaurant location, not your home location.
-              </p>
-            </div>
-            <Button
-              type="button"
-              variant="outline"
-              disabled={isLocating}
-              onClick={useCurrentLocation}
-            >
-              <LocateFixedIcon data-icon="inline-start" />
-              {isLocating ? "Locating..." : "Use current location"}
-            </Button>
+          <div className="mb-4">
+            <p className="font-medium">Map location</p>
+            <p className="text-sm text-muted-foreground">
+              Choose the restaurant location, not your home location. Confirm
+              the pin before saving the draft.
+            </p>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <LeafletLocationPicker
+            onConfirm={(location) => {
+              form.setFieldValue("latitude", location.latitude.toFixed(6))
+              form.setFieldValue("longitude", location.longitude.toFixed(6))
+              setMessage({
+                text: "Map location confirmed. Confirm the written address too.",
+                type: "success",
+              })
+            }}
+          />
+          {/*latitude*/}
+          <div className="mt-4 grid gap-6 md:grid-cols-2">
             <form.Field name="latitude">
               {(field) => {
                 const isInvalid =
@@ -263,13 +230,11 @@ export function RestaurantOnboardingForm() {
                       name={field.name}
                       type="number"
                       step="any"
+                      readOnly
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(event) =>
-                        field.handleChange(event.target.value)
-                      }
                       aria-invalid={isInvalid}
-                      placeholder="12.971599"
+                      placeholder="Confirm a location on the map"
                     />
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
@@ -278,7 +243,7 @@ export function RestaurantOnboardingForm() {
                 )
               }}
             </form.Field>
-
+            {/*longitude*/}
             <form.Field name="longitude">
               {(field) => {
                 const isInvalid =
@@ -291,13 +256,11 @@ export function RestaurantOnboardingForm() {
                       name={field.name}
                       type="number"
                       step="any"
+                      readOnly
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(event) =>
-                        field.handleChange(event.target.value)
-                      }
                       aria-invalid={isInvalid}
-                      placeholder="77.594566"
+                      placeholder="Confirm a location on the map"
                     />
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />

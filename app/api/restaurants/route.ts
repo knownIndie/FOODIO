@@ -46,6 +46,7 @@ export async function POST(request: Request) {
 
   try {
     const restaurant = await db.transaction(async (tx) => {
+      // the [] is required as we are using the .returning , it returns result in the forma on an array
       const [createdRestaurant] = await tx
         .insert(restaurants)
         .values({

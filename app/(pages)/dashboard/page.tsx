@@ -53,7 +53,7 @@ export default async function Page() {
                 <CardDescription>
                   You are this restaurant&apos;s{" "}
                   {restaurant.membershipRole.toLowerCase()}. Its current status
-                  is {restaurant.status.replaceAll("_", " ").toLowerCase()}.
+                  is {restaurant.status.toLowerCase()}.
                 </CardDescription>
                 <CardAction>
                   <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium">
