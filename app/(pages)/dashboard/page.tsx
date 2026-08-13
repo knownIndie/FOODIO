@@ -34,7 +34,11 @@ export default async function Page() {
         </div>
 
         {canCreateRestaurant && restaurantList.length > 0 && (
-          <Button size="lg" render={<Link href="/dashboard/restaurants/new" />}>
+          <Button
+            nativeButton={false}
+            size="lg"
+            render={<Link href="/dashboard/restaurants/new" />}
+          >
             <PlusIcon data-icon="inline-start" />
             Add another restaurant
           </Button>
@@ -53,7 +57,8 @@ export default async function Page() {
                 <CardDescription>
                   You are this restaurant&apos;s{" "}
                   {restaurant.membershipRole.toLowerCase()}. Its current status
-                  is {restaurant.status.toLowerCase()}.
+                  is {restaurant.status.toLowerCase()}. Restaurant ID:{" "}
+                  {restaurant.id}
                 </CardDescription>
                 <CardAction>
                   <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium">
@@ -82,6 +87,7 @@ export default async function Page() {
           <CardContent>
             {canCreateRestaurant ? (
               <Button
+                nativeButton={false}
                 size="lg"
                 render={<Link href="/dashboard/restaurants/new" />}
               >
@@ -89,7 +95,11 @@ export default async function Page() {
                 Add your first restaurant
               </Button>
             ) : (
-              <Button size="lg" render={<Link href="/signup/restraurant" />}>
+              <Button
+                nativeButton={false}
+                size="lg"
+                render={<Link href="/signup/restraurant" />}
+              >
                 Set up restaurant owner access
               </Button>
             )}

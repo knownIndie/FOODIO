@@ -95,6 +95,19 @@ const data = {
   ],
 }
 
+const settingsPlaceholders = [
+  "settings-placeholder-1",
+  "settings-placeholder-2",
+  "settings-placeholder-3",
+  "settings-placeholder-4",
+  "settings-placeholder-5",
+  "settings-placeholder-6",
+  "settings-placeholder-7",
+  "settings-placeholder-8",
+  "settings-placeholder-9",
+  "settings-placeholder-10",
+]
+
 export function SettingsDialog() {
   const [open, setOpen] = React.useState(true)
   return (
@@ -114,8 +127,8 @@ export function SettingsDialog() {
                     {data.nav.map((item) => (
                       <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton
+                          type="button"
                           isActive={item.name === "Messages & media"}
-                          render={<a href="#" />}
                         >
                           {item.icon}
                           <span>{item.name}</span>
@@ -144,11 +157,9 @@ export function SettingsDialog() {
               </div>
             </header>
             <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-4 pt-0">
-              {Array.from({
-                length: 10,
-              }).map((_, i) => (
+              {settingsPlaceholders.map((placeholder) => (
                 <div
-                  key={i}
+                  key={placeholder}
                   className="aspect-video max-w-3xl rounded-xl bg-muted/50"
                 />
               ))}

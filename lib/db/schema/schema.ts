@@ -24,7 +24,7 @@ export const ComplianceTypeEnum = pgEnum("compliance_type", [
   "GST",
   "FSSAI",
 ])
-export const restaurantMemberRole = pgEnum("restaurant_member_role", [
+export const restaurantMemberRoleEnum = pgEnum("restaurant_member_role", [
   "OWNER",
   "MANAGER",
   "STAFF",
@@ -147,7 +147,6 @@ export const restaurantSetupStatus = pgTable("restaurant_setup_status", {
   menuItemsStatus: restaurantSectionStatusEnum("menu_items_status")
     .notNull()
     .default("NOT_STARTED"),
-
 })
 
 export const restaurantMembers = pgTable(
@@ -161,7 +160,7 @@ export const restaurantMembers = pgTable(
       .notNull()
       .references(() => profiles.id, { onDelete: "cascade" }),
 
-    role: restaurantMemberRole("role").notNull(),
+    role: restaurantMemberRoleEnum("role").notNull(),
 
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },

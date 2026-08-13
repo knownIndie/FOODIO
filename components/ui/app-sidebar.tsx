@@ -1,20 +1,8 @@
 "use client"
 
-import {
-  AudioLinesIcon,
-  BookOpenIcon,
-  BotIcon,
-  FrameIcon,
-  GalleryVerticalEndIcon,
-  MapIcon,
-  PieChartIcon,
-  Settings2Icon,
-  TerminalIcon,
-  TerminalSquareIcon,
-} from "lucide-react"
+import { Settings2Icon, TerminalSquareIcon } from "lucide-react"
 import type * as React from "react"
 import { NavMain } from "@/components/ui/nav-main"
-import { NavProjects } from "@/components/ui/nav-projects"
 import { NavUser } from "@/components/ui/nav-user"
 import {
   Sidebar,
@@ -32,12 +20,12 @@ export function AppSidebar({
   profile,
   ...props
 }: React.ComponentProps<typeof Sidebar> & { profile: currentProfileType }) {
-  const { id, name, email, roles, username } = profile
+  const { name, email } = profile
 
   const data = {
     user: {
-      name: name,
-      email: email,
+      name,
+      email,
       avatar: "/avatars/shadcn.jpg",
     },
     teams: [
@@ -144,23 +132,6 @@ export function AppSidebar({
           //   url: "#",
           // },
         ],
-      },
-    ],
-    projects: [
-      {
-        name: "Design Engineering",
-        url: "#",
-        icon: <FrameIcon />,
-      },
-      {
-        name: "Sales & Marketing",
-        url: "#",
-        icon: <PieChartIcon />,
-      },
-      {
-        name: "Travel",
-        url: "#",
-        icon: <MapIcon />,
       },
     ],
   }

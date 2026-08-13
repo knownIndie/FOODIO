@@ -1,6 +1,4 @@
 import { Card } from "@/components/ui/card"
-import { RestaurantFirstSetupForm } from "@/components/restaurants/restaurant-FirstSetupForm"
-import { RestaurantOnboardingForm } from "@/components/restaurants/restaurant-onboarding-form"
 
 export default function TestPage() {
   return (
@@ -8,7 +6,7 @@ export default function TestPage() {
       <Card className="p-4">Leaflet location picker</Card>
       <Card className="p-4 ">
         {/*<LeafletLocationPicker />*/}
-        <RestaurantFirstSetupForm />
+        {/*<RestaurantFirstSetupForm />*/}
       </Card>
     </div>
   )

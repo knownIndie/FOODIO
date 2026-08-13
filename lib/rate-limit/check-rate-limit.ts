@@ -8,8 +8,7 @@ export async function checkRateLimit(
   limiter: Ratelimit,
   identifier: string
 ): Promise<CheckRateLimitReturnType> {
-  const { success, limit, remaining, pending, reset } =
-    await limiter.limit(identifier)
+  const { success, reset } = await limiter.limit(identifier)
 
   if (success) {
     return { allowed: true }

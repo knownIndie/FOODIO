@@ -8,7 +8,7 @@ function rateLimitSecretReader() {
 }
 
 export function createEmailRateLimitIdentifier(email: string): string {
-  // this is so we dont leak or use the actual email or send it anywher , we store it in redis so no email leak 
+  // this is so we dont leak or use the actual email or send it anywher , we store it in redis so no email leak
   const normalizedEmail = email.trim().toLowerCase()
   const hmac = createHmac("sha256", rateLimitSecretReader())
   const hmacEmail = hmac.update(normalizedEmail).digest("hex")

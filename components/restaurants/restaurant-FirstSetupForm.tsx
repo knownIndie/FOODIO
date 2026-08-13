@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
   Field,
   FieldDescription,
   FieldError,
@@ -13,14 +20,6 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { restaurantFormSchema } from "@/lib/restaurants/restaurant-form-schema"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../ui/card"
 import { restaurantFirstSetupSchema } from "@/lib/restaurants/restaurant-basic-schema"
 
 type FormMessage = {
@@ -49,9 +48,7 @@ export function RestaurantFirstSetupForm() {
       setMessage(undefined)
 
       try {
-        console.log(value)
-        console.log("here from restaurant-FirstSetupForm.tsx")
-        const response = await fetch("/api/restaurants", {
+        const response = await fetch("/api/restaurants/initializeBasic", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(value),
@@ -59,7 +56,11 @@ export function RestaurantFirstSetupForm() {
         const data = (await response.json()) as {
           error?: string
           next?: string
-          restaurant?: { id: number; name: string; status: string }
+          restaurant?: {
+            id: number
+            name: string
+            description: string | null
+          }
         }
 
         if (!response.ok || !data.restaurant) {
