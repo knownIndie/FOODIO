@@ -15,7 +15,6 @@ import { getProfileRestaurants } from "@/lib/restaurants/get-profile-restaurant"
 
 export default async function Page() {
   const profile = await currentProfile()
-
   if (!profile) {
     redirect("/login")
   }
@@ -48,31 +47,38 @@ export default async function Page() {
       {restaurantList.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2">
           {restaurantList.map((restaurant) => (
-            <Card key={restaurant.id}>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <StoreIcon className="size-4" />
-                  {restaurant.name}
-                </CardTitle>
-                <CardDescription>
-                  You are this restaurant&apos;s{" "}
-                  {restaurant.membershipRole.toLowerCase()}. Its current status
-                  is {restaurant.status.toLowerCase()}. Restaurant ID:{" "}
-                  {restaurant.id}
-                </CardDescription>
-                <CardAction>
-                  <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium">
-                    {restaurant.status.replaceAll("_", " ")}
-                  </span>
-                </CardAction>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Menu, compliance documents, payouts, and opening hours will be
-                  added in the next onboarding steps.
-                </p>
-              </CardContent>
-            </Card>
+            <Link
+              key={restaurant.id}
+              href={`/dashboard/restaurants/${restaurant.id}/setup/basic`}
+              aria-label={`Continue setup for ${restaurant.name}`}
+              className="block rounded-[min(var(--radius-4xl),24px)] outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
+            >
+              <Card className="h-full cursor-pointer transition-colors hover:bg-muted/40">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <StoreIcon className="size-4" />
+                    {restaurant.name}
+                  </CardTitle>
+                  <CardDescription>
+                    You are this restaurant&apos;s{" "}
+                    {restaurant.membershipRole.toLowerCase()}. Its current
+                    status is {restaurant.status.toLowerCase()}. Restaurant ID:{" "}
+                    {restaurant.id}
+                  </CardDescription>
+                  <CardAction>
+                    <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium">
+                      {restaurant.status.replaceAll("_", " ")}
+                    </span>
+                  </CardAction>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    Menu, compliance documents, payouts, and opening hours will
+                    be added in the next onboarding steps.
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       ) : (

@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { LeafletLocationPicker } from "@/lib/restaurants/leaflet-location-picker"
-import { restaurantFormSchema } from "@/lib/restaurants/restaurant-form-schema"
+import { restaurantFormSchema } from "@/lib/restaurants/schema/restaurant-form-schema"
 
 type FormMessage = {
   text: string

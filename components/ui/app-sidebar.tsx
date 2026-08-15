@@ -48,22 +48,22 @@ export function AppSidebar({
     navMain: [
       {
         title: "Restraurant",
-        url: "#",
+        url: "",
         icon: <TerminalSquareIcon />,
         isActive: true,
         items: [
           {
-            title: "History",
-            url: "#",
+            title: "All",
+            url: "/dashboard/",
           },
-          {
-            title: "Starred",
-            url: "#",
-          },
-          {
-            title: "Settings",
-            url: "#",
-          },
+          // {
+          //   title: "Starred",
+          //   url: "#",
+          // },
+          // {
+          //   title: "Settings",
+          //   url: "#",
+          // },
         ],
       },
       /*
@@ -115,10 +115,10 @@ export function AppSidebar({
         url: "#",
         icon: <Settings2Icon />,
         items: [
-          {
-            title: "General",
-            url: "#",
-          },
+          // {
+          //   title: "General",
+          //   url: "#",
+          // },
           // {
           //   title: "Team",
           //   url: "#",

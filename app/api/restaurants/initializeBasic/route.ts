@@ -5,7 +5,7 @@ import {
   restaurantSetupStatus,
   restaurants,
 } from "@/lib/db/schema/schema"
-import { restaurantFirstSetupSchema } from "@/lib/restaurants/restaurant-basic-schema"
+import { restaurantFirstSetupSchema } from "@/lib/restaurants/schema/restaurant-basic-schema"
 
 export async function POST(request: Request) {
   const profile = await currentProfile()
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     return Response.json(
       {
         restaurant,
-        next: "/dashboard",
+        next: `/dashboard/restaurants/${restaurant.id}/`,
       },
       { status: 201 }
     )

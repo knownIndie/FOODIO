@@ -47,10 +47,10 @@ export default async function DashboardLayout({
                     {profile.username}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>{profile.name}</BreadcrumbPage>
-                </BreadcrumbItem>
+                {/*<BreadcrumbSeparator className="hidden md:block" />*/}
+                {/*<BreadcrumbItem>
+                  <BreadcrumbPage>{profile}</BreadcrumbPage>
+                </BreadcrumbItem>*/}
               </BreadcrumbList>
             </Breadcrumb>
           </div>

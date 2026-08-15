@@ -1,3 +1,5 @@
+
+import { RestaurantOnboardingForm } from "@/components/restaurants/restaurant-onboarding-form"
 import { Card } from "@/components/ui/card"
 
 export default function TestPage() {
@@ -6,7 +8,7 @@ export default function TestPage() {
       <Card className="p-4">Leaflet location picker</Card>
       <Card className="p-4 ">
         {/*<LeafletLocationPicker />*/}
-        {/*<RestaurantFirstSetupForm />*/}
+        <RestaurantOnboardingForm/>
       </Card>
     </div>
   )

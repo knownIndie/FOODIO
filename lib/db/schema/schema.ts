@@ -7,6 +7,7 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core"
+
 export const restaurantStatusEnum = pgEnum("restaurant_status", [
   "DRAFT",
   "PENDING_REVIEW",
@@ -29,15 +30,7 @@ export const restaurantMemberRoleEnum = pgEnum("restaurant_member_role", [
   "MANAGER",
   "STAFF",
 ])
-export const profiles = pgTable("profiles", {
-  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
-  username: text("username").notNull().unique(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  emailVerifiedAt: timestamp("email_verified_at"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  password: text("password").notNull(),
-})
+
 export const emailVerificationOtps = pgTable("email_verification_otps", {
   profileId: integer("profile_id")
     .primaryKey()
@@ -47,6 +40,16 @@ export const emailVerificationOtps = pgTable("email_verification_otps", {
   failedAttempts: integer("failed_attempts").notNull().default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   lastSentAt: timestamp("last_sent_at").notNull().defaultNow(),
+})
+
+export const profiles = pgTable("profiles", {
+  id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
+  username: text("username").notNull().unique(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerifiedAt: timestamp("email_verified_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  password: text("password").notNull(),
 })
 export const roles = pgTable("roles", {
   id: integer("role_id").primaryKey().generatedAlwaysAsIdentity(),
@@ -69,6 +72,7 @@ export const profileRoles = pgTable(
     }),
   ]
 )
+
 export const restaurants = pgTable("restaurants", {
   id: integer("restaurant_id").primaryKey().generatedAlwaysAsIdentity(),
   name: text("name").notNull(),

@@ -1,7 +1,7 @@
 import { currentProfile } from "@/lib/auth/current-profile"
 import { db } from "@/lib/db/drizzle"
 import { restaurantMembers, restaurants } from "@/lib/db/schema/schema"
-import { restaurantFormSchema } from "@/lib/restaurants/restaurant-form-schema"
+import { restaurantFormSchema } from "@/lib/restaurants/schema/restaurant-form-schema"
 
 export async function POST(request: Request) {
   const profile = await currentProfile()

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { restaurantFirstSetupSchema } from "@/lib/restaurants/restaurant-basic-schema"
+import { restaurantFirstSetupSchema } from "@/lib/restaurants/schema/restaurant-basic-schema"
 
 type FormMessage = {
   text: string
@@ -75,7 +75,7 @@ export function RestaurantFirstSetupForm() {
           text: `${data.restaurant.name} was saved as a draft.`,
           type: "success",
         })
-        router.replace(data.next ?? "/dashboard")
+        router.replace(data.next ?? `/dashboard`)
         router.refresh()
       } catch {
         setMessage({
