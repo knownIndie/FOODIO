@@ -44,3 +44,5 @@
 - [ ] Free plan: up to 3 restaurant listings and no staff accounts.
 
 
+- [ ] database id chage to uuid
+- [ ] 

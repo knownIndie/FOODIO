@@ -5,8 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -56,7 +54,7 @@ export default async function DashboardLayout({
           </div>
         </header>
 
-        <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
+        <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   )

@@ -1,8 +1,10 @@
 "use client"
 
 import { useForm } from "@tanstack/react-form"
+import { FlaskConicalIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -20,7 +22,7 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { restaurantFirstSetupSchema } from "@/lib/restaurants/schema/restaurant-basic-schema"
+import { createRestaurantSchema } from "@/lib/restaurants/schema/restaurant-schema"
 
 type FormMessage = {
   text: string
@@ -32,6 +34,8 @@ const testRestaurantDetails = {
   description: "Test restaurant used to verify the FoodIO onboarding process.",
 }
 
+const showTestDetails = process.env.NODE_ENV === "development"
+
 export function RestaurantFirstSetupForm() {
   const router = useRouter()
   const [message, setMessage] = useState<FormMessage>()
@@ -42,13 +46,13 @@ export function RestaurantFirstSetupForm() {
       description: "",
     },
     validators: {
-      onSubmit: restaurantFirstSetupSchema,
+      onSubmit: createRestaurantSchema,
     },
     onSubmit: async ({ value }) => {
       setMessage(undefined)
 
       try {
-        const response = await fetch("/api/restaurants/initializeBasic", {
+        const response = await fetch("/api/restaurants", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(value),
@@ -57,7 +61,7 @@ export function RestaurantFirstSetupForm() {
           error?: string
           next?: string
           restaurant?: {
-            id: number
+            id: string
             name: string
             description: string | null
           }
@@ -164,36 +168,34 @@ export function RestaurantFirstSetupForm() {
             </form.Field>
 
             {message && (
-              <p
-                className={
-                  message.type === "success"
-                    ? "text-sm text-emerald-700"
-                    : "text-sm text-destructive"
-                }
-                role="status"
+              <Alert
+                variant={message.type === "error" ? "destructive" : "default"}
               >
-                {message.text}
-              </p>
+                <AlertDescription>{message.text}</AlertDescription>
+              </Alert>
             )}
 
             <form.Subscribe selector={(state) => state.isSubmitting}>
               {(isSubmitting) => (
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    disabled={isSubmitting}
-                    onClick={() => {
-                      form.setFieldValue("name", testRestaurantDetails.name)
-                      form.setFieldValue(
-                        "description",
-                        testRestaurantDetails.description
-                      )
-                      setMessage(undefined)
-                    }}
-                  >
-                    Fill test details
-                  </Button>
+                  {showTestDetails && (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      disabled={isSubmitting}
+                      onClick={() => {
+                        form.setFieldValue("name", testRestaurantDetails.name)
+                        form.setFieldValue(
+                          "description",
+                          testRestaurantDetails.description
+                        )
+                        setMessage(undefined)
+                      }}
+                    >
+                      <FlaskConicalIcon data-icon="inline-start" />
+                      Fill test details
+                    </Button>
+                  )}
 
                   <div className="flex flex-col-reverse gap-2 sm:flex-row">
                     <Button

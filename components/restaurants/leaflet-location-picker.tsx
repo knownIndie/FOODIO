@@ -5,7 +5,6 @@ import "leaflet/dist/leaflet.css"
 import markerIcon from "leaflet/dist/images/marker-icon.png"
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png"
 import markerShadow from "leaflet/dist/images/marker-shadow.png"
-
 import { LocateFixedIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -157,7 +156,7 @@ export function LeafletLocationPicker({
       <div className="relative overflow-hidden rounded-xl border">
         <section
           aria-label="Restaurant location map"
-          className="h-[32rem] w-full"
+          className="h-[22rem] w-full sm:h-[26rem]"
           ref={mapContainerRef}
         />
         {!isMapReady && (

@@ -1,6 +1,7 @@
 import { PlusIcon, StoreIcon } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -49,7 +50,11 @@ export default async function Page() {
           {restaurantList.map((restaurant) => (
             <Link
               key={restaurant.id}
-              href={`/dashboard/restaurants/${restaurant.id}/setup/basic`}
+              href={
+                restaurant.status === "DRAFT"
+                  ? `/dashboard/restaurants/${restaurant.id}/setup`
+                  : `/dashboard/restaurants/${restaurant.id}`
+              }
               aria-label={`Continue setup for ${restaurant.name}`}
               className="block rounded-[min(var(--radius-4xl),24px)] outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
             >
@@ -66,9 +71,9 @@ export default async function Page() {
                     {restaurant.id}
                   </CardDescription>
                   <CardAction>
-                    <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium">
+                    <Badge variant="secondary">
                       {restaurant.status.replaceAll("_", " ")}
-                    </span>
+                    </Badge>
                   </CardAction>
                 </CardHeader>
                 <CardContent>

@@ -6,6 +6,8 @@ import {
   primaryKey,
   text,
   timestamp,
+  unique,
+  uuid,
 } from "drizzle-orm/pg-core"
 
 export const restaurantStatusEnum = pgEnum("restaurant_status", [
@@ -74,7 +76,7 @@ export const profileRoles = pgTable(
 )
 
 export const restaurants = pgTable("restaurants", {
-  id: integer("restaurant_id").primaryKey().generatedAlwaysAsIdentity(),
+  id: uuid("restaurant_id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
   phone: text("phone"),
   email: text("email"),
@@ -91,7 +93,7 @@ export const restaurants = pgTable("restaurants", {
 export const restaurantBusinessDetails = pgTable(
   "restaurant_business_details",
   {
-    restaurantId: integer("restaurant_id")
+    restaurantId: uuid("restaurant_id")
       .primaryKey()
       .references(() => restaurants.id, { onDelete: "cascade" }),
     legal_name: text("legal_name").notNull(),
@@ -103,21 +105,29 @@ export const restaurantBusinessDetails = pgTable(
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   }
 )
-export const restaurantCompliances = pgTable("restaurant_compliances", {
-  id: integer("id").generatedAlwaysAsIdentity(),
-  restaurantId: integer("restaurant_id")
-    .primaryKey()
-    .references(() => restaurants.id, { onDelete: "cascade" }),
-  type: ComplianceTypeEnum("type").notNull(),
-  registration_number: text("registration_number").notNull(),
-  // issued_at: timestamp("issued_at").notNull(),
-  // expires_at: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-})
+export const restaurantCompliances = pgTable(
+  "restaurant_compliances",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    restaurantId: uuid("restaurant_id")
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "cascade" }),
+    type: ComplianceTypeEnum("type").notNull(),
+    registration_number: text("registration_number").notNull(),
+    // issued_at: timestamp("issued_at").notNull(),
+    // expires_at: timestamp("expires_at").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    unique("restaurant_compliance_type_unique").on(
+      table.restaurantId,
+      table.type
+    ),
+  ]
+)
 export const restaurantBankAccounts = pgTable("restaurant_bank_accounts", {
-  id: integer("id").generatedAlwaysAsIdentity(),
-  restaurantId: integer("restaurant_id")
+  restaurantId: uuid("restaurant_id")
     .primaryKey()
     .references(() => restaurants.id, { onDelete: "cascade" }),
   accountNumber: text("account_number").notNull(),
@@ -127,7 +137,7 @@ export const restaurantBankAccounts = pgTable("restaurant_bank_accounts", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 })
 export const restaurantSetupStatus = pgTable("restaurant_setup_status", {
-  restaurantId: integer("restaurant_id")
+  restaurantId: uuid("restaurant_id")
     .primaryKey()
     .references(() => restaurants.id, { onDelete: "cascade" }),
   restaurantBasicStatus: restaurantSectionStatusEnum("restaurant_basic_status")
@@ -156,7 +166,7 @@ export const restaurantSetupStatus = pgTable("restaurant_setup_status", {
 export const restaurantMembers = pgTable(
   "restaurant_members",
   {
-    restaurantId: integer("restaurant_id")
+    restaurantId: uuid("restaurant_id")
       .notNull()
       .references(() => restaurants.id, { onDelete: "cascade" }),
 
@@ -176,7 +186,7 @@ export const restaurantMembers = pgTable(
 )
 export const menuItems = pgTable("menu_items", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
-  restaurantId: integer("restaurant_id")
+  restaurantId: uuid("restaurant_id")
     .notNull()
     .references(() => restaurants.id, { onDelete: "cascade" }),
   name: text("name").notNull(),

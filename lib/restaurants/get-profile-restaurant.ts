@@ -1,18 +1,10 @@
-import { eq, and } from "drizzle-orm"
 import "server-only"
+
+import { and, eq } from "drizzle-orm"
 import { db } from "@/lib/db/drizzle"
 import { restaurantMembers, restaurants } from "@/lib/db/schema/schema"
-import { currentProfile } from "../auth/current-profile"
-import { redirect } from "next/navigation"
 
 export async function getProfileRestaurants(profileId: number) {
-  const currentuser = await currentProfile()
-  if (!currentuser) {
-    redirect("/login")
-  }
-  if (currentuser.id !== profileId) {
-    redirect("/login")
-  }
   const restaurantList = await db
     .select({
       id: restaurants.id,

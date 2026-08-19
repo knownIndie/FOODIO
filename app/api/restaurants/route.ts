@@ -1,7 +1,11 @@
 import { currentProfile } from "@/lib/auth/current-profile"
 import { db } from "@/lib/db/drizzle"
-import { restaurantMembers, restaurants } from "@/lib/db/schema/schema"
-import { restaurantFormSchema } from "@/lib/restaurants/schema/restaurant-form-schema"
+import {
+  restaurantMembers,
+  restaurantSetupStatus,
+  restaurants,
+} from "@/lib/db/schema/schema"
+import { createRestaurantSchema } from "@/lib/restaurants/schema/restaurant-schema"
 
 export async function POST(request: Request) {
   const profile = await currentProfile()
@@ -24,15 +28,9 @@ export async function POST(request: Request) {
     )
   }
 
-  let body: unknown
-
-  try {
-    body = await request.json()
-  } catch {
-    return Response.json({ error: "Invalid JSON body." }, { status: 400 })
-  }
-
-  const parsed = restaurantFormSchema.safeParse(body)
+  const parsed = createRestaurantSchema.safeParse(
+    await request.json().catch(() => null)
+  )
 
   if (!parsed.success) {
     return Response.json(
@@ -46,28 +44,21 @@ export async function POST(request: Request) {
 
   try {
     const restaurant = await db.transaction(async (tx) => {
-      // the [] is required as we are using the .returning , it returns result in the forma on an array
       const [createdRestaurant] = await tx
         .insert(restaurants)
         .values({
           name: parsed.data.name,
-          phone: parsed.data.phone,
-          email: parsed.data.email || null,
-          address: parsed.data.address,
-          resmaplatitude: Number(parsed.data.latitude),
-          resmaplongitude: Number(parsed.data.longitude),
           description: parsed.data.description || null,
         })
         .returning({
           id: restaurants.id,
           name: restaurants.name,
+          description: restaurants.description,
           status: restaurants.status,
         })
 
       if (!createdRestaurant) {
-        throw new Error(
-          "Restaurant insert returned no row, we could not create the restaurant."
-        )
+        throw new Error("RESTAURANT_CREATE_FAILED")
       }
 
       await tx.insert(restaurantMembers).values({
@@ -76,13 +67,18 @@ export async function POST(request: Request) {
         role: "OWNER",
       })
 
+      await tx.insert(restaurantSetupStatus).values({
+        restaurantId: createdRestaurant.id,
+        restaurantBasicStatus: "IN_PROGRESS",
+      })
+
       return createdRestaurant
     })
 
     return Response.json(
       {
         restaurant,
-        next: "/dashboard",
+        next: `/dashboard/restaurants/${restaurant.id}/setup/basic`,
       },
       { status: 201 }
     )

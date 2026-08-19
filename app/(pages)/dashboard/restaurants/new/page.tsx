@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { RestaurantFirstSetupForm } from "@/components/restaurants/restaurant-FirstSetupForm"
+import { RestaurantFirstSetupForm } from "@/components/restaurants/restaurant-first-setup-form"
 import { Button } from "@/components/ui/button"
 import { CardHeader, CardTitle } from "@/components/ui/card"
 import { currentProfile } from "@/lib/auth/current-profile"
