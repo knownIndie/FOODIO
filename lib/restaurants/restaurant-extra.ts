@@ -60,6 +60,10 @@ const requiredSectionSlugs = [
   "bank",
 ] as const
 
+/*
+  this function is essentially needed to calculate the progress of the restaurant setup
+  it returns an object with the number of completed sections, the current section, and whether all required sections are complete and other status that is required to make the beautiful progress in section header
+  */
 export function getRestaurantSetupProgress(status: RestaurantSetupProgress) {
   const completed = requiredSectionSlugs.filter(
     (section) => status[section] === "COMPLETED"
@@ -76,12 +80,17 @@ export function getRestaurantSetupProgress(status: RestaurantSetupProgress) {
   }
 }
 
+/*
+this is to make sure that the url maches the known slugs and not some user given
+*/
 export function isRestaurantSetupSection(
   section: string
 ): section is RestaurantSetupSection {
   return restaurantSetupSections.some((item) => item.slug === section)
 }
-
+/*
+this function is to check if the user can visit a given section based on the current progress
+*/
 export function canVisitRestaurantSetupSection(
   section: RestaurantSetupSection,
   status: RestaurantSetupProgress

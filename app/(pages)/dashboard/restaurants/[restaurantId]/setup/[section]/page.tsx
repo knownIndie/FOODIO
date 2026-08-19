@@ -21,6 +21,7 @@ export default async function RestaurantSetupSectionPage({
 }) {
   const { section, restaurantId } = await params
   if (!isRestaurantSetupSection(section)) notFound()
+  // not found is when the section is not a known setup section
 
   const currentRestaurant = await getCurrentRestaurant(restaurantId)
   if (currentRestaurant.restaurant.status !== "DRAFT") {
