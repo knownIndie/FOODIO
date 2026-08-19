@@ -34,7 +34,7 @@ export default async function RestaurantSetupSectionPage({
     )
   }
 
-  let content: React.ReactNode
+  let content: React.ReactNode // as this page will eventually hold react node
   switch (section) {
     case "basic":
       content = <RestaurantBasicForm restaurantId={restaurantId} />

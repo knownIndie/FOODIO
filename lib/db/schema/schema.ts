@@ -8,6 +8,7 @@ import {
   timestamp,
   unique,
   uuid,
+  boolean,
 } from "drizzle-orm/pg-core"
 
 export const restaurantStatusEnum = pgEnum("restaurant_status", [
@@ -31,6 +32,37 @@ export const restaurantMemberRoleEnum = pgEnum("restaurant_member_role", [
   "OWNER",
   "MANAGER",
   "STAFF",
+])
+export const menuItemTimingEnum = pgEnum("menu_item_timing", [
+  "BREAKFAST",
+  "LUNCH",
+  "DINNER",
+  "ALL_DAY",
+])
+export const menuItemFoodTypeEnum = pgEnum("menu_item_food_type", [
+  "BURGER",
+  "PIZZA",
+  "PASTA",
+  "BIRYANI",
+  "MOMOS",
+  "SANDWICH",
+  "ROLLS",
+  "SALAD",
+  "DESSERT",
+  "DRINKS",
+  "OTHER",
+])
+export const menuItemCuisineEnum = pgEnum("menu_cuisine", [
+  "NORTH_INDIAN",
+  "SOUTH_INDIAN",
+  "CHINESE",
+  "ITALIAN",
+  "MEXICAN",
+  "THAI",
+  "JAPANESE",
+  "KOREAN",
+  "FRENCH",
+  "OTHER",
 ])
 
 export const emailVerificationOtps = pgTable("email_verification_otps", {
@@ -190,5 +222,15 @@ export const menuItems = pgTable("menu_items", {
     .notNull()
     .references(() => restaurants.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
-  price: integer("price").notNull(),
+  description: text("description"),
+  priceInPaise: integer("price_in_paise").notNull(),
+  isVeg: boolean("is_veg").notNull(),
+  isAvailable: boolean("is_available").notNull().default(true),
+  isActive: boolean("is_active").notNull().default(true),
+  foodTypes: menuItemFoodTypeEnum("food_types").array().notNull(),
+  cuisines: menuItemCuisineEnum("cuisines").array().notNull(),
+  timings: menuItemTimingEnum("timings").array().notNull(),
+  caloriesKcal: integer("calories_kcal"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 })

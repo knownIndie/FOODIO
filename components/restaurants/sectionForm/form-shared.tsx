@@ -18,7 +18,7 @@ export const showTestDetails = process.env.NODE_ENV === "development"
 export const sectionFormContentClassName = "px-5 py-6 sm:px-7 sm:py-7"
 
 export const sectionFormFooterClassName =
-  "flex-col items-stretch gap-2 border-t bg-muted/15 px-5 py-4 sm:flex-row sm:items-center sm:justify-end sm:px-7"
+  "flex-col items-stretch gap-2 border-t bg-muted/15 px-5 py-6 sm:flex-row sm:items-center sm:justify-end sm:px-7"
 
 export function FormAlert({ message }: { message?: FormMessage }) {
   if (!message) return null
