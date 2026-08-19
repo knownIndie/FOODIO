@@ -147,7 +147,7 @@ export function RestaurantReviewSummary({ data }: { data: ReviewData }) {
   }
 
   return (
-    <>
+    <div className="px-6 pt-4">
       <CardHeader className="border-b">
         <CardTitle className="text-xl">Review your restaurant</CardTitle>
         <CardDescription>
@@ -211,12 +211,12 @@ export function RestaurantReviewSummary({ data }: { data: ReviewData }) {
           </Alert>
         )}
       </CardContent>
-      <CardFooter className="justify-end border-t">
+      <CardFooter className="justify-end border-t p-4 items-center">
         <Button onClick={submitRestaurant} disabled={isSubmitting}>
           <SendIcon data-icon="inline-start" />
           {isSubmitting ? "Submitting..." : "Submit for review"}
         </Button>
       </CardFooter>
-    </>
+    </div>
   )
 }

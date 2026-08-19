@@ -100,7 +100,7 @@ export async function POST(request: Request, { params }: RouteContext) {
 
     return Response.json({
       success: true,
-      next: `/dashboard/restaurants/${parsedRestaurantId.data}/setup/menu`,
+      next: `/dashboard/restaurants/${parsedRestaurantId.data}/setup/review`,
     })
   } catch (error) {
     if (error instanceof Error) {

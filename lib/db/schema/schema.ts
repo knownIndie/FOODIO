@@ -65,7 +65,7 @@ export const menuItemCuisineEnum = pgEnum("menu_cuisine", [
   "OTHER",
 ])
 
-export const emailVerificationOtps = pgTable("email_verification_otps", {
+export const emailVerificationOtps = pgTable("verification_otps", {
   profileId: integer("profile_id")
     .primaryKey()
     .references(() => profiles.id, { onDelete: "cascade" }),

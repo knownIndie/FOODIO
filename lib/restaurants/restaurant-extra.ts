@@ -23,12 +23,12 @@ export const restaurantSetupSections = [
     description: "Settlement account details",
     required: true,
   },
-  {
-    slug: "menu",
-    label: "Menu",
-    description: "Google Sheets menu import is coming soon",
-    required: false,
-  },
+  // {
+  //   slug: "menu",
+  //   label: "Menu",
+  //   description: "Google Sheets menu import is coming soon",
+  //   required: false,
+  // },
   {
     slug: "review",
     label: "Review",
@@ -50,7 +50,7 @@ export type RestaurantSetupProgress = {
   business: RestaurantSectionStatus
   compliance: RestaurantSectionStatus
   bank: RestaurantSectionStatus
-  menu: RestaurantSectionStatus
+  // menu: RestaurantSectionStatus
 }
 
 const requiredSectionSlugs = [
@@ -97,7 +97,7 @@ export function canVisitRestaurantSetupSection(
 ) {
   const progress = getRestaurantSetupProgress(status)
 
-  if (section === "menu" || section === "review") {
+  if (section === "review") {
     return progress.allRequiredComplete
   }
 

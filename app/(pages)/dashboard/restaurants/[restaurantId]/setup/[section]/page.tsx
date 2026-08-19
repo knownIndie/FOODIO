@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import {
-  RestaurantMenuPlaceholder,
+  // RestaurantMenuPlaceholder,
   RestaurantReviewSummary,
 } from "@/components/restaurants/restaurant-setup-review"
 import { RestaurantBankForm } from "@/components/restaurants/sectionForm/bank-form"
@@ -48,9 +48,9 @@ export default async function RestaurantSetupSectionPage({
     case "bank":
       content = <RestaurantBankForm restaurantId={restaurantId} />
       break
-    case "menu":
-      content = <RestaurantMenuPlaceholder restaurantId={restaurantId} />
-      break
+    // case "menu":
+    //   content = <RestaurantMenuPlaceholder restaurantId={restaurantId} />
+    //   break
     case "review":
       content = <RestaurantReviewSummary data={currentRestaurant} />
       break
