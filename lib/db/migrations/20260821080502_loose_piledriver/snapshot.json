@@ -1,9 +1,9 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "5294f8cb-b6d4-4d35-ba27-1eb76d7b52ff",
+  "id": "0b663bd9-de2b-4781-a940-bcc0a415cd84",
   "prevIds": [
-    "808a581f-2e3e-40ec-9efa-607ffe6dbd8f"
+    "00000000-0000-0000-0000-000000000000"
   ],
   "ddl": [
     {
@@ -13,6 +13,52 @@
         "FSSAI"
       ],
       "name": "compliance_type",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "NORTH_INDIAN",
+        "SOUTH_INDIAN",
+        "CHINESE",
+        "ITALIAN",
+        "MEXICAN",
+        "THAI",
+        "JAPANESE",
+        "KOREAN",
+        "FRENCH",
+        "OTHER"
+      ],
+      "name": "menu_cuisine",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "BURGER",
+        "PIZZA",
+        "PASTA",
+        "BIRYANI",
+        "MOMOS",
+        "SANDWICH",
+        "ROLLS",
+        "SALAD",
+        "DESSERT",
+        "DRINKS",
+        "OTHER"
+      ],
+      "name": "menu_item_food_type",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "BREAKFAST",
+        "LUNCH",
+        "DINNER",
+        "ALL_DAY"
+      ],
+      "name": "menu_item_timing",
       "entityType": "enums",
       "schema": "public"
     },
@@ -215,7 +261,7 @@
       "table": "menu_items"
     },
     {
-      "type": "integer",
+      "type": "uuid",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -241,6 +287,19 @@
       "table": "menu_items"
     },
     {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "description",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
       "type": "integer",
       "typeSchema": null,
       "notNull": true,
@@ -248,7 +307,124 @@
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "price",
+      "name": "price_in_paise",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "is_veg",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "true",
+      "generated": null,
+      "identity": null,
+      "name": "is_available",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "boolean",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "true",
+      "generated": null,
+      "identity": null,
+      "name": "is_active",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "menu_item_food_type",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 1,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "food_types",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "menu_cuisine",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 1,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "cuisines",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "menu_item_timing",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 1,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "timings",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "calories_kcal",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "menu_items"
+    },
+    {
+      "type": "timestamp",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
       "entityType": "columns",
       "schema": "public",
       "table": "menu_items"
@@ -393,29 +569,7 @@
       "table": "profiles"
     },
     {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": true,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": {
-        "type": "always",
-        "name": "restaurant_bank_accounts_id_seq",
-        "increment": "1",
-        "startWith": "1",
-        "minValue": "1",
-        "maxValue": "2147483647",
-        "cache": 1,
-        "cycle": false
-      },
-      "name": "id",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "restaurant_bank_accounts"
-    },
-    {
-      "type": "integer",
+      "type": "uuid",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -493,7 +647,7 @@
       "table": "restaurant_bank_accounts"
     },
     {
-      "type": "integer",
+      "type": "uuid",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -619,7 +773,7 @@
       "table": "restaurant_compliances"
     },
     {
-      "type": "integer",
+      "type": "uuid",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -684,7 +838,7 @@
       "table": "restaurant_compliances"
     },
     {
-      "type": "integer",
+      "type": "uuid",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -736,7 +890,7 @@
       "table": "restaurant_members"
     },
     {
-      "type": "integer",
+      "type": "uuid",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
@@ -814,22 +968,13 @@
       "table": "restaurant_setup_status"
     },
     {
-      "type": "integer",
+      "type": "uuid",
       "typeSchema": null,
       "notNull": true,
       "dimensions": 0,
-      "default": null,
+      "default": "gen_random_uuid()",
       "generated": null,
-      "identity": {
-        "type": "always",
-        "name": "restaurants_restaurant_id_seq",
-        "increment": "1",
-        "startWith": "1",
-        "minValue": "1",
-        "maxValue": "2147483647",
-        "cache": 1,
-        "cycle": false
-      },
+      "identity": null,
       "name": "restaurant_id",
       "entityType": "columns",
       "schema": "public",
@@ -1257,7 +1402,7 @@
     },
     {
       "columns": [
-        "restaurant_id"
+        "id"
       ],
       "nameExplicit": false,
       "name": "restaurant_compliances_pkey",
@@ -1294,6 +1439,18 @@
       "schema": "public",
       "table": "roles",
       "entityType": "pks"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        "restaurant_id",
+        "type"
+      ],
+      "nullsNotDistinct": false,
+      "name": "restaurant_compliance_type_unique",
+      "entityType": "uniques",
+      "schema": "public",
+      "table": "restaurant_compliances"
     },
     {
       "nameExplicit": false,

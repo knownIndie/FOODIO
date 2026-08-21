@@ -1,1 +1,0 @@
-ALTER TABLE "restaurants" ALTER COLUMN "description" SET NOT NULL;
