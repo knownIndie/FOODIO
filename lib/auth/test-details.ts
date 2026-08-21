@@ -21,9 +21,7 @@ export const partnerTestDetails: SignupTestDetails = {
   email: "foodio.test1@example.com",
   password: "FoodIOTest123!",
 }
-export const adminTestDetails: SignupTestDetails = {
-  name: "FoodIO Test User",
-  username: "foodio_test_user1",
+export const adminTestDetails: LoginTestDetails = {
   email: "foodio.testadmin@example.com",
   password: "FoodIOTest123!",
 }

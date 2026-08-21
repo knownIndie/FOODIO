@@ -44,7 +44,7 @@ export function NavUser({
         return
       }
 
-      router.replace("/login")
+      router.replace("/")
       router.refresh()
     } catch {
       setIsLoggingOut(false)
