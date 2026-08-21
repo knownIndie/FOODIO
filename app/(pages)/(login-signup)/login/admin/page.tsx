@@ -1,5 +1,6 @@
 import { ShieldCheckIcon } from "lucide-react"
 import { LoginPageShell } from "@/components/auth/login-page-shell"
+import { adminTestDetails } from "@/lib/auth/test-details"
 
 export default function AdminLoginPage() {
   return (
@@ -10,7 +11,7 @@ export default function AdminLoginPage() {
       endpoint="/api/login/admin"
       destination="/dashboard/admin"
       signupHref={null}
-      testDetails={null}
+      testDetails={adminTestDetails}
       icon={ShieldCheckIcon}
     />
   )
