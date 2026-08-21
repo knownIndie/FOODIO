@@ -34,7 +34,7 @@ export async function POST(request: Request) {
             code: "ACCOUNT_ALREADY_EXISTS",
             error:
               "A FoodIO account already exists with this email. Log in instead.",
-            next: "/login",
+            next: "/login/customer",
           },
           { status: 409 }
         )

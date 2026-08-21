@@ -1,1 +1,1 @@
-export { POST } from "../route"
+export { POST } from "../restaurant/route"

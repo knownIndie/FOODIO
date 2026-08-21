@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { customerTestDetails } from "@/lib/auth/test-details"
 // default customer signup page
 export default function SignupPage() {
   return (
@@ -13,12 +14,15 @@ export default function SignupPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">Create your account</CardTitle>
-          <CardDescription>
-            Join FoodIO as a user or restaurant owner.
-          </CardDescription>
+          <CardDescription>Join FoodIO as a customer.</CardDescription>
         </CardHeader>
         <CardContent>
-          <SignupForm endpoint="/api/register" />
+          <SignupForm
+            endpoint="/api/register"
+            loginHref="/login/customer"
+            returnTo="/"
+            testDetails={customerTestDetails}
+          />
         </CardContent>
       </Card>
     </main>
