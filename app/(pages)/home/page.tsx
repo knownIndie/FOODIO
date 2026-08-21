@@ -70,75 +70,9 @@ export default async function HomePage() {
       <SiteHeader profile={profile} />
 
       <main>
-        <section className="relative overflow-hidden border-b border-border/70">
-          <div className="absolute -top-28 right-0 size-96 rounded-full bg-primary/10 blur-3xl" />
-          <div className="mx-auto grid w-full max-w-7xl gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:px-8">
-            <div className="relative max-w-2xl space-y-7">
-              <Badge variant="secondary">Food delivery, your way</Badge>
-              <div className="space-y-4">
-                <h1 className="font-heading text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
-                  Good food, delivered your way.
-                </h1>
-                <p className="max-w-xl text-lg leading-8 text-muted-foreground">
-                  Find local restaurants, order your favourites, or open the
-                  FoodIO portal built for your role.
-                </p>
-              </div>
-
-              <div className="flex max-w-xl flex-col gap-3 rounded-3xl border bg-card p-3 shadow-sm sm:flex-row">
-                <div className="relative flex-1">
-                  <MapPinIcon className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    aria-label="Delivery location"
-                    className="h-11 border-0 bg-muted/60 pl-10 shadow-none"
-                    placeholder="Enter your delivery location"
-                  />
-                </div>
-                <Button
-                  nativeButton={false}
-                  size="lg"
-                  render={<Link href="/login/customer" />}
-                >
-                  Find food
-                </Button>
-              </div>
-            </div>
-
-            <Card className="relative border-border/70 bg-card/90 shadow-2xl shadow-primary/10">
-              <CardHeader>
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-                    <UtensilsIcon className="size-5" />
-                  </div>
-                  <Badge variant="outline">
-                    <Clock3Icon data-icon="inline-start" />
-                    30 to 45 min
-                  </Badge>
-                </div>
-                <CardTitle className="mt-4 text-2xl">Dinner near you</CardTitle>
-                <CardDescription>
-                  Browse by cuisine once customer ordering is connected.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid grid-cols-2 gap-3">
-                {["North Indian", "Biryani", "South Indian", "Desserts"].map(
-                  (cuisine) => (
-                    <div
-                      key={cuisine}
-                      className="rounded-2xl border bg-muted/40 p-4 font-medium"
-                    >
-                      {cuisine}
-                    </div>
-                  )
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </section>
-
         <section
           id="portals"
-          className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8"
+          className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8"
         >
           <div className="mb-8 max-w-2xl space-y-2">
             <p className="text-sm font-medium text-primary">FoodIO access</p>
