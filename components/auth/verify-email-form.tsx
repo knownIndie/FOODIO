@@ -95,7 +95,7 @@ export function VerifyEmailForm({
         return
       }
 
-      router.replace("/login")
+      router.replace("/")
       router.refresh()
     } catch {
       setMessage({ text: "Unable to log out.", type: "error" })

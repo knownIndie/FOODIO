@@ -15,19 +15,25 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
+import {
+  partnerTestDetails,
+  type SignupTestDetails,
+} from "@/lib/auth/test-details"
 
-const testDetails = {
-  name: "FoodIO Test User",
-  username: "foodio_test_user1",
-  email: "foodio.test1@example.com",
-  password: "FoodIOTest123!",
-}
 export type SignupEndpoint = {
   endpoint: string
+  loginHref?: string
+  returnTo?: string
+  testDetails?: SignupTestDetails
 }
-export function SignupForm({ endpoint }: SignupEndpoint) {
+export function SignupForm({
+  endpoint,
+  loginHref: initialLoginHref = "/login",
+  returnTo,
+  testDetails = partnerTestDetails,
+}: SignupEndpoint) {
   const router = useRouter()
-  const [loginHref, setLoginHref] = useState("/login")
+  const [loginHref, setLoginHref] = useState(initialLoginHref)
   const [message, setMessage] = useState<{
     text: string
     type: "error" | "success"
@@ -86,8 +92,15 @@ export function SignupForm({ endpoint }: SignupEndpoint) {
       })
 
       if (data.verificationRequired) {
-        router.replace(data.next ?? "/verify-email")
+        router.replace(
+          returnTo
+            ? `/verify-email?returnTo=${encodeURIComponent(returnTo)}`
+            : (data.next ?? "/verify-email")
+        )
+        return
       }
+
+      router.replace(returnTo ?? data.next ?? "/")
     },
   })
 

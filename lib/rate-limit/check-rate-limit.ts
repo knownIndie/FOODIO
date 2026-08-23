@@ -1,15 +1,14 @@
-import type { Ratelimit } from "@upstash/ratelimit"
+import type { RateLimiter } from "./rate-limiter"
 
 type CheckRateLimitReturnType =
   | { allowed: true }
   | { allowed: false; retryAfterSeconds: number }
 
 export async function checkRateLimit(
-  limiter: Ratelimit,
+  limiter: RateLimiter,
   identifier: string
 ): Promise<CheckRateLimitReturnType> {
-  const { success, limit, remaining, pending, reset } =
-    await limiter.limit(identifier)
+  const { success, reset } = await limiter.limit(identifier)
 
   if (success) {
     return { allowed: true }

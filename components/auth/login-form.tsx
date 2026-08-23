@@ -13,17 +13,26 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { loginFormSchema } from "@/lib/auth/schema/form-schemas"
+import {
+  type LoginTestDetails,
+  partnerTestDetails,
+} from "@/lib/auth/test-details"
 
-const testDetails = {
-  email: "foodio.test1@example.com",
-  password: "FoodIOTest123!",
-}
-type loginEndpoint = {
+type LoginFormProps = {
   endpoint: string
   returnTo?: string
+  signupHref?: string | null
+  signupLabel?: string
+  testDetails?: LoginTestDetails | null
 }
 
-export function LoginForm({ endpoint, returnTo }: loginEndpoint) {
+export function LoginForm({
+  endpoint,
+  returnTo,
+  signupHref = "/signup",
+  signupLabel = "Sign up",
+  testDetails = partnerTestDetails,
+}: LoginFormProps) {
   const router = useRouter()
   const [message, setMessage] = useState<{
     text: string
@@ -47,7 +56,6 @@ export function LoginForm({ endpoint, returnTo }: loginEndpoint) {
       const data = (await response.json()) as {
         error?: string
         profile?: { name: string; username: string }
-        token?: string
         verificationRequired?: boolean
         next?: string
       }
@@ -147,31 +155,35 @@ export function LoginForm({ endpoint, returnTo }: loginEndpoint) {
               <Button type="submit" disabled={isSubmitting} className="w-full">
                 {isSubmitting ? "Logging in..." : "Log in"}
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                disabled={isSubmitting}
-                onClick={() => {
-                  form.setFieldValue("email", testDetails.email)
-                  form.setFieldValue("password", testDetails.password)
-                  setMessage(undefined)
-                }}
-              >
-                Fill test details
-              </Button>
+              {testDetails ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isSubmitting}
+                  onClick={() => {
+                    form.setFieldValue("email", testDetails.email)
+                    form.setFieldValue("password", testDetails.password)
+                    setMessage(undefined)
+                  }}
+                >
+                  Fill test details
+                </Button>
+              ) : null}
             </div>
           )}
         </form.Subscribe>
 
-        <p className="text-center text-sm text-muted-foreground">
-          Need an account?{" "}
-          <Link
-            href="/signup"
-            className="font-medium text-foreground underline"
-          >
-            Sign up
-          </Link>
-        </p>
+        {signupHref && (
+          <p className="text-center text-sm text-muted-foreground">
+            Need an account?{" "}
+            <Link
+              href={signupHref}
+              className="font-medium text-foreground underline"
+            >
+              {signupLabel}
+            </Link>
+          </p>
+        )}
       </FieldGroup>
     </form>
   )

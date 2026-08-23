@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FoodIO learning and contribution audit</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #000;
+      --surface: #0a0a0a;
+      --surface-2: #111;
+      --border: #2a2a2a;
+      --text: #f5f5f5;
+      --muted: #a1a1aa;
+      --faint: #71717a;
+      --green: #86efac;
+      --green-bg: #092c1a;
+      --amber: #fcd34d;
+      --amber-bg: #312308;
+      --red: #fca5a5;
+      --red-bg: #351010;
+      --blue: #93c5fd;
+      --blue-bg: #10233f;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.58;
+    }
+
+    main {
+      width: min(100% - 32px, 1040px);
+      margin: 0 auto;
+      padding: 52px 0 80px;
+    }
+
+    h1, h2, h3 { letter-spacing: -0.025em; }
+
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 3.7rem);
+      line-height: 1.03;
+      font-weight: 720;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: clamp(1.35rem, 3vw, 1.9rem);
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
+    }
+
+    p { margin: 0 0 14px; }
+
+    strong { font-weight: 680; }
+
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    section {
+      padding: 34px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .eyebrow {
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .lede {
+      max-width: 820px;
+      margin: 22px 0 30px;
+      color: #d4d4d8;
+      font-size: clamp(1.05rem, 2vw, 1.24rem);
+    }
+
+    .verdict {
+      margin: 0 0 42px;
+      padding: 22px 24px;
+      border: 1px solid #3f3f46;
+      background: var(--surface);
+    }
+
+    .verdict p:last-child { margin-bottom: 0; }
+
+    .verdict-line {
+      margin-bottom: 9px;
+      font-size: 1.14rem;
+      font-weight: 680;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 2px 8px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.72rem;
+      font-weight: 680;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .learned { color: var(--green); background: var(--green-bg); }
+    .mixed { color: var(--amber); background: var(--amber-bg); }
+    .ai-heavy { color: var(--red); background: var(--red-bg); }
+    .inferred { color: var(--blue); background: var(--blue-bg); }
+
+    .note {
+      padding: 15px 17px;
+      border-left: 3px solid var(--amber);
+      background: var(--amber-bg);
+      color: #fde68a;
+    }
+
+    .note p:last-child { margin-bottom: 0; }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      min-width: 760px;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 13px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      color: #d4d4d8;
+      background: var(--surface-2);
+      font-size: 0.75rem;
+      letter-spacing: 0.045em;
+      text-transform: uppercase;
+    }
+
+    tbody tr:last-child td { border-bottom: 0; }
+    td:first-child { font-weight: 640; }
+
+    .ownership-grid {
+      display: grid;
+      gap: 1px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 20px;
+      border: 1px solid var(--border);
+      background: var(--border);
+    }
+
+    .ownership-block {
+      padding: 19px;
+      background: var(--surface);
+    }
+
+    .band {
+      margin: 8px 0 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 1.18rem;
+      font-weight: 720;
+    }
+
+    .ownership-block p:last-child { margin-bottom: 0; color: var(--muted); }
+
+    ul, ol {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+
+    li { margin: 8px 0; }
+
+    .two-column {
+      display: grid;
+      gap: 28px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .quote {
+      margin: 18px 0;
+      padding: 16px 18px;
+      border-left: 2px solid #52525b;
+      background: var(--surface);
+      color: #e4e4e7;
+    }
+
+    .quote p:last-child { margin-bottom: 0; }
+
+    .quote-source {
+      color: var(--faint);
+      font-size: 0.8rem;
+    }
+
+    .timeline {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .timeline li {
+      display: grid;
+      grid-template-columns: 132px 1fr;
+      gap: 20px;
+      margin: 0;
+      padding: 17px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .timeline li:last-child { border-bottom: 0; }
+
+    .time {
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+    }
+
+    .evidence-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .evidence-item {
+      padding: 15px 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .evidence-item p:last-child { margin-bottom: 0; }
+
+    .small { color: var(--muted); font-size: 0.86rem; }
+
+    .final-wording {
+      padding: 20px;
+      border: 1px solid var(--green);
+      background: var(--green-bg);
+      color: #dcfce7;
+      font-size: 1.03rem;
+    }
+
+    footer {
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      color: var(--faint);
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 720px) {
+      main { width: min(100% - 24px, 1040px); padding-top: 30px; }
+      section { padding: 28px 0; }
+      .ownership-grid, .two-column { grid-template-columns: 1fr; }
+      .timeline li { grid-template-columns: 1fr; gap: 4px; }
+      .verdict { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">FoodIO authorship and learning audit · 13 August 2026</div>
+      <h1>You learned real things. You did not independently build all of FoodIO.</h1>
+      <p class="lede">
+        FoodIO is your project in product intent, persistence, and many implementation decisions. It is not yet honestly describable as an independently engineered system. The task history shows genuine learning in the auth work, but it also shows ChatGPT performing much of the architecture, debugging, verification, and several complete feature implementations.
+      </p>
+      <div class="verdict">
+        <p class="verdict-line">The blunt verdict</p>
+        <p><span class="status learned">YES</span> You learned concepts and wrote meaningful code, especially during the iterative auth phases.</p>
+        <p><span class="status mixed">NOT YET</span> You have not demonstrated that you can reproduce the important flows without step-by-step AI direction.</p>
+        <p><span class="status ai-heavy">CLEARLY AI-HEAVY</span> The OTP slice, recent restaurant onboarding implementation, multi-restaurant refactor, and working Leaflet picker were substantially or explicitly implemented by ChatGPT.</p>
+      </div>
+    </header>
+
+    <section aria-labelledby="split-heading">
+      <h2 id="split-heading">Contribution split, by type of work</h2>
+      <p>These are evidence-based bands, not line counts. The repository uses shared authorship identity, and many edits happened inside AI-controlled tasks, so a single exact percentage would be fake precision.</p>
+
+      <div class="ownership-grid">
+        <div class="ownership-block">
+          <h3>Product direction and priorities</h3>
+          <div class="band">You: 65% to 75%</div>
+          <p>You chose the restaurant product, custom auth direction, role flows, onboarding needs, provider constraints, and what to defer.</p>
+        </div>
+        <div class="ownership-block">
+          <h3>Architecture and mental heavy lifting</h3>
+          <div class="band">You: 30% to 40%</div>
+          <p>ChatGPT supplied most of the route, service, transaction, auth, tenancy, OTP, map lifecycle, and verification structure.</p>
+        </div>
+        <div class="ownership-block">
+          <h3>Physical implementation</h3>
+          <div class="band">You: 45% to 55%</div>
+          <p>The auth history contains real user-written iteration. Later slices include several explicit “implement this” requests fulfilled by ChatGPT.</p>
+        </div>
+        <div class="ownership-block">
+          <h3>Debugging and verification</h3>
+          <div class="band">You: 15% to 25%</div>
+          <p>ChatGPT repeatedly inspected the live tree, found failures, ran type, lint, build, database, HTTP, and browser checks, and proposed the correction.</p>
+        </div>
+      </div>
+
+      <div class="note" style="margin-top: 20px">
+        <p><strong>Overall label:</strong> FoodIO is an AI-assisted build with user-owned product direction, mixed code authorship, and AI-heavy technical guidance. Calling it “built entirely by me” would be inaccurate. Calling it “built by ChatGPT while I watched” would also be inaccurate.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="ledger-heading">
+      <h2 id="ledger-heading">Feature ownership ledger</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Slice</th>
+              <th>Your contribution</th>
+              <th>ChatGPT contribution</th>
+              <th>Assessment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Core product and scope</td>
+              <td>Chose the Swiggy or Zomato-like direction, role types, restaurant onboarding goals, maps, plans, and incremental priorities.</td>
+              <td>Converted rough intent into schemas, routes, phased plans, TODOs, and implementation sequences.</td>
+              <td><span class="status learned">YOU LED</span></td>
+            </tr>
+            <tr>
+              <td>Profile and role model</td>
+              <td>Questioned separate signup and login paths, described one person acquiring multiple roles, and made product decisions about how roles should be granted.</td>
+              <td>Supplied the one-profile, many-role architecture, joins, server-owned role assignment, and route or service separation.</td>
+              <td><span class="status mixed">MIXED</span></td>
+            </tr>
+            <tr>
+              <td>Signup and login forms</td>
+              <td>Rejected role selection on login, insisted on TanStack Form and shadcn, requested rollback when the result was wrong, and asked for flow explanations.</td>
+              <td>Implemented working signup and login forms, validation, API wiring, password handling, and test-detail helpers in multiple iterations.</td>
+              <td><span class="status ai-heavy">AI-HEAVY</span></td>
+            </tr>
+            <tr>
+              <td>JWT and current-profile flow</td>
+              <td>Often wrote the next edit, asked ChatGPT to check, restated the login flow, fixed reported conditions, and deliberately asked to implement it yourself.</td>
+              <td>Taught JWT claims and cookie boundaries, identified inverted logic and route errors, gave exact next steps, and ran runtime verification.</td>
+              <td><span class="status mixed">GENUINE MIXED LEARNING</span></td>
+            </tr>
+            <tr>
+              <td>Email OTP, Mailtrap, logout</td>
+              <td>Selected Mailtrap sandbox, rejected Nodemailer, chose the product requirement, configured credentials, tested the result, and asked why the OTP table was required.</td>
+              <td>Designed the OTP state model, HMAC handling, schema and migration, routes, email integration, protected gates, and then explicitly implemented the complete slice and fixed logout.</td>
+              <td><span class="status ai-heavy">AI-OWNED IMPLEMENTATION</span></td>
+            </tr>
+            <tr>
+              <td>Rate limiting</td>
+              <td>Chose Upstash, worked through HMAC and HTTP response questions, and participated in the login limiter flow.</td>
+              <td>Researched options, supplied the endpoint strategy and implementation model, explained keys, headers, status codes, and tested behavior.</td>
+              <td><span class="status mixed">MIXED, AI-LED</span></td>
+            </tr>
+            <tr>
+              <td>Restaurant onboarding foundation</td>
+              <td>Defined the desired fields, dashboard entry, multi-restaurant goal, product flow, and later proposed independent section routes with a shared sidebar.</td>
+              <td>Implemented the large form, validation, API transaction, dashboard integration, database additions, and helper behavior.</td>
+              <td><span class="status ai-heavy">AI-HEAVY IMPLEMENTATION</span></td>
+            </tr>
+            <tr>
+              <td>Multiple restaurants per owner</td>
+              <td>Identified the requirement and attempted to locate the limiting code.</td>
+              <td>Diagnosed the singular helper and guards, performed the array refactor, fixed consumers, and verified the build.</td>
+              <td><span class="status ai-heavy">AI-HEAVY</span></td>
+            </tr>
+            <tr>
+              <td>Map picker</td>
+              <td>Selected and changed providers, read documentation, identified that the implementation was broken, and honestly stopped claiming the implementation as yours.</td>
+              <td>Diagnosed React lifecycle, refs, container height, imports, assets, provider boundaries, then stashed MapLibre and built a working Leaflet picker.</td>
+              <td><span class="status ai-heavy">CHATGPT-OWNED</span></td>
+            </tr>
+            <tr>
+              <td>Section-based onboarding design</td>
+              <td>Originated the strongest current architecture idea: create a restaurant draft, redirect by ID, and use a shared sidebar with separate forms per section.</td>
+              <td>Expanded the idea into a route tree, draft rules, section boundaries, and final submission model.</td>
+              <td><span class="status learned">YOUR IDEA, AI-ELABORATED</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="learned-heading">
+      <h2 id="learned-heading">What you appear to have actually learned</h2>
+      <p>Learning is credited only when the history shows you reasoning, restating, correcting, or writing before review. Merely asking for an explanation after ChatGPT implemented a feature counts as exposure, not mastery.</p>
+
+      <div class="two-column">
+        <div>
+          <h3>Demonstrated learning</h3>
+          <ul>
+            <li><strong>Request and response flow:</strong> form state, <code>fetch</code>, route parsing, service work, status codes, and JSON response handling.</li>
+            <li><strong>Authentication versus authorization:</strong> a valid profile is not automatically allowed to control a restaurant.</li>
+            <li><strong>One identity with multiple roles:</strong> a person can be a customer and later gain restaurant-owner or delivery roles.</li>
+            <li><strong>Database result shaping:</strong> selected columns return row objects, and <code>map</code> converts those rows into an array of role values.</li>
+            <li><strong>Server and client boundaries:</strong> server code loads identity, while click handlers, browser APIs, and client navigation need client components.</li>
+            <li><strong>Transactions:</strong> restaurant creation and owner membership must succeed or fail together.</li>
+            <li><strong>HTTP response structure:</strong> the JSON body and response options such as status and headers are different layers.</li>
+            <li><strong>Product decomposition:</strong> separate onboarding forms can save independently under one restaurant ID.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Not yet demonstrated independently</h3>
+          <ul>
+            <li>Building a third-party browser integration from documentation without ChatGPT translating the docs into the exact component.</li>
+            <li>Implementing an end-to-end feature without repeated “check” cycles and exact correction prompts.</li>
+            <li>Reconstructing JWT, OTP, or restaurant authorization from a blank editor.</li>
+            <li>Diagnosing runtime UI and asset failures without ChatGPT or browser automation doing the investigation.</li>
+            <li>Designing a secure resource-scoped authorization layer without AI proposing the membership query and failure behavior.</li>
+            <li>Owning the test strategy. Most evidence comes from checks run by ChatGPT, not tests you designed and executed independently.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="quote">
+        <p>“I want to implement this myself, give me step by step.”</p>
+        <p class="quote-source">Work on phase 4</p>
+      </div>
+      <p>This is good evidence of active intent. The repeated code-review loop that followed shows real participation. It still means the solution path was heavily scaffolded.</p>
+    </section>
+
+    <section aria-labelledby="evidence-heading">
+      <h2 id="evidence-heading">The most important evidence</h2>
+      <div class="evidence-list">
+        <div class="evidence-item">
+          <h3>1. You repeatedly wrote code and requested review</h3>
+          <p>Across the JWT, verification, current-profile, and restaurant-role phases, your recurring pattern was “check,” followed by edits and another check. ChatGPT sometimes rejected the result, and you corrected it. That is not passive copying.</p>
+          <p class="small">Evidence state: verified from the FoodIO phase 3 to phase 6 task history.</p>
+        </div>
+        <div class="evidence-item">
+          <h3>2. You made and defended product decisions</h3>
+          <p>You removed role selection from login, chose one profile with additive roles, rejected Nodemailer for Mailtrap sandbox, chose Upstash, deferred sessions at one point, changed map providers, and proposed section-based onboarding. ChatGPT did not invent every decision.</p>
+          <p class="small">Evidence state: verified from auth, OTP, phase 8, maps, and current onboarding tasks.</p>
+        </div>
+        <div class="evidence-item">
+          <h3>3. You sometimes asked ChatGPT to take over completely</h3>
+          <p>Examples include “make it work,” “go ahead implement this,” “do necessary changes,” and requests to add complete flows. Those tasks resulted in substantial repository edits attributed operationally to ChatGPT.</p>
+          <p class="small">Evidence state: verified from signup or login, OTP, restaurant onboarding, and multi-restaurant tasks.</p>
+        </div>
+        <div class="evidence-item">
+          <h3>4. The map thread removes all ambiguity</h3>
+          <p>You said: “you did all the work, I did nothing.” ChatGPT agreed that the working Leaflet implementation was its work and should not be presented as knowledge you possessed. That is a clean ownership boundary.</p>
+          <p class="small">Evidence state: verified from “Fix broken MapLibre implementation.”</p>
+        </div>
+        <div class="evidence-item">
+          <h3>5. Your current self-assessment is accurate</h3>
+          <p>You said you had been offloading the mental heavy work and asked ChatGPT to become a mentor rather than a developer. The audit supports that diagnosis. This recognition is valuable because it changes the workflow that created the dependency.</p>
+          <p class="small">Evidence state: verified from “Update restaurant onboarding.”</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="history-heading">
+      <h2 id="history-heading">How your role changed over time</h2>
+      <ol class="timeline">
+        <li>
+          <span class="time">9 to 12 July</span>
+          <div><strong>Architecture discovery.</strong> ChatGPT did most of the system decomposition. You supplied the app idea, asked questions, and began making code changes under close direction.</div>
+        </li>
+        <li>
+          <span class="time">17 to 27 July</span>
+          <div><strong>Your strongest learning period.</strong> You worked through JWT signing and verification, cookies, current-profile queries, joins, role assignment, and client or server boundaries using an iterative write, check, explain cycle.</div>
+        </li>
+        <li>
+          <span class="time">31 July to 2 August</span>
+          <div><strong>Implementation ownership shifted toward ChatGPT.</strong> You chose Mailtrap and the OTP requirement, but explicitly asked ChatGPT to implement the system and fix logout.</div>
+        </li>
+        <li>
+          <span class="time">6 to 10 August</span>
+          <div><strong>Restaurant work became AI-heavy.</strong> ChatGPT implemented the onboarding foundation and later fixed multi-restaurant behavior while you directed features and requested explanations.</div>
+        </li>
+        <li>
+          <span class="time">12 to 13 August</span>
+          <div><strong>The dependency became visible.</strong> The map integration failed as a learning exercise, ChatGPT replaced it with Leaflet, and you correctly refused to claim that work as yours.</div>
+        </li>
+        <li>
+          <span class="time">Current</span>
+          <div><strong>A better mode is starting.</strong> You proposed the section-based onboarding direction and explicitly changed ChatGPT’s role from implementer to mentor. No independent implementation has happened yet, so this is a decision, not proof of changed skill.</div>
+        </li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="claim-heading">
+      <h2 id="claim-heading">What you can honestly claim</h2>
+      <p>An older FoodIO report used the wording “I wrote the FoodIO implementation, and Codex reviewed it.” That was defensible for parts of the earlier auth learning loop. It is no longer accurate for the project as a whole after the later OTP, onboarding, multi-restaurant, and Leaflet implementations.</p>
+
+      <div class="final-wording">
+        <strong>Recommended wording:</strong><br>
+        “I am building FoodIO as an AI-assisted learning project. I own the product direction and have written meaningful parts of the authentication and role flows through an iterative review process. I also used ChatGPT for architecture, debugging, verification, and some complete feature implementations, including the recent map and parts of restaurant onboarding. I am now changing the workflow so I implement first and use AI as a reviewer.”
+      </div>
+
+      <div class="two-column" style="margin-top: 24px">
+        <div>
+          <h3>Safe claims</h3>
+          <ul>
+            <li>You understand more about auth, roles, requests, responses, joins, and React boundaries than when you started.</li>
+            <li>You contributed real product thinking and some implementation.</li>
+            <li>You used AI actively, questioned it, rejected incorrect outcomes, and iterated.</li>
+            <li>You can explain several FoodIO flows with support from the code.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Claims to avoid</h3>
+          <ul>
+            <li>“I designed and built the complete architecture myself.”</li>
+            <li>“ChatGPT only reviewed my code.”</li>
+            <li>“I know how to build the map picker because it works in the repository.”</li>
+            <li>“Every committed feature represents knowledge I can reproduce.”</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="test-heading">
+      <h2 id="test-heading">How to prove the learning is yours</h2>
+      <p>The next milestone should not be another large feature. It should be evidence that you can perform the reasoning without ChatGPT carrying it.</p>
+      <ol>
+        <li><strong>Trace before coding.</strong> Explain the current restaurant creation request from page to database transaction in your own words, without asking ChatGPT for the answer.</li>
+        <li><strong>Design one section yourself.</strong> Choose the basic-information section. Write its route, authorization checks, data contract, schema changes, and save behavior as a short plan.</li>
+        <li><strong>Read only the relevant official docs.</strong> Do not ask ChatGPT for code. Record what each doc changes in your plan.</li>
+        <li><strong>Implement the vertical slice.</strong> Build it from a blank editor or existing patterns. Run your own typecheck and browser test. Save the failures you encounter.</li>
+        <li><strong>Ask ChatGPT for review only.</strong> The prompt should be “inspect my implementation and report defects, do not edit.”</li>
+        <li><strong>Repair it yourself.</strong> Ask for hints only when the failure remains after your own diagnosis.</li>
+        <li><strong>Rebuild one critical function later.</strong> A week later, recreate a small JWT verifier, membership authorization query, or location-selection callback without copying FoodIO.</li>
+      </ol>
+      <div class="note" style="margin-top: 20px">
+        <p><strong>Passing condition:</strong> You can explain, implement, debug, and verify one complete FoodIO slice with ChatGPT acting only as reviewer. Until then, you have learned with support, but independence remains unproven.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="scope-heading">
+      <h2 id="scope-heading">Audit scope and limitations</h2>
+      <ul>
+        <li>Reviewed 16 FoodIO-related Codex and ChatGPT task histories covering auth planning, forms, JWT, current profile, roles, OTP, rate limiting, database design, restaurant onboarding, multi-restaurant behavior, maps, and the current mentor-mode decision.</li>
+        <li>Inspected the current repository status, recent commit history, active README state, and an earlier FoodIO journey or authorship report.</li>
+        <li>The audit distinguishes verified task statements from inference. Ownership bands are inferred from prompts, edits, acknowledgements, and feature outcomes.</li>
+        <li>Git metadata cannot prove human versus AI line authorship because both worked through the same repository identity and task environment.</li>
+        <li>“Learned” means demonstrated reasoning or correction in the task record. It does not mean interview-ready recall or independent implementation mastery.</li>
+      </ul>
+    </section>
+
+    <footer>
+      Standalone audit prepared from FoodIO task history and repository evidence. No external resources, scripts, tracking, or network requests are included.
+    </footer>
+  </main>
+</body>
+</html>

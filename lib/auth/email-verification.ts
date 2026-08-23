@@ -3,7 +3,7 @@ import { createHmac, randomInt, timingSafeEqual } from "node:crypto"
 import { and, eq } from "drizzle-orm"
 import { db } from "@/lib/db/drizzle"
 import { emailVerificationOtps, profiles } from "@/lib/db/schema/schema"
-import { sendVerificationEmail } from "@/lib/email/mailtrap"
+import { sendVerificationEmail } from "@/lib/email/send-verification-email"
 
 const OTP_EXPIRY_MINUTES = 10
 const MAX_FAILED_ATTEMPTS = 5

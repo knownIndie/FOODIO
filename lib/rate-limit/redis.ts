@@ -1,4 +1,9 @@
 import "server-only"
 import { Redis } from "@upstash/redis"
-// default redis export for the whole app
-export const redis = Redis.fromEnv()
+
+let hostedRedis: Redis | undefined
+
+export function getHostedRedis() {
+  hostedRedis ??= Redis.fromEnv()
+  return hostedRedis
+}

@@ -1,22 +1,22 @@
 import { Geist_Mono, Noto_Sans, Nunito_Sans } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/ui/theme-provider"
-import { Tooltip } from "@/components/ui/tooltip"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
 const notoSansHeading = Noto_Sans({
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-noto-heading",
 })
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-nunito-sans",
 })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-geist-mono",
 })
 
 export default function RootLayout({
@@ -36,9 +36,9 @@ export default function RootLayout({
       )}
     >
       <body>
-        <Tooltip>
+        <TooltipProvider>
           <ThemeProvider>{children}</ThemeProvider>
-        </Tooltip>
+        </TooltipProvider>
       </body>
     </html>
   )
