@@ -44,8 +44,7 @@ export async function POST() {
     return Response.json(
       {
         code: "VERIFICATION_EMAIL_SEND_FAILED",
-        error:
-          "The verification email could not be sent. Check the Mailtrap sandbox configuration and try again.",
+        error: "The verification email could not be sent. Try again later.",
       },
       { status: 503 }
     )
