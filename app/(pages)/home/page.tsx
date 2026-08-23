@@ -1,11 +1,8 @@
 import {
   BikeIcon,
-  Clock3Icon,
-  MapPinIcon,
   ShieldCheckIcon,
   StoreIcon,
   UserRoundIcon,
-  UtensilsIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { SiteHeader } from "@/components/home/site-header"
@@ -18,7 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { currentProfile } from "@/lib/auth/current-profile"
 
 const portals = [

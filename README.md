@@ -14,7 +14,7 @@
 
 - [x] Allow one owner to manage multiple restaurants.
 - [x] make maps interactive accordinf to sid req [ coudn't figure it out ]
-- [] make the multiple steps for restaurant to work 
+- [ ] make the multiple steps for restaurant to work
 - [ ] ask if we want the auto approve after 24 h { given we have all the provided docs }or manual review
 - [ ] get docker work
 
@@ -42,7 +42,4 @@
 - [ ] Confirm the pricing and account limits.
 - [ ] Paid plan: `$100` signup, up to 50 restaurant listings, and 3 staff accounts.
 - [ ] Free plan: up to 3 restaurant listings and no staff accounts.
-
-
 - [ ] database id chage to uuid
-- [ ] 

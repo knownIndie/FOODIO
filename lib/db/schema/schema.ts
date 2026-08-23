@@ -1,4 +1,5 @@
 import {
+  boolean,
   doublePrecision,
   integer,
   pgEnum,
@@ -8,7 +9,6 @@ import {
   timestamp,
   unique,
   uuid,
-  boolean,
 } from "drizzle-orm/pg-core"
 
 export const restaurantStatusEnum = pgEnum("restaurant_status", [

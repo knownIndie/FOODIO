@@ -41,4 +41,3 @@ app/(pages)/dashboard/restaurants/[restaurantId]/
 └── orders/
     └── page.tsx
 ```
-
