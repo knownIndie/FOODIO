@@ -11,6 +11,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core"
 
+// restaurant status and section status enums
 export const restaurantStatusEnum = pgEnum("restaurant_status", [
   "DRAFT",
   "PENDING_REVIEW",
@@ -33,6 +34,8 @@ export const restaurantMemberRoleEnum = pgEnum("restaurant_member_role", [
   "MANAGER",
   "STAFF",
 ])
+
+// menu item timing and food type enums
 export const menuItemTimingEnum = pgEnum("menu_item_timing", [
   "BREAKFAST",
   "LUNCH",
@@ -65,6 +68,7 @@ export const menuItemCuisineEnum = pgEnum("menu_cuisine", [
   "OTHER",
 ])
 
+// email verification OTPs
 export const emailVerificationOtps = pgTable("email_verification_otps", {
   profileId: integer("profile_id")
     .primaryKey()
@@ -76,6 +80,7 @@ export const emailVerificationOtps = pgTable("email_verification_otps", {
   lastSentAt: timestamp("last_sent_at").notNull().defaultNow(),
 })
 
+// profiles and roles
 export const profiles = pgTable("profiles", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   username: text("username").notNull().unique(),
@@ -107,6 +112,7 @@ export const profileRoles = pgTable(
   ]
 )
 
+// restaurants and their business details
 export const restaurants = pgTable("restaurants", {
   id: uuid("restaurant_id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
@@ -195,6 +201,7 @@ export const restaurantSetupStatus = pgTable("restaurant_setup_status", {
     .default("NOT_STARTED"),
 })
 
+// restaurant members
 export const restaurantMembers = pgTable(
   "restaurant_members",
   {
@@ -211,11 +218,15 @@ export const restaurantMembers = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [
+    // Prevents adding the same profile to the same restaurant twice.
+    // A profile may still belong to multiple restaurants.
     primaryKey({
       columns: [table.restaurantId, table.profileId],
     }),
   ]
 )
+
+// menu items
 export const menuItems = pgTable("menu_items", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
   restaurantId: uuid("restaurant_id")
@@ -231,6 +242,31 @@ export const menuItems = pgTable("menu_items", {
   cuisines: menuItemCuisineEnum("cuisines").array().notNull(),
   timings: menuItemTimingEnum("timings").array().notNull(),
   caloriesKcal: integer("calories_kcal"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+})
+
+// pricing setup
+export const pricingTiers = pgTable("pricing_tiers", {
+  id: integer("id").primaryKey(),
+  planName: text("plan_name").notNull(),
+  planPrice: integer("plan_price").notNull(),
+  restaurantLimit: integer("restaurant_limit").notNull(),
+  staffLimit: integer("staff_limit").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  // add plans via a seed
+})
+export const profileSubscriptions = pgTable("profile_subscriptions", {
+  profileId: integer("profile_id")
+    .primaryKey()
+    // profileId is the primary key, so each profile can have at most one subscription row.
+    .references(() => profiles.id, { onDelete: "cascade" }),
+
+  pricingTierId: integer("pricing_tier_id")
+    .notNull()
+    .references(() => pricingTiers.id, { onDelete: "restrict" }),
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 })
