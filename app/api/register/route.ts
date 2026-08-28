@@ -2,6 +2,8 @@ import { registerProfile } from "@/lib/auth/register-profile"
 import { registrationVerificationResponse } from "@/lib/auth/registration-verification-response"
 import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
 
+// customer registration
+
 export async function POST(request: Request) {
   const parsed = signupFormSchema.safeParse(
     await request.json().catch(() => null) // it tries to parse the request body as json, if it fails then it catches the error and returns null instead
@@ -26,7 +28,7 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof Error) {
       /*
-        the error can be anything, but to access the error message we need to know it's actually an Error object. that's why we check instanceof Error first, so we don't crash trying to read .message on something like a string or undefined 
+        the error can be anything, but to access the error message we need to know it's actually an Error object. that's why we check instanceof Error first, so we don't crash trying to read .message on something like a string or undefined
       */
       if (error.message === "EMAIL_ALREADY_EXISTS") {
         return Response.json(

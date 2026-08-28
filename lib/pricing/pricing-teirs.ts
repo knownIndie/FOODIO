@@ -1,4 +1,4 @@
-export const pricingTiers = [
+export const pricingTiersData = [
   {
     id: 1,
     planName: "free",
@@ -21,4 +21,4 @@ export const pricingTiers = [
     restaurantLimit: 25,
   },
 ] as const
-export type PricingTier = (typeof pricingTiers)[number]
+export type PricingTierData = (typeof pricingTiersData)[number]

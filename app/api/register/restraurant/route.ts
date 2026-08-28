@@ -4,6 +4,8 @@ import { addProfileRole, registerProfile } from "@/lib/auth/register-profile"
 import { registrationVerificationResponse } from "@/lib/auth/registration-verification-response"
 import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
 
+// restaurant owner registration
+
 const returnTo = "/signup/restraurant"
 
 export async function POST(request: Request) {
