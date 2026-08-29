@@ -4,12 +4,19 @@
   - [x] Review [Capacitor](https://capacitorjs.com/).
   - [x] Review the [Next.js Progressive Web Apps guide](https://nextjs.org/docs/app/guides/progressive-web-apps).
 
+### Docker setup questions
+
+- [x] Decide whether Docker should continue using the hosted Neon database and Redis, or run local database and Redis services.
+  - setup everything locally -> docker [ plugin ans everything]
+- [ ] Define what a one-command startup should boot and document that command.
+
 ## This week
 
 - [x] Allow one owner to manage multiple restaurants.
 - [x] make maps interactive accordinf to sid req [ coudn't figure it out ]
 - [ ] make the multiple steps for restaurant to work
 - [ ] ask if we want the auto approve after 24 h { given we have all the provided docs }or manual review
+- [ ] get docker work
 
 ## Restaurant onboarding
 [later]
