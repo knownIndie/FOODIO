@@ -2,7 +2,12 @@ import "server-only"
 import { hash } from "argon2"
 import { eq, inArray, or } from "drizzle-orm"
 import { db } from "../db/drizzle"
-import { profileRoles, profiles, roles } from "../db/schema/schema"
+import {
+  profileRoles,
+  profiles,
+  profileSubscriptions,
+  roles,
+} from "../db/schema/schema"
 import type { PlatformRole } from "./schema/roles"
 
 type RegisterProfileInput = {
@@ -48,6 +53,8 @@ export const registerProfile = async (input: RegisterProfileInput) => {
 
   const hashedPassword = await hash(input.password)
 
+  // new profile registration
+
   return db.transaction(async (tx) => {
     const roleRows = await tx
       .select({ roleId: roles.id, role: roles.role })
@@ -77,6 +84,7 @@ export const registerProfile = async (input: RegisterProfileInput) => {
         profileId: createProfile.id,
       }))
     )
+
     return createProfile
   })
 }
@@ -96,6 +104,7 @@ export const addProfileRole = async (profileId: number, role: PlatformRole) => {
       .values({
         profileId: profileId,
         roleId: roleId.id,
+        // add the subscription teir here after seeding
       })
       .onConflictDoNothing()
   })
