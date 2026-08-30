@@ -1,7 +1,9 @@
 import { UtensilsCrossedIcon } from "lucide-react"
 import Link from "next/link"
+import { containerWidth } from "@/components/classname-extras"
 import { AccountMenu } from "@/components/home/account-menu"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 type HeaderProfile = {
   email: string
@@ -29,7 +31,12 @@ function dashboardHref(roles: string[]) {
 export function SiteHeader({ profile }: { profile: HeaderProfile | null }) {
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+      <div
+        className={cn(
+          containerWidth,
+          "flex h-16 items-center justify-between gap-6"
+        )}
+      >
         <Link href="/" className="flex items-center gap-2">
           <span className="flex size-9 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
             <UtensilsCrossedIcon className="size-4" />
@@ -57,6 +64,12 @@ export function SiteHeader({ profile }: { profile: HeaderProfile | null }) {
             href="/signup/delivery"
           >
             Deliver with us
+          </Link>
+          <Link
+            className="transition-colors hover:text-foreground"
+            href="/pricing"
+          >
+            Pricing
           </Link>
         </nav>
 
