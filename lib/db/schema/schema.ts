@@ -267,6 +267,9 @@ export const profileSubscriptions = pgTable("profile_subscriptions", {
     .notNull()
     .references(() => pricingTiers.id, { onDelete: "restrict" }),
 
+  staffLimit: integer("staff_limit").notNull(),
+  restaurantLimit: integer("restaurant_limit").notNull(),
+
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 })

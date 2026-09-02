@@ -1,0 +1,1 @@
+ALTER TABLE "profile_subscriptions" ADD COLUMN "staff_limit" integer;
