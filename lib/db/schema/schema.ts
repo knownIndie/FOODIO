@@ -36,7 +36,7 @@ export const restaurantMemberRoleEnum = pgEnum("restaurant_member_role", [
 ])
 
 // menu item timing and food type enums
-export const menuItemTimingEnum = pgEnum("menu_item_timing", [
+export const menuItemAvailabilityEnum = pgEnum("menu_item_availability", [
   "BREAKFAST",
   "LUNCH",
   "DINNER",
@@ -240,7 +240,7 @@ export const menuItems = pgTable("menu_items", {
   isActive: boolean("is_active").notNull().default(true),
   foodTypes: menuItemFoodTypeEnum("food_types").array().notNull(),
   cuisines: menuItemCuisineEnum("cuisines").array().notNull(),
-  timings: menuItemTimingEnum("timings").array().notNull(),
+  timings: menuItemAvailabilityEnum("timings").array().notNull(),
   caloriesKcal: integer("calories_kcal"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
