@@ -9,14 +9,14 @@ export const pricingTiersData = [
   {
     id: 2,
     planName: "Premium",
-    planPrice: 0,
+    planPrice: 100,
     staffLimit: 100,
     restaurantLimit: 10,
   },
   {
     id: 3,
     planName: "Business",
-    planPrice: 0,
+    planPrice: 1000,
     staffLimit: 250,
     restaurantLimit: 25,
   },
