@@ -1,6 +1,6 @@
 import { UserRoundIcon } from "lucide-react"
 import { LoginPageShell } from "@/components/auth/login-page-shell"
-import { customerTestDetails } from "@/lib/auth/test-details"
+import { foodioStudiosDemoDetails } from "@/lib/auth/test-details"
 
 export default function CustomerLoginPage() {
   return (
@@ -12,7 +12,7 @@ export default function CustomerLoginPage() {
       destination="/customer"
       signupHref="/signup"
       signupLabel="Create a customer account"
-      testDetails={customerTestDetails}
+      testDetails={foodioStudiosDemoDetails}
       icon={UserRoundIcon}
     />
   )

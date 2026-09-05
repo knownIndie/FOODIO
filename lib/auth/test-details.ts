@@ -15,6 +15,11 @@ export const customerTestDetails: SignupTestDetails = {
   password: "FoodIOTest123!",
 }
 
+export const foodioStudiosDemoDetails: LoginTestDetails = {
+  email: "foodio.studios.demo@example.com",
+  password: "TEST 123",
+}
+
 export const partnerTestDetails: SignupTestDetails = {
   name: "FoodIO Test User",
   username: "foodio_test_user1",
