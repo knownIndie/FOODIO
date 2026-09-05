@@ -5,6 +5,8 @@ import { RestaurantFirstSetupForm } from "@/components/restaurants/restaurant-fi
 import { Button } from "@/components/ui/button"
 import { CardHeader, CardTitle } from "@/components/ui/card"
 import { currentProfile } from "@/lib/auth/current-profile"
+import { getProfileSubscription } from "@/lib/pricing/get-profile-subscription"
+import { getProfileRestaurants } from "@/lib/restaurants/get-profile-restaurant"
 
 export default async function NewRestaurantPage() {
   const profile = await currentProfile()
@@ -15,6 +17,15 @@ export default async function NewRestaurantPage() {
 
   if (!profile.roles.includes("RESTAURANT_OWNER")) {
     redirect("/signup/restraurant")
+  }
+  const profileSubscriptionTier = await getProfileSubscription(profile.id)
+  const restaurantList = await getProfileRestaurants(profile.id)
+
+  if (
+    !profileSubscriptionTier ||
+    restaurantList.length >= profileSubscriptionTier.restaurantLimit
+  ) {
+    redirect("/dashboard")
   }
 
   return (

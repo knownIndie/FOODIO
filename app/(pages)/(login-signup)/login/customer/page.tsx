@@ -9,7 +9,7 @@ export default function CustomerLoginPage() {
       title="Welcome back"
       description="Log in to order food and manage your FoodIO account."
       endpoint="/api/login/customer"
-      destination="/"
+      destination="/customer"
       signupHref="/signup"
       signupLabel="Create a customer account"
       testDetails={customerTestDetails}

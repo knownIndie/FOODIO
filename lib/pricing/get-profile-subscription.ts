@@ -1,5 +1,5 @@
 import "server-only"
-import { eq, sql } from "drizzle-orm"
+import { eq } from "drizzle-orm"
 import { db } from "../db/drizzle"
 import { pricingTiers, profileSubscriptions } from "../db/schema/schema"
 
@@ -9,8 +9,8 @@ export async function getProfileSubscription(profileId: number) {
       profileId: profileSubscriptions.profileId,
       pricingTierId: pricingTiers.id,
       planName: pricingTiers.planName,
-      staffLimitOverride: profileSubscriptions.staffLimit,
-      staffLimit: sql<number>`coalesce(${profileSubscriptions.staffLimit}, ${pricingTiers.staffLimit})`,
+      staffLimit: profileSubscriptions.staffLimit,
+      restaurantLimit: profileSubscriptions.restaurantLimit,
     })
     .from(profileSubscriptions)
     .innerJoin(
