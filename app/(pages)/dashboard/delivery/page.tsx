@@ -1,6 +1,6 @@
 import { BikeIcon } from "lucide-react"
 import { redirect } from "next/navigation"
-import { PortalPlaceholder } from "@/components/dashboard/portal-placeholder"
+import { PortalPlaceholder } from "@/components/portal-placeholder"
 import { currentProfile } from "@/lib/auth/current-profile"
 
 export default async function DeliveryDashboardPage() {

@@ -1,6 +1,9 @@
 import { currentProfile } from "@/lib/auth/current-profile"
 import { sendEmailVerificationOtp } from "@/lib/auth/email-verification"
-import { addProfileRole, registerProfile } from "@/lib/auth/register-profile"
+import {
+  addRestaurantProfile,
+  registerRestaurantProfile,
+} from "@/lib/auth/register-restaurant-profile"
 import { registrationVerificationResponse } from "@/lib/auth/registration-verification-response"
 import { signupFormSchema } from "@/lib/auth/schema/form-schemas"
 
@@ -35,7 +38,7 @@ export async function POST(request: Request) {
         )
       }
 
-      await addProfileRole(profile.id, "RESTAURANT_OWNER")
+      await addRestaurantProfile(profile.id)
       return Response.json(
         {
           message: "Restaurant owner role added successfully.",
@@ -59,10 +62,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const registeredProfile = await registerProfile({
-      ...parsed.data,
-      roles: ["RESTAURANT_OWNER"],
-    })
+    const registeredProfile = await registerRestaurantProfile(parsed.data)
 
     return registrationVerificationResponse(registeredProfile)
   } catch (error) {

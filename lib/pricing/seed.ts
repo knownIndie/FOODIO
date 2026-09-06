@@ -1,10 +1,11 @@
 import { drizzle } from "drizzle-orm/node-postgres"
 import { pricingTiers } from "../db/schema/schema"
-import { pricingTiersData } from "./pricing-teirs"
 import { DatabaseUrl } from "../usefulFuncs"
+import { pricingTiersData } from "./pricing-teirs"
 
-// still need to run this
-// pnpm exec tsx --env-file=.env lib/pricing/seed.ts
+// pricing seed
+
+// seeding command -> pnpm exec tsx --env-file=.env lib/pricing/seed.ts
 
 const conectionString = DatabaseUrl()
 

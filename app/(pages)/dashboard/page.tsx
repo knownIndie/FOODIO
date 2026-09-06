@@ -12,7 +12,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { currentProfile } from "@/lib/auth/current-profile"
+import { getProfileSubscription } from "@/lib/pricing/get-profile-subscription"
 import { getProfileRestaurants } from "@/lib/restaurants/get-profile-restaurant"
+
+//  dashboard page where the restatutant data displayed and managed
 
 export default async function Page() {
   const profile = await currentProfile()
@@ -21,8 +24,17 @@ export default async function Page() {
   }
 
   const restaurantList = await getProfileRestaurants(profile.id)
+
+  const profileSubscriptionTeir = await getProfileSubscription(profile.id)
+
   const canCreateRestaurant = profile.roles.includes("RESTAURANT_OWNER")
 
+  const isAllowedToCreateRestaurant =
+    canCreateRestaurant &&
+    restaurantList.length < profileSubscriptionTeir?.restaurantLimit
+
+  const showAddMoreRestaurantButton =
+    canCreateRestaurant && restaurantList.length > 0
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 py-4">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -33,11 +45,48 @@ export default async function Page() {
           </h1>
         </div>
 
-        {canCreateRestaurant && restaurantList.length > 0 && (
+        {/*{isAllowedToCreateRestaurant ? (
           <Button
             nativeButton={false}
             size="lg"
             render={<Link href="/dashboard/restaurants/new" />}
+          >
+            <PlusIcon data-icon="inline-start" />
+            Add another restaurant
+          </Button>
+        ) : (
+          <Button
+            nativeButton={false}
+            size="lg"
+            render={<Link href="/dashboard/restaurants/new" />}
+            disabled
+          >
+            <PlusIcon data-icon="inline-start" />
+            Add another restaurant
+          </Button>
+        )}*/}
+
+        {showAddMoreRestaurantButton && (
+          <Button
+            nativeButton={false}
+            size="lg"
+            render={
+              // new thing -> allows to render a different element based on the condition here we are
+              // rendering a Link if the condition is true, and a span if it's false
+              isAllowedToCreateRestaurant ? (
+                <Link href="/dashboard/restaurants/new" />
+              ) : (
+                <span />
+              )
+            }
+            disabled={!isAllowedToCreateRestaurant}
+            // if the condition is false, the span will be rendered and the button will be disabled
+            className={
+              !isAllowedToCreateRestaurant
+                ? "cursor-not-allowed opacity-50"
+                : ""
+            }
+            // if the condition is false, special css will be applied and the button will be disabled else nothing
           >
             <PlusIcon data-icon="inline-start" />
             Add another restaurant

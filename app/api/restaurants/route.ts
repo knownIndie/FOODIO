@@ -5,6 +5,8 @@ import {
   restaurantSetupStatus,
   restaurants,
 } from "@/lib/db/schema/schema"
+import { getProfileSubscription } from "@/lib/pricing/get-profile-subscription"
+import { getProfileRestaurants } from "@/lib/restaurants/get-profile-restaurant"
 import { createRestaurantSchema } from "@/lib/restaurants/schema/restaurant-schema"
 
 export async function POST(request: Request) {
@@ -27,7 +29,18 @@ export async function POST(request: Request) {
       { status: 403 }
     )
   }
+  const profileSubscriptionTier = await getProfileSubscription(profile.id)
+  const restaurantList = await getProfileRestaurants(profile.id)
 
+  if (
+    !profileSubscriptionTier ||
+    restaurantList.length >= profileSubscriptionTier.restaurantLimit
+  ) {
+    return Response.json(
+      { error: "Exceeded the restaurant limit for your subscription." },
+      { status: 403 }
+    )
+  }
   const parsed = createRestaurantSchema.safeParse(
     await request.json().catch(() => null)
   )

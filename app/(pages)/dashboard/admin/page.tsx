@@ -1,7 +1,7 @@
 import { ShieldCheckIcon } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { PortalPlaceholder } from "@/components/dashboard/portal-placeholder"
+import { PortalPlaceholder } from "@/components/portal-placeholder"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {

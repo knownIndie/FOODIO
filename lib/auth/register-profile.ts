@@ -2,12 +2,7 @@ import "server-only"
 import { hash } from "argon2"
 import { eq, inArray, or } from "drizzle-orm"
 import { db } from "../db/drizzle"
-import {
-  profileRoles,
-  profiles,
-  profileSubscriptions,
-  roles,
-} from "../db/schema/schema"
+import { profileRoles, profiles, roles } from "../db/schema/schema"
 import type { PlatformRole } from "./schema/roles"
 
 type RegisterProfileInput = {
