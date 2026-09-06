@@ -15,7 +15,7 @@
     "dbm": "drizzle-kit migrate",
     "dbp": "drizzle-kit push",
     "dbs": "drizzle-kit studio",
-    "seed": "tsx --env-file=.env lib/db/seed.ts"
+    "seed": "tsx --env-file=.env lib/demo-home-data/seed.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
