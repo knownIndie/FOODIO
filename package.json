@@ -15,7 +15,8 @@
     "dbm": "drizzle-kit migrate",
     "dbp": "drizzle-kit push",
     "dbs": "drizzle-kit studio",
-    "seed": "tsx --env-file=.env lib/demo-home-data/seed.ts"
+    "seed": "tsx --env-file=.env lib/demo-home-data/seed.ts",
+    "test:onboarding": "node --experimental-test-module-mocks --import tsx --test tests/restaurant-onboarding.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.7",
+    "@electric-sql/pglite": "^0.5.8",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^20.19.43",

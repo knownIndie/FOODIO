@@ -127,8 +127,7 @@ export default async function Page() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground">
-                    Menu, compliance documents, payouts, and opening hours will
-                    be added in the next onboarding steps.
+                    Complete your application and submit it for approval.
                   </p>
                 </CardContent>
               </Card>
@@ -140,8 +139,8 @@ export default async function Page() {
           <CardHeader>
             <CardTitle>Register your first restaurant</CardTitle>
             <CardDescription>
-              Add the restaurant identity, contact address, and map location. It
-              will be saved as a private draft.
+              Add your restaurant, business, registration, and bank details in
+              one form, then review and submit for approval.
             </CardDescription>
           </CardHeader>
           <CardContent>

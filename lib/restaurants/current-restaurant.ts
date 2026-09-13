@@ -13,7 +13,6 @@ import {
   restaurantSetupStatus,
   restaurants,
 } from "@/lib/db/schema/schema"
-import { getRestaurantSetupProgress } from "./restaurant-extra"
 import { restaurantIdSchema } from "./schema/restaurant-schema"
 
 export const getCurrentRestaurant = cache(async (restaurantId: string) => {
@@ -114,7 +113,6 @@ export const getCurrentRestaurant = cache(async (restaurantId: string) => {
       membershipRole: restaurant.membershipRole,
     },
     setup,
-    progress: getRestaurantSetupProgress(setup),
     business: businessRows[0] ?? null,
     compliance,
     bank: bankRows[0] ?? null,

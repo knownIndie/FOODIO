@@ -1,9 +1,8 @@
 import { ArrowLeftIcon } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { RestaurantFirstSetupForm } from "@/components/restaurants/restaurant-first-setup-form"
+import { RestaurantOnboardingForm } from "@/components/restaurants/restaurant-onboarding-form"
 import { Button } from "@/components/ui/button"
-import { CardHeader, CardTitle } from "@/components/ui/card"
 import { currentProfile } from "@/lib/auth/current-profile"
 import { getProfileSubscription } from "@/lib/pricing/get-profile-subscription"
 import { getProfileRestaurants } from "@/lib/restaurants/get-profile-restaurant"
@@ -40,15 +39,7 @@ export default async function NewRestaurantPage() {
         Back to dashboard
       </Button>
 
-      <CardHeader className="text-center  mb-3">
-        <CardTitle className="text-2xl">Register your restaurant</CardTitle>
-        {/*<CardDescription>
-            This creates the restaurant identity and saves it as a private
-            draft. Verification documents and menu setup come later.
-          </CardDescription>*/}
-      </CardHeader>
-      {/*<RestaurantOnboardingForm />*/}
-      <RestaurantFirstSetupForm />
+      <RestaurantOnboardingForm />
     </div>
   )
 }
