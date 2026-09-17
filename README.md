@@ -1,3 +1,9 @@
+
+- make the food item small and add more
+- either add pencil item in card or if more action add three dot menu
+- seed 100 res
+- profile subs -> single source of truth
+
 ## App packaging and research
 
 - [x] Research how to package the Next.js frontend as an Android APK.

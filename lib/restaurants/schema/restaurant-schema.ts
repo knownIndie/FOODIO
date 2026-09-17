@@ -57,14 +57,17 @@ export const restaurantBusinessSchema = z.object({
     .trim()
     .min(2, "Enter the registered legal name.")
     .max(160, "Legal name must be at most 160 characters."),
-  entityType: z.enum([
-    "sole_proprietorship",
-    "partnership",
-    "llp",
-    "private_limited",
-    "public_limited",
-    "other",
-  ]),
+  entityType: z.enum(
+    [
+      "sole_proprietorship",
+      "partnership",
+      "llp",
+      "private_limited",
+      "public_limited",
+      "other",
+    ],
+    { error: "Choose a business type." }
+  ),
   registeredAddress: z
     .string()
     .trim()
@@ -106,3 +109,14 @@ export const restaurantEntityTypes = [
   { label: "Public limited company", value: "public_limited" },
   { label: "Other", value: "other" },
 ] as const
+
+export const restaurantOnboardingSchema = createRestaurantSchema
+  .extend(restaurantBasicSchema.shape)
+  .extend(restaurantBusinessSchema.shape)
+  .extend(restaurantComplianceSchema.shape)
+  .extend(restaurantBankSchema.shape)
+  .extend({ ifsc: restaurantBankSchema.shape.ifsc.toUpperCase() })
+
+export type RestaurantOnboardingInput = z.infer<
+  typeof restaurantOnboardingSchema
+>
