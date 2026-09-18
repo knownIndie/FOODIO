@@ -493,8 +493,6 @@ pnpm b
 
 `typec` checks TypeScript. `l` runs Biome checks. `b` builds the Next.js application.
 
-`package.json` also has a `test:menu` script pointing to `tests/menu-checks.test.mjs`, but that file is currently absent. The script cannot run until the test file is restored or replaced. The earlier menu tests used an in-memory PGlite database, not the live Neon database, and replaced `currentProfile()` with test accounts rather than testing real login cookies.
-
 For a browser check with a real owner account:
 
 1. Open your restaurant and select Manage menu.
