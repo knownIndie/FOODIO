@@ -66,6 +66,13 @@ export default async function RestaurantPage({
           </div>
         </CardContent>
       </Card>
+      <Button
+        nativeButton={false}
+        className="w-fit"
+        render={<Link href={`/dashboard/restaurants/${restaurantId}/menu`} />}
+      >
+        Manage menu
+      </Button>
     </div>
   )
 }

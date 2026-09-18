@@ -17,6 +17,7 @@ const coordinateSchema = (label: string, minimum: number, maximum: number) =>
     )
 
 export const restaurantIdSchema = z.uuid("Invalid restaurant ID.")
+// validation rule that checks whether the restaurant ID has the expected UUID format.
 
 export const createRestaurantSchema = z.object({
   name: z

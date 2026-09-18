@@ -10,6 +10,11 @@ import {
   unique,
   uuid,
 } from "drizzle-orm/pg-core"
+import {
+  menuItemAvailabilities,
+  menuItemCuisines,
+  menuItemFoodTypes,
+} from "@/lib/menu/constants"
 
 // restaurant status and section status enums
 export const restaurantStatusEnum = pgEnum("restaurant_status", [
@@ -36,37 +41,15 @@ export const restaurantMemberRoleEnum = pgEnum("restaurant_member_role", [
 ])
 
 // menu item timing and food type enums
-export const menuItemAvailabilityEnum = pgEnum("menu_item_availability", [
-  "BREAKFAST",
-  "LUNCH",
-  "DINNER",
-  "ALL_DAY",
-])
-export const menuItemFoodTypeEnum = pgEnum("menu_item_food_type", [
-  "BURGER",
-  "PIZZA",
-  "PASTA",
-  "BIRYANI",
-  "MOMOS",
-  "SANDWICH",
-  "ROLLS",
-  "SALAD",
-  "DESSERT",
-  "DRINKS",
-  "OTHER",
-])
-export const menuItemCuisineEnum = pgEnum("menu_cuisine", [
-  "NORTH_INDIAN",
-  "SOUTH_INDIAN",
-  "CHINESE",
-  "ITALIAN",
-  "MEXICAN",
-  "THAI",
-  "JAPANESE",
-  "KOREAN",
-  "FRENCH",
-  "OTHER",
-])
+export const menuItemAvailabilityEnum = pgEnum(
+  "menu_item_availability",
+  menuItemAvailabilities
+)
+export const menuItemFoodTypeEnum = pgEnum(
+  "menu_item_food_type",
+  menuItemFoodTypes
+)
+export const menuItemCuisineEnum = pgEnum("menu_cuisine", menuItemCuisines)
 
 // email verification OTPs
 export const emailVerificationOtps = pgTable("email_verification_otps", {
