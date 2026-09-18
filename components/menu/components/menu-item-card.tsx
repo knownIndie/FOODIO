@@ -1,6 +1,5 @@
 import { LeafIcon, UtensilsIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,8 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { formatMenuItemOption } from "../entries/menuFormData"
+import { AddToCartButton } from "./add-to-cart-button"
 
 type MenuItemType = {
+  id: number
   name: string
   description: string | null
   priceInPaise: number
@@ -70,11 +71,12 @@ export function MenuItemCard({ item, restaurant }: MenuItemCardProps) {
           <CardDescription>{item.description}</CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="mt-auto flex flex-wrap gap-2 items-center">
-        <Badge variant="secondary">{formatMenuItemOption(itemType)}</Badge>
-        <Badge variant="secondary">{formatMenuItemOption(cuisine)}</Badge>
-
-        <Button variant="ghost">add to cart</Button>
+      <CardContent className="mt-auto flex items-center justify-between">
+        <div className="flex gap-2">
+          <Badge variant="secondary">{formatMenuItemOption(itemType)}</Badge>
+          <Badge variant="secondary">{formatMenuItemOption(cuisine)}</Badge>
+        </div>
+        <AddToCartButton itemId={item.id} />
       </CardContent>
     </Card>
   )

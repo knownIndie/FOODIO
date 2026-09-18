@@ -1,8 +1,8 @@
-import { requireMenuOwnerAccount } from "@/lib/menu/checks/account"
-import { MenuCheckError } from "@/lib/menu/checks/error"
-import { readMenuInput } from "@/lib/menu/checks/request"
-import { checkRestaurantId } from "@/lib/menu/checks/restaurant"
-import { addMenuItems } from "@/lib/menu/commands"
+import { requireMenuOwnerAccount } from "@/lib/dashboard-menu/checks/account"
+import { MenuCheckError } from "@/lib/dashboard-menu/checks/error"
+import { readMenuInput } from "@/lib/dashboard-menu/checks/request"
+import { checkRestaurantId } from "@/lib/dashboard-menu/checks/restaurant"
+import { addMenuItems } from "@/lib/dashboard-menu/commands"
 
 type RouteContext = { params: Promise<{ restaurantId: string }> }
 

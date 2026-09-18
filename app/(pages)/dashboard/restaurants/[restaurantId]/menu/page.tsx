@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation"
 import { MenuForm } from "@/components/menu/entries/menu-form"
 import { Badge } from "@/components/ui/badge"
 import { currentProfile } from "@/lib/auth/current-profile"
-import { getMenuForOwner } from "@/lib/menu/queries"
+import { getMenuForOwner } from "@/lib/dashboard-menu/queries"
 import { restaurantIdSchema } from "@/lib/restaurants/schema/restaurant-schema"
 
 const priceFormatter = new Intl.NumberFormat("en-IN", {

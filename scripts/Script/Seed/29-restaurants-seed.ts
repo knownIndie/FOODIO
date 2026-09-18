@@ -3,13 +3,13 @@ import { hash } from "argon2"
 import { and, eq, inArray, or, sql } from "drizzle-orm"
 import { drizzle } from "drizzle-orm/neon-serverless"
 import { PLATFORM_ROLES } from "../../../lib/auth/schema/roles"
-import * as schema from "../../../lib/db/schema/schema"
 import type {
   MenuItemAvailability,
   menuItemCuisines,
   menuItemFoodTypes,
-} from "../../../lib/menu/constants"
-import { menuBatchSchema } from "../../../lib/menu/schema"
+} from "../../../lib/dashboard-menu/constants"
+import { menuBatchSchema } from "../../../lib/dashboard-menu/schema"
+import * as schema from "../../../lib/db/schema/schema"
 import { pricingTiersData } from "../../../lib/pricing/pricing-teirs"
 
 // Shared password for all 29 test restaurant owners: FoodIO-Demo-2026!

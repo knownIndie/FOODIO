@@ -17,7 +17,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useId, useState } from "react"
 import * as z from "zod"
-import type { MenuSaveResponse } from "@/lib/menu/schema"
+import type { MenuSaveResponse } from "@/lib/dashboard-menu/schema"
 import { Badge } from "../../ui/badge"
 import { Button } from "../../ui/button"
 import {
