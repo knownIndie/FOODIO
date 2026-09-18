@@ -18,8 +18,8 @@ import { useRouter } from "next/navigation"
 import { useId, useState } from "react"
 import * as z from "zod"
 import type { MenuSaveResponse } from "@/lib/menu/schema"
-import { Badge } from "../ui/badge"
-import { Button } from "../ui/button"
+import { Badge } from "../../ui/badge"
+import { Button } from "../../ui/button"
 import {
   Card,
   CardContent,
@@ -27,7 +27,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card"
+} from "../../ui/card"
 import {
   Field,
   FieldContent,
@@ -37,8 +37,8 @@ import {
   FieldLabel,
   FieldLegend,
   FieldSet,
-} from "../ui/field"
-import { Input } from "../ui/input"
+} from "../../ui/field"
+import { Input } from "../../ui/input"
 import {
   Select,
   SelectContent,
@@ -47,10 +47,10 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "../ui/select"
-import { Separator } from "../ui/separator"
-import { Switch } from "../ui/switch"
-import { Textarea } from "../ui/textarea"
+} from "../../ui/select"
+import { Separator } from "../../ui/separator"
+import { Switch } from "../../ui/switch"
+import { Textarea } from "../../ui/textarea"
 import {
   formatMenuItemOption,
   type MenuItemAvailability,

@@ -1,5 +1,6 @@
-import { SiteHeader } from "@/components/home/site-header"
-import { DemoMenuItem } from "@/components/menu/demo-menu-item"
+import { CustomerHeader } from "@/components/customer-homepage/site-header"
+import { Footer } from "@/components/footer/footer"
+import { MenuItemCard } from "@/components/menu/components/menu-item-card"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -18,8 +19,8 @@ export default async function CustomerPage() {
   ])
 
   return (
-    <div className="mx-auto min-h-svh bg-background">
-      <SiteHeader profile={profile} />
+    <div className="mx-auto flex min-h-svh flex-col bg-background">
+      <CustomerHeader profile={profile} />
       <main className="mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
         {demoHomeData ? (
           <>
@@ -50,7 +51,11 @@ export default async function CustomerPage() {
               </div>
               <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 {demoHomeData.items.map((item) => (
-                  <DemoMenuItem key={item.id} item={item} />
+                  <MenuItemCard
+                    key={item.id}
+                    item={item}
+                    restaurant={demoHomeData.restaurant}
+                  />
                 ))}
               </div>
             </section>
@@ -67,6 +72,7 @@ export default async function CustomerPage() {
           </Card>
         )}
       </main>
+      <Footer />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { LeafIcon, UtensilsIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -7,15 +8,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { formatMenuItemOption } from "./menuFormData"
+import { formatMenuItemOption } from "../entries/menuFormData"
 
-type DemoMenuItem = {
+type MenuItemType = {
   name: string
   description: string | null
   priceInPaise: number
   isVeg: boolean
   foodTypes: string[]
   cuisines: string[]
+}
+type RestaurantType = {
+  name: string
+}
+type MenuItemCardProps = {
+  item: MenuItemType
+  restaurant: RestaurantType
 }
 
 const priceFormatter = new Intl.NumberFormat("en-IN", {
@@ -24,7 +32,7 @@ const priceFormatter = new Intl.NumberFormat("en-IN", {
   style: "currency",
 })
 
-export function DemoMenuItem({ item }: { item: DemoMenuItem }) {
+export function MenuItemCard({ item, restaurant }: MenuItemCardProps) {
   const itemType = item.foodTypes[0] ?? "OTHER"
   const cuisine = item.cuisines[0] ?? "OTHER"
 
@@ -35,17 +43,22 @@ export function DemoMenuItem({ item }: { item: DemoMenuItem }) {
           <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
             <UtensilsIcon className="size-5" />
           </div>
-          <Badge
-            variant="outline"
-            className={
-              item.isVeg
-                ? "border-emerald-600/30 text-emerald-700 dark:text-emerald-400"
-                : "border-rose-600/30 text-rose-700 dark:text-rose-400"
-            }
-          >
-            {item.isVeg ? <LeafIcon /> : null}
-            {item.isVeg ? "Vegetarian" : "Non-vegetarian"}
-          </Badge>
+          <div className="flex flex-col gap-2">
+            <Badge variant="outline" className="text-xs">
+              {restaurant.name}
+            </Badge>
+            <Badge
+              variant="outline"
+              className={
+                item.isVeg
+                  ? "border-emerald-600/30 text-emerald-700 dark:text-emerald-400"
+                  : "border-rose-600/30 text-rose-700 dark:text-rose-400"
+              }
+            >
+              {item.isVeg ? <LeafIcon /> : null}
+              {item.isVeg ? "Vegetarian" : "Non-vegetarian"}
+            </Badge>
+          </div>
         </div>
         <div className="space-y-1.5">
           <CardTitle className="flex items-start justify-between gap-3 text-lg">
@@ -57,9 +70,11 @@ export function DemoMenuItem({ item }: { item: DemoMenuItem }) {
           <CardDescription>{item.description}</CardDescription>
         </div>
       </CardHeader>
-      <CardContent className="mt-auto flex flex-wrap gap-2">
+      <CardContent className="mt-auto flex flex-wrap gap-2 items-center">
         <Badge variant="secondary">{formatMenuItemOption(itemType)}</Badge>
         <Badge variant="secondary">{formatMenuItemOption(cuisine)}</Badge>
+
+        <Button variant="ghost">add to cart</Button>
       </CardContent>
     </Card>
   )
