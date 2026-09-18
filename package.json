@@ -16,7 +16,8 @@
     "dbp": "drizzle-kit push",
     "dbs": "drizzle-kit studio",
     "seed": "tsx --env-file=.env lib/demo-home-data/seed.ts",
-    "test:onboarding": "node --experimental-test-module-mocks --import tsx --test tests/restaurant-onboarding.test.mjs"
+    "test:onboarding": "node --experimental-test-module-mocks --import tsx --test tests/restaurant-onboarding.test.mjs",
+    "test:menu": "node --experimental-test-module-mocks --import tsx --test tests/menu-checks.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

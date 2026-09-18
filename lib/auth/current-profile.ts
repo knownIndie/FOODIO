@@ -1,11 +1,12 @@
 import "server-only"
 import { eq } from "drizzle-orm"
 import { cookies } from "next/headers"
+import { cache } from "react"
 import { db } from "../db/drizzle"
 import { profileRoles, profiles, roles } from "../db/schema/schema"
 import { verifyAccessToken } from "./jwt"
 
-export async function currentProfile() {
+export const currentProfile = cache(async () => {
   const cookieStore = await cookies()
   const token = cookieStore.get("foodio_access_token")?.value
 
@@ -50,4 +51,4 @@ export async function currentProfile() {
     emailVerifiedAt: profile.emailVerifiedAt,
     name: profile.name,
   }
-}
+})
