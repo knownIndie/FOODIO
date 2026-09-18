@@ -1,11 +1,11 @@
 import { z } from "zod"
-import type { MenuItemAvailability } from "@/lib/menu/constants"
+import type { MenuItemAvailability } from "@/lib/dashboard-menu/constants"
 import {
   MAX_MENU_ITEMS_PER_BATCH,
   type MenuItemInput,
   menuBatchSchema,
   menuItemSchema,
-} from "@/lib/menu/schema"
+} from "@/lib/dashboard-menu/schema"
 
 // this is the test data
 

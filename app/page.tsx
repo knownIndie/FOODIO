@@ -1,5 +1,5 @@
-import HomePage from "./(pages)/home/page"
+import CustomerPage from "./(pages)/(public)/customer/page"
 
 export default function Page() {
-  return <HomePage />
+  return <CustomerPage />
 }

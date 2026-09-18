@@ -14,7 +14,7 @@ import {
   menuItemAvailabilities,
   menuItemCuisines,
   menuItemFoodTypes,
-} from "@/lib/menu/constants"
+} from "@/lib/dashboard-menu/constants"
 
 // restaurant status and section status enums
 export const restaurantStatusEnum = pgEnum("restaurant_status", [
