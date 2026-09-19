@@ -1,6 +1,6 @@
 import ModernCart from "@/components/menu/components/cart."
 
-export default async function TestPage() {
+export default function OrderPage() {
   return (
     <div>
       <ModernCart />
