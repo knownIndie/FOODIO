@@ -1,4 +1,4 @@
-import ModernCart from "@/components/menu/components/cart."
+import ModernCart from "@/components/menu/components/cart"
 
 export default async function TestPage() {
   return (
