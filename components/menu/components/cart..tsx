@@ -1,4 +1,16 @@
 "use client"
+
+import {
+  CreditCard,
+  Minus,
+  Package,
+  Plus,
+  Shield,
+  Trash2,
+  Truck,
+} from "lucide-react"
+import Image from "next/image"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -16,16 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Trash2,
-  Plus,
-  Minus,
-  Package,
-  CreditCard,
-  Truck,
-  Shield,
-} from "lucide-react"
-import { useState } from "react"
 
 interface CartItem {
   id: string
@@ -138,11 +140,12 @@ export default function ModernCart() {
                   <div className="flex h-full flex-col md:flex-row">
                     {/* Product Image */}
                     <div className="relative h-auto w-full md:w-32">
-                      <img
+                      <Image
                         src={item.image}
                         alt={item.name}
                         width={500}
                         height={500}
+                        unoptimized
                         className="h-full w-full object-cover md:w-32"
                       />
                     </div>
@@ -220,7 +223,9 @@ export default function ModernCart() {
                 <Label>Shipping Method</Label>
                 <Select
                   value={shippingMethod}
-                  onValueChange={setShippingMethod}
+                  onValueChange={(value) =>
+                    setShippingMethod(value ?? "standard")
+                  }
                 >
                   <SelectTrigger className="w-full max-w-none data-[size=default]:h-auto">
                     <SelectValue placeholder="Select shipping method" />
