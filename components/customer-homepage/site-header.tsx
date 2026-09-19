@@ -4,6 +4,7 @@ import { AccountMenu } from "@/components/customer-homepage/account-menu"
 import { containerWidth } from "@/components/extras/classname-extras"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import TakeMeToCart from "../menu/components/take-me-to-cart"
 
 type HeaderProfile = {
   email: string
@@ -50,28 +51,32 @@ export function CustomerHeader({ profile }: { profile: HeaderProfile | null }) {
             All Links Page
           </span>
         </Link>
-
-        {profile ? (
-          <AccountMenu
-            dashboardHref={dashboardHref(profile.roles)}
-            email={profile.email}
-            name={profile.name}
-            username={profile.username}
-          />
-        ) : (
-          <div className="flex items-center gap-2">
-            <Button
-              nativeButton={false}
-              variant="ghost"
-              render={<Link href="/login/customer" />}
-            >
-              Log in
-            </Button>
-            <Button nativeButton={false} render={<Link href="/signup" />}>
-              Sign up
-            </Button>
-          </div>
-        )}
+        <div className="flex items-center gap-10">
+          {profile ? (
+            <div className="flex items-center gap-2">
+              <AccountMenu
+                dashboardHref={dashboardHref(profile.roles)}
+                email={profile.email}
+                name={profile.name}
+                username={profile.username}
+              />
+              <TakeMeToCart />
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Button
+                nativeButton={false}
+                variant="ghost"
+                render={<Link href="/login/customer" />}
+              >
+                Log in
+              </Button>
+              <Button nativeButton={false} render={<Link href="/signup" />}>
+                Sign up
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   )
