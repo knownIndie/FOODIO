@@ -9,7 +9,6 @@ import {
   Trash2,
   Truck,
 } from "lucide-react"
-import Image from "next/image"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,15 +29,15 @@ import {
 } from "@/components/ui/select"
 
 interface CartItem {
-  id: string
+  id: number
+  restaurantId: string
+  restaurantName: string
   name: string
-  price: number
-  originalPrice?: number
+  priceInPaise: number
   quantity: number
-  image: string
-  color: string
-  size: string
-  stock: number
+  veg: boolean
+  kcals: number | null
+  description: string | null
 }
 
 interface ShippingMethod {
@@ -49,28 +48,30 @@ interface ShippingMethod {
   description: string
 }
 
+const priceFormatter = new Intl.NumberFormat("en-IN", {
+  currency: "INR",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+  style: "currency",
+})
+
+function rupeeFormatter(amountInPaise: number): string {
+  return priceFormatter.format(amountInPaise / 100)
+}
+
 export default function ModernCart() {
   const [items, setItems] = useState<CartItem[]>([
     {
-      id: "1",
-      name: "Classic Chronograph Watch",
-      price: 299.99,
-      originalPrice: 399.99,
+      id: 1,
+      restaurantId: "1",
+      restaurantName: "demo-test-restaurant",
+      name: "Classic Chronograph Burger",
+      priceInPaise: 29999,
       quantity: 1,
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-      color: "Black",
-      size: "Standard",
-      stock: 5,
-    },
-    {
-      id: "2",
-      name: "Sport Diver Watch",
-      price: 199.99,
-      quantity: 2,
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30",
-      color: "Blue",
-      size: "Standard",
-      stock: 3,
+      veg: false,
+      kcals: 1000,
+      description:
+        "A juicy, flame-broiled beef patty topped with melted American cheese, crisp lettuce, ripe tomato, and tangy pickles, finished with our signature house sauce on a toasted sesame seed bun.",
     },
   ])
 
@@ -80,35 +81,32 @@ export default function ModernCart() {
     {
       id: "standard",
       name: "Standard Shipping",
-      price: 5.99,
+      price: 5999,
       estimatedDays: "3-5 days",
       description: "Free shipping on orders over $200",
     },
     {
       id: "express",
       name: "Express Shipping",
-      price: 12.99,
+      price: 12999,
       estimatedDays: "1-2 days",
       description: "Priority delivery with tracking",
     },
   ]
 
   const subtotal = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.priceInPaise * item.quantity,
     0
   )
   const shipping =
     shippingMethods.find((m) => m.id === shippingMethod)?.price || 0
   const total = subtotal + shipping
 
-  const updateQuantity = (id: string, change: number) => {
+  const updateQuantity = (id: number, change: number) => {
     setItems((prev) =>
       prev.map((item) => {
         if (item.id === id) {
-          const newQuantity = Math.max(
-            1,
-            Math.min(item.stock, item.quantity + change)
-          )
+          const newQuantity = Math.max(1, item.quantity + change)
           return { ...item, quantity: newQuantity }
         }
         return item
@@ -116,7 +114,7 @@ export default function ModernCart() {
     )
   }
 
-  const removeItem = (id: string) => {
+  const removeItem = (id: number) => {
     setItems((prev) => prev.filter((item) => item.id !== id))
   }
 
@@ -139,24 +137,18 @@ export default function ModernCart() {
                 <CardContent className="p-0">
                   <div className="flex h-full flex-col md:flex-row">
                     {/* Product Image */}
-                    <div className="relative h-auto w-full md:w-32">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        width={500}
-                        height={500}
-                        unoptimized
-                        className="h-full w-full object-cover md:w-32"
-                      />
-                    </div>
+                    <div className="relative h-auto w-full md:w-32"></div>
 
                     {/* Product Details */}
                     <div className="flex-1 p-6 pb-3">
                       <div className="flex justify-between">
-                        <div>
+                        <div className="flex flex-col gap-2 ">
                           <h3 className="font-medium">{item.name}</h3>
                           <p className="text-muted-foreground text-sm">
-                            {item.color} • {item.size}
+                            {item.veg ? "Veg" : "Non-Veg"} • {item.kcals} kcals
+                          </p>
+                          <p className="text-muted-foreground text-sm">
+                            {item.description}
                           </p>
                         </div>
                         <Button
@@ -191,13 +183,8 @@ export default function ModernCart() {
 
                         <div className="text-right">
                           <div className="font-medium">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            {rupeeFormatter(item.priceInPaise * item.quantity)}
                           </div>
-                          {item.originalPrice && (
-                            <div className="text-muted-foreground text-sm line-through">
-                              ${(item.originalPrice * item.quantity).toFixed(2)}
-                            </div>
-                          )}
                         </div>
                       </div>
                     </div>
@@ -243,7 +230,7 @@ export default function ModernCart() {
                             {method.estimatedDays}
                           </div>
                           <div className="font-medium">
-                            ${method.price.toFixed(2)}
+                            {rupeeFormatter(method.price)}
                           </div>
                         </div>
                       </SelectItem>
@@ -265,15 +252,15 @@ export default function ModernCart() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>{rupeeFormatter(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span>Shipping</span>
-                  <span>${shipping.toFixed(2)}</span>
+                  <span>{rupeeFormatter(shipping)}</span>
                 </div>
                 <div className="flex justify-between font-medium">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <span>{rupeeFormatter(total)}</span>
                 </div>
               </div>
 
