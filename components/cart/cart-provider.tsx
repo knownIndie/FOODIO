@@ -1,13 +1,17 @@
 "use client"
 
-import { ReactNode } from "react"
+import { ReactNode, useEffect } from "react"
 // ReactNode is a TypeScript type for anything React can render.
 // For example: text, JSX, a page, or multiple components.
 
 import { createContext, useState, useContext } from "react"
+import { unknown } from "zod/v3"
+import { parse } from "zod/v4/core"
 // createContext creates a shared place for data.
 // useContext reads data from that shared place.
 // useState stores data that can change over time.
+
+const CART_STORAGE_KEY = "foodio-cart-v1"
 
 interface CartItem {
   // Shape of one item stored in the cart.
@@ -40,10 +44,71 @@ interface cartContextValue {
 // Components receive the real value when rendered inside CartProvider.
 const cartContext = createContext<cartContextValue | null>(null)
 
+function isCartItem(value: unknown): value is CartItem {
+  if (typeof value !== "object" || value === null) {
+    // Reject anything that isn't an object.
+    // `null` is checked separately because `typeof null === "object"` in JavaScript.
+    return false
+  }
+
+  // Treat `value` as an object with string keys.
+  // The values can be any type, so they remain `unknown` until checked.
+  const item = value as Record<string, unknown>
+
+  return (
+    /*
+    here we are checking that `value` is a valid `CartItem` by making sure all required fields are present and have the correct types.
+    */
+    typeof item.id === "number" &&
+    typeof item.restaurantId === "string" &&
+    typeof item.name === "string" &&
+    typeof item.priceInPaise === "number" &&
+    typeof item.quantity === "number" &&
+    item.quantity >= 1 &&
+    typeof item.veg === "boolean" &&
+    (item.caloriesKcal === null || typeof item.caloriesKcal === "number") &&
+    (item.description === null || typeof item.description === "string")
+  )
+}
+
 export function CartProvider({ children }: { children: ReactNode }) {
   // This wrapper makes the cart state and its operations available
   // to child components, such as the cart page.
   const [items, setItems] = useState<CartItem[]>([])
+  // This tells us whether we have finished checking localStorage.
+  const [loadedFromStorage, setLoadedFromStorage] = useState(false)
+
+  useEffect(() => {
+    // Load cart from localStorage when the component mounts.
+    try {
+      const savedCart = window.localStorage.getItem(CART_STORAGE_KEY)
+      if (savedCart) {
+        const parsedData: unknown = JSON.parse(savedCart)
+
+        if (Array.isArray(parsedData) && parsedData.every(isCartItem)) {
+          const restaurantID = parsedData[0].restaurantId
+          if (parsedData.every((item) => item.restaurantId === restaurantID)) {
+            setItems(parsedData)
+          }
+        }
+      }
+    } catch (e) {
+      console.error("Failed to load cart from localStorage", e)
+    } finally {
+      setLoadedFromStorage(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!loadedFromStorage) {
+      return
+    }
+    try {
+      window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items))
+    } catch (e) {
+      console.error("Failed to save cart to localStorage", e)
+    }
+  }, [items, loadedFromStorage])
 
   function addItem(newItem: CartItemInput) {
     // Use the state updater form so the change is based on the latest cart.
