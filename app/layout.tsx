@@ -1,5 +1,6 @@
 import { Geist_Mono, Noto_Sans, Nunito_Sans } from "next/font/google"
 import "./globals.css"
+import { CartProvider } from "@/components/cart/cart-provider"
 import { ThemeProvider } from "@/components/ui/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
@@ -36,9 +37,11 @@ export default function RootLayout({
       )}
     >
       <body>
-        <TooltipProvider>
-          <ThemeProvider>{children}</ThemeProvider>
-        </TooltipProvider>
+        <CartProvider>
+          <TooltipProvider>
+            <ThemeProvider>{children}</ThemeProvider>
+          </TooltipProvider>
+        </CartProvider>
       </body>
     </html>
   )
