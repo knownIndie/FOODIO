@@ -1,9 +1,9 @@
 import { Geist_Mono, Noto_Sans, Nunito_Sans } from "next/font/google"
 import "./globals.css"
+import { CartProvider } from "@/components/cart/cart-provider"
 import { ThemeProvider } from "@/components/ui/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
-import { CartProvider } from "@/components/cart/cart-provider"
 
 const notoSansHeading = Noto_Sans({
   subsets: ["latin"],

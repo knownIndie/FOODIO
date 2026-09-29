@@ -1,5 +1,8 @@
 "use client"
-import { CartItemInput, useCart } from "@/components/cart/cart-provider"
+
+import { Minus, Plus } from "lucide-react"
+import { useState } from "react"
+import { type CartItemInput, useCart } from "@/components/cart/cart-provider"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -10,16 +13,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { useState } from "react"
 
 export function AddToCartButton({ item }: { item: CartItemInput }) {
-  const { items, addItem, replaceCart } = useCart()
+  const { items, addItem, replaceCart, removeItem, updateQuantity } = useCart()
   /*
  it is supposed to do the followings
  - add the item to the cart if it is from the first restaurant only
  - if a new item from a new restaurant is added , ask if the user want to replace the cart and make it add the current item only
   */
   const [dialogOpen, setDialogOpen] = useState(false)
+  // this tells us if the cart has the item already in the cart or not
+  const cartItem = items.find((cartItem) => cartItem.id === item.id)
+
+  // this tells us how many of the item are already in the cart
+  const quantity = cartItem?.quantity ?? 0
 
   function handleAddToCartButton() {
     const firstItemInCart = items[0]
@@ -32,6 +39,14 @@ export function AddToCartButton({ item }: { item: CartItemInput }) {
     addItem(item)
   }
 
+  function handleDecreaseQuantity() {
+    if (quantity === 1) {
+      removeItem(item.id)
+      return
+    }
+    updateQuantity(item.id, -1)
+  }
+
   function handleReplaceCart() {
     replaceCart(item)
     setDialogOpen(false)
@@ -39,10 +54,29 @@ export function AddToCartButton({ item }: { item: CartItemInput }) {
 
   return (
     <>
-      <Button variant="secondary" onClick={handleAddToCartButton}>
-        {" "}
-        Add To Cart
-      </Button>
+      {quantity === 0 ? (
+        <Button variant="secondary" onClick={handleAddToCartButton}>
+          {" "}
+          Add To Cart
+        </Button>
+      ) : (
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleDecreaseQuantity}
+          >
+            <Minus />
+          </Button>
+
+          <span className="min-w-8 text-center">{quantity}</span>
+
+          <Button variant="outline" size="icon" onClick={handleAddToCartButton}>
+            <Plus />
+          </Button>
+        </div>
+      )}
+
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>

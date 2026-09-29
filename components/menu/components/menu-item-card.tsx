@@ -1,4 +1,5 @@
 import { LeafIcon, UtensilsIcon } from "lucide-react"
+import { AddToCartButton } from "@/components/cart/components/AddToCartButton"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -8,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { formatMenuItemOption } from "../entries/menuFormData"
-import { AddToCartButton } from "@/components/cart/components/AddToCartButton"
 
 type MenuItemType = {
   id: number

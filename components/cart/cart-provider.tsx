@@ -1,12 +1,13 @@
 "use client"
 
-import { ReactNode, useEffect } from "react"
-// ReactNode is a TypeScript type for anything React can render.
-// For example: text, JSX, a page, or multiple components.
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 
-import { createContext, useState, useContext } from "react"
-import { unknown } from "zod/v3"
-import { parse } from "zod/v4/core"
 // createContext creates a shared place for data.
 // useContext reads data from that shared place.
 // useState stores data that can change over time.
@@ -86,7 +87,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         const parsedData: unknown = JSON.parse(savedCart)
 
         if (Array.isArray(parsedData) && parsedData.every(isCartItem)) {
-          const restaurantID = parsedData[0].restaurantId
+          const restaurantID = parsedData[0]?.restaurantId
           if (parsedData.every((item) => item.restaurantId === restaurantID)) {
             setItems(parsedData)
           }
@@ -109,7 +110,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       console.error("Failed to save cart to localStorage", e)
     }
   }, [items, loadedFromStorage])
-
   function addItem(newItem: CartItemInput) {
     // Use the state updater form so the change is based on the latest cart.
     setItems((currentItems) => {
@@ -120,9 +120,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
 
       // Find whether this dish is already in the cart.
-      const existingItem = currentItems.find(
-        (item) => item.restaurantId === newItem.restaurantId
-      )
+      const existingItem = currentItems.find((item) => item.id === newItem.id)
 
       if (existingItem) {
         // Return a new array and increase the quantity of the matching dish.
