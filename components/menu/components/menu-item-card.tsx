@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { formatMenuItemOption } from "../entries/menuFormData"
-import { AddToCartButton } from "./add-to-cart-button"
+import { AddToCartButton } from "@/components/cart/components/AddToCartButton"
 
 type MenuItemType = {
   id: number
@@ -18,9 +18,11 @@ type MenuItemType = {
   isVeg: boolean
   foodTypes: string[]
   cuisines: string[]
+  caloriesKcal: number | null
 }
 type RestaurantType = {
   name: string
+  id: string
 }
 type MenuItemCardProps = {
   item: MenuItemType
@@ -76,7 +78,17 @@ export function MenuItemCard({ item, restaurant }: MenuItemCardProps) {
           <Badge variant="secondary">{formatMenuItemOption(itemType)}</Badge>
           <Badge variant="secondary">{formatMenuItemOption(cuisine)}</Badge>
         </div>
-        <AddToCartButton itemId={item.id} />
+        <AddToCartButton
+          item={{
+            id: item.id,
+            restaurantId: restaurant.id,
+            name: item.name,
+            priceInPaise: item.priceInPaise,
+            veg: item.isVeg,
+            caloriesKcal: item.caloriesKcal,
+            description: item.description,
+          }}
+        />
       </CardContent>
     </Card>
   )

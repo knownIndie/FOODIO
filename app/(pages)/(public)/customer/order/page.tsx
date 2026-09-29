@@ -1,4 +1,4 @@
-import ModernCart from "@/components/menu/components/cart"
+import ModernCart from "@/components/cart/components/cart"
 
 export default function OrderPage() {
   return (
