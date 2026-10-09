@@ -10,7 +10,7 @@ This is my hiring review judgment, not a claim that every recruiter expects the 
 
 - App pages, API routes, authentication, restaurant access checks, onboarding, admin approval, menu form, pricing, database schema, migrations, seeds, README and project notes.
 - Read-only database queries for table names, aggregate row counts and restaurant statuses. No personal records or bank details were retrieved.
-- `pnpm typec` and `pnpm l`. Both currently fail. I did not run a production build or browser walkthrough, so visual quality and runtime flows remain unverified.
+- `bun run typec` and `bun run l`. Both currently fail. I did not run a production build or browser walkthrough, so visual quality and runtime flows remain unverified.
 - Existing uncommitted work is included in this assessment. The menu route and page are untracked work in progress.
 
 ## What already exists
@@ -38,7 +38,7 @@ Work through these in order. Each item includes a practical completion check.
 - [ ] Connect the menu form to the API. Its submit handler currently calls `console.log` only. Pass the restaurant ID, show errors, prevent duplicate submission and show saved results.
 - [ ] Clear TypeScript and Biome failures, then run the production build. Current Biome output reports 3 errors and 2 warnings, mostly formatting, import ordering and unused menu styles.
 
-Done when a valid menu submission persists after refresh, unauthorized writes fail, and `pnpm typec`, `pnpm l` and `pnpm b` pass.
+Done when a valid menu submission persists after refresh, unauthorized writes fail, and `bun run typec`, `bun run l` and `bun run b` pass.
 
 ### 2. Finish restaurant menu management
 

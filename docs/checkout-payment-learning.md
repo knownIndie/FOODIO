@@ -597,10 +597,10 @@ Run:
 
 ```bash
 # Check TypeScript types and imports.
-pnpm typec
+bun run typec
 
 # Start FoodIO if it is not already running.
-pnpm dev
+bun run dev
 ```
 
 Sign in with a customer account. Add a dish, then open the cart at `/customer/order` and click Proceed to Checkout.

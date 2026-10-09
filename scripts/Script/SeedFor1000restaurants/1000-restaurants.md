@@ -21,7 +21,7 @@ The preview lists every username, email, restaurant, location, and menu.
 From the repository root:
 
 ```sh
-pnpm exec tsx scripts/Script/SeedFor1000restaurants/1000-restaurants-seed.ts
+bun run scripts/Script/SeedFor1000restaurants/1000-restaurants-seed.ts
 ```
 
 This validates the dataset and writes `1000-restaurants-preview.json` beside the script without connecting to a database.
@@ -29,7 +29,7 @@ This validates the dataset and writes `1000-restaurants-preview.json` beside the
 ## Database write
 
 ```sh
-pnpm exec tsx --env-file=.env scripts/Script/SeedFor1000restaurants/1000-restaurants-seed.ts --write
+bun --env-file=.env run scripts/Script/SeedFor1000restaurants/1000-restaurants-seed.ts --write
 ```
 
 The write targets DATABASE_URL. It hashes each owner's password with a separate salt, then writes all records in one transaction. Reruns update this seed's records and preserve menu IDs. Unexpected account, restaurant, ownership, or menu collisions abort the transaction. Existing roles and pricing tiers are preserved. Reruns reset the seeded owners' passwords and subscriptions to these seed defaults.
@@ -37,7 +37,7 @@ The write targets DATABASE_URL. It hashes each owner's password with a separate 
 ## Local integration check
 
 ```sh
-pnpm exec tsx scripts/Script/SeedFor1000restaurants/1000-restaurants-seed.check.ts
+bun run scripts/Script/SeedFor1000restaurants/1000-restaurants-seed.check.ts
 ```
 
 The check applies the repository migrations to an in-memory PGlite database. It checks insertion counts, menu sizes, password verification, reruns, stable menu IDs, preservation of an unrelated restaurant, and rollback on an account collision. It does not read DATABASE_URL.
