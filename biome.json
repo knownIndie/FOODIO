@@ -6,7 +6,11 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignoreUnknown": true
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!scripts/Script/SeedFor1000restaurants/1000-restaurants-preview.json"
+    ]
   },
   "formatter": {
     "enabled": true,

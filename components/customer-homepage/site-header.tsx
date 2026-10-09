@@ -47,8 +47,8 @@ export function CustomerHeader({ profile }: { profile: HeaderProfile | null }) {
           </span>
         </Link>
         <Link href="/links" className="flex items-center gap-2">
-          <span className="font-heading text-lg font-semibold tracking-tight">
-            All Links Page
+          <span className="font-heading text-sm font-semibold tracking-tight">
+            All Links
           </span>
         </Link>
         <div className="flex items-center gap-10">

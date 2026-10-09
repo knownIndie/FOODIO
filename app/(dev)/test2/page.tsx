@@ -1,5 +1,5 @@
 import { AddToCartButton } from "@/components/cart/components/AddToCartButton"
-import ModernCart from "@/components/cart/components/cart"
+import Cart from "@/components/cart/components/cart"
 
 export default function TestPage2() {
   return (
@@ -32,7 +32,7 @@ export default function TestPage2() {
         />
       </div>
 
-      <ModernCart />
+      <Cart />
     </div>
   )
 }
