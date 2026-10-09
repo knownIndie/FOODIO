@@ -86,7 +86,7 @@ export function NearbyRestaurants({
       )
 
       /*
-       * Keep showing the existing Delhi restaurants
+       * Keep showing the existing restaurants
        * when the location request fails.
        */
       setStatus("error")
@@ -188,8 +188,8 @@ export function NearbyRestaurants({
           <CardHeader>
             <CardTitle>No restaurants found near {locationLabel}</CardTitle>
             <CardDescription>
-              We could not find an active restaurant within 20 kilometres of
-              this location.
+              No active restaurants with available dishes were found near this
+              location.
             </CardDescription>
           </CardHeader>
         </Card>

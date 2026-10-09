@@ -12,6 +12,6 @@ Changes stay in the form while switching between editing and review. Leaving or 
 
 ## Tests
 
-Run `pnpm test:onboarding` with Node.js 22.3 or newer. The suite uses Node's experimental module mocking and an isolated PGlite database. It applies the repository's migrations and never connects to the configured database.
+The earlier onboarding suite used Node.js module mocking and an isolated PGlite database. This checkout does not define a `test:onboarding` command. Use `bun run mc` for the current TypeScript and lint checks, and `bun run build` for the production build.
 
 Coverage includes complete submissions, draft updates, optional registration removal, ownership, repeated draft submission, subscription limits, rollback, request authentication, and validation.

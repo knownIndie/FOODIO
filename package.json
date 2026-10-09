@@ -3,23 +3,32 @@
   "version": "0.0.1",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "bun@1.4.2",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "bun --bun next dev",
+    "dev:webpack": "bun --bun next dev --webpack",
+    "build": "bun --bun next build",
+    "start": "bun --bun next start",
     "lint": "biome check .",
-    "typecheck": "tsc --noEmit",
-    "b": "next build",
-    "s": "next start",
-    "l": "biome check .",
-    "mc": "pnpm typec && pnpm l",
-    "f": "biome check --write .",
-    "typec": "tsc --noEmit",
-    "dbg": "drizzle-kit generate",
-    "dbm": "drizzle-kit migrate",
-    "dbp": "drizzle-kit push",
-    "dbs": "drizzle-kit studio"
+    "typecheck": "bun --bun tsc --noEmit",
+    "b": "bun run build",
+    "s": "bun run start",
+    "l": "bun run lint",
+    "mc": "bun run check",
+    "f": "bun run format",
+    "typec": "bun run typecheck",
+    "dbg": "bun run db:generate",
+    "dbm": "bun run db:migrate",
+    "dbp": "bun run db:push",
+    "dbs": "bun run db:studio",
+    "check": "bun run typecheck && bun run lint",
+    "format": "biome check --write .",
+    "test:seed": "bun run scripts/Script/SeedFor1000restaurants/1000-restaurants-seed.check.ts",
+    "db:generate": "bun --bun drizzle-kit generate",
+    "db:migrate": "bun --bun drizzle-kit migrate",
+    "db:push": "bun --bun drizzle-kit push",
+    "db:studio": "bun --bun drizzle-kit studio",
+    "db:check": "bun --bun drizzle-kit check"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -58,5 +67,14 @@
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.12",
     "typescript": "^5.9.3"
-  }
+  },
+  "engines": {
+    "bun": ">=1.4.2"
+  },
+  "trustedDependencies": [
+    "argon2",
+    "esbuild",
+    "sharp",
+    "unrs-resolver"
+  ]
 }

@@ -25,8 +25,8 @@ export default async function CustomerPage() {
         </h1>
 
         <p className="text-lg text-muted-foreground">
-          Browse restaurants in Delhi or use your current location to find
-          restaurants near you.
+          Browse restaurants in {DEFAULT_CITY.label} or use your current
+          location to find restaurants near you.
         </p>
       </section>
 
