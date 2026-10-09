@@ -129,7 +129,7 @@ export default function Cart() {
               <Button
                 className="w-full"
                 onClick={() => router.push("/customer/payment")}
-                disabled={!isReady}
+                disabled={!isReady || items.length === 0}
               >
                 <CreditCard className="mr-2 h-4 w-4" />
                 Proceed to Checkout
