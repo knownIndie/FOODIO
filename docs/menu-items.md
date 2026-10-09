@@ -486,9 +486,9 @@ Hidden and unavailable flags are saved as data. This owner form and saved list d
 Run these from the project folder:
 
 ```sh
-pnpm typec
-pnpm l
-pnpm b
+bun run typec
+bun run l
+bun run b
 ```
 
 `typec` checks TypeScript. `l` runs Biome checks. `b` builds the Next.js application.

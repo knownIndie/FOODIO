@@ -5,7 +5,7 @@ import { pricingTiersData } from "./pricing-teirs"
 
 // pricing seed
 
-// seeding command -> pnpm exec tsx --env-file=.env lib/pricing/seed.ts
+// seeding command -> bun --env-file=.env run lib/pricing/seed.ts
 
 const conectionString = DatabaseUrl()
 
