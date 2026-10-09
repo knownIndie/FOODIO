@@ -1,9 +1,9 @@
-import ModernCart from "@/components/cart/components/cart"
+import Cart from "@/components/cart/components/cart"
 
 export default function OrderPage() {
   return (
     <div>
-      <ModernCart />
+      <Cart />
     </div>
   )
 }

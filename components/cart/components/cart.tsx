@@ -1,6 +1,7 @@
 "use client"
 
 import { CreditCard, Minus, Plus, Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -23,9 +24,10 @@ function rupeeFormatter(amountInPaise: number): string {
   return priceFormatter.format(amountInPaise / 100)
 }
 
-export default function ModernCart() {
+export default function Cart() {
+  const router = useRouter()
   // The cart page reads the same items that the menu button changes.
-  const { items, updateQuantity, removeItem } = useCart()
+  const { items, updateQuantity, removeItem, isReady } = useCart()
 
   // reduce turns the array of cart items into one subtotal.
   // sum starts at 0 and grows by each item's line total.
@@ -123,8 +125,12 @@ export default function ModernCart() {
                 </p>
               </div>
 
-              {/* Checkout is disabled until its flow exists. */}
-              <Button className="w-full" disabled>
+              {/* Wait for the saved cart before opening checkout. */}
+              <Button
+                className="w-full"
+                onClick={() => router.push("/customer/payment")}
+                disabled={!isReady}
+              >
                 <CreditCard className="mr-2 h-4 w-4" />
                 Proceed to Checkout
               </Button>

@@ -1,7 +1,7 @@
 import "server-only"
 import { and, asc, eq, inArray, isNotNull, lte, sql } from "drizzle-orm"
-import { menuItems, restaurants } from "../db/schema/schema"
 import { db } from "../db/drizzle"
+import { menuItems, restaurants } from "../db/schema/schema"
 
 export type SearchQueryData = {
   latitude: number
@@ -26,8 +26,7 @@ export async function nearlocationData({
 }: SearchQueryData) {
   /*
  this formula help with finding the distance between two points on a sphere i.e earth
- The Haversine formula calculates the distance between
- two latitude and longitude points
+expression uses the spherical law of cosines.
  6371 is the approximate radius of Earth in kilometres.
   */
   const distanceKM = sql<number>`

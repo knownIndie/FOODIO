@@ -39,6 +39,7 @@ interface cartContextValue {
   replaceCart: (item: CartItemInput) => void // Replaces all cart items with one dish.
   updateQuantity: (id: number, quantity: number) => void // Changes a dish's quantity.
   removeItem: (id: number) => void // Removes a dish from the cart.
+  isReady: boolean
 }
 
 // The context starts as null because there is no provider value yet.
@@ -160,7 +161,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   return (
     <cartContext.Provider
-      value={{ items, addItem, replaceCart, updateQuantity, removeItem }}
+      value={{
+        items,
+        addItem,
+        replaceCart,
+        updateQuantity,
+        removeItem,
+        isReady: loadedFromStorage,
+        // we use isRea
+      }}
     >
       {children}
     </cartContext.Provider>
