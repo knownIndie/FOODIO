@@ -1,3 +1,4 @@
+import { CustomerShell } from "@/components/customer-homepage/customer-shell"
 import { CustomerHeader } from "@/components/customer-homepage/site-header"
 import { Footer } from "@/components/footer/footer"
 
@@ -10,13 +11,11 @@ export default async function CustomerLayout({
 }>) {
   const profile = await currentProfile()
   return (
-    <div className="mx-auto flex min-h-svh flex-col bg-background">
-      <CustomerHeader profile={profile} />
-
-      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
-        {children}
-      </main>
-      <Footer />
-    </div>
+    <CustomerShell
+      header={<CustomerHeader profile={profile} />}
+      footer={<Footer />}
+    >
+      {children}
+    </CustomerShell>
   )
 }
