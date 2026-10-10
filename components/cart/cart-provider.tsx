@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from "react"
+import type { deliveryAddress } from "@/lib/checkout/address-schema"
 
 // createContext creates a shared place for data.
 // useContext reads data from that shared place.
@@ -18,6 +19,7 @@ interface CartItem {
   // Shape of one item stored in the cart.
   id: number
   restaurantId: string
+  restaurantName?: string
   name: string
   priceInPaise: number
   quantity: number
@@ -40,6 +42,8 @@ interface cartContextValue {
   updateQuantity: (id: number, quantity: number) => void // Changes a dish's quantity.
   removeItem: (id: number) => void // Removes a dish from the cart.
   isReady: boolean
+  address: deliveryAddress | null
+  updateAddress: (address: deliveryAddress) => void
 }
 
 // The context starts as null because there is no provider value yet.
@@ -63,6 +67,8 @@ function isCartItem(value: unknown): value is CartItem {
     */
     typeof item.id === "number" &&
     typeof item.restaurantId === "string" &&
+    (item.restaurantName === undefined ||
+      typeof item.restaurantName === "string") &&
     typeof item.name === "string" &&
     typeof item.priceInPaise === "number" &&
     typeof item.quantity === "number" &&
@@ -77,6 +83,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // This wrapper makes the cart state and its operations available
   // to child components, such as the cart page.
   const [items, setItems] = useState<CartItem[]>([])
+  // Keep the confirmed address across checkout pages, without storing contact details.
+  const [address, setAddress] = useState<deliveryAddress | null>(null)
   // This tells us whether we have finished checking localStorage.
   const [loadedFromStorage, setLoadedFromStorage] = useState(false)
 
@@ -111,6 +119,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       console.error("Failed to save cart to localStorage", e)
     }
   }, [items, loadedFromStorage])
+
   function addItem(newItem: CartItemInput) {
     // Use the state updater form so the change is based on the latest cart.
     setItems((currentItems) => {
@@ -137,6 +146,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function replaceCart(newItem: CartItemInput) {
+    setAddress(null)
     // Discard the existing cart and store only this item at quantity 1.
     return setItems([{ ...newItem, quantity: 1 }])
   }
@@ -153,10 +163,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function removeItem(id: number) {
+    if (items.length === 1 && items[0]?.id === id) {
+      setAddress(null)
+    }
     // Keep every dish except the one matching this ID.
     return setItems((currentItems) => {
       return currentItems.filter((item) => item.id !== id)
     })
+  }
+
+  function updateAddress(confirmedAddress: deliveryAddress) {
+    setAddress(confirmedAddress)
   }
 
   return (
@@ -168,6 +185,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         updateQuantity,
         removeItem,
         isReady: loadedFromStorage,
+        address,
+        updateAddress,
         // we use isRea
       }}
     >
