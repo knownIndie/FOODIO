@@ -3,20 +3,24 @@
 import { usePathname } from "next/navigation"
 import type { ReactNode } from "react"
 
+type CustomerShellProps = {
+  children: ReactNode
+  header: ReactNode
+  footer: ReactNode
+}
+
 export function CustomerShell({
   children,
   header,
   footer,
-}: {
-  children: ReactNode
-  header: ReactNode
-  footer: ReactNode
-}) {
+}: CustomerShellProps) {
   const pathname = usePathname()
   const isCheckout =
     pathname === "/customer/order" || pathname === "/customer/order/review"
 
-  if (isCheckout) return <main>{children}</main>
+  if (isCheckout) {
+    return <main>{children}</main>
+  }
 
   return (
     <div className="mx-auto flex min-h-svh flex-col bg-background">
