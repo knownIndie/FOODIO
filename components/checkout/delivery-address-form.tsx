@@ -38,7 +38,7 @@ const addressFields = [
   },
   {
     name: "billingAddress",
-    label: "Billing Address",
+    label: "Delivery Address",
     type: "textarea",
     placeholder: "House or flat number, street, area, and landmark",
   },
@@ -72,36 +72,63 @@ const testDeliveryAddress = {
   postalCode: "560001",
 } satisfies deliveryAddress
 
-export function DeliveryAddressForm() {
+type Props = {
+  // When editing, start the draft with the last confirmed address.
+  initialAddress: deliveryAddress | null
+  // Only a successful confirmation changes the parent's saved address.
+  onConfirm: (address: deliveryAddress) => void
+  // Cancel closes the draft without changing the saved address.
+  onCancel?: () => void
+  showTestDetails?: boolean
+  // The cart supplies its own card and heading.
+  embedded?: boolean
+}
+
+export function DeliveryAddressForm({
+  initialAddress,
+  onConfirm,
+  onCancel,
+  showTestDetails = true,
+  embedded = false,
+}: Props) {
   const [message, setMessage] = useState<string | null>(null)
 
   const form = useForm({
-    defaultValues: {
-      customerName: "",
-      phone: "",
-      billingAddress: "",
-      city: "",
-      state: "",
-      postalCode: "",
-    } satisfies deliveryAddress,
+    // The page mounts a fresh form for each edit. Its values are the draft.
+    // TanStack updates this draft while the page keeps its confirmed copy.
+    defaultValues:
+      initialAddress ??
+      ({
+        customerName: "",
+        phone: "",
+        billingAddress: "",
+        city: "",
+        state: "",
+        postalCode: "",
+      } satisfies deliveryAddress),
     // `satisfies deliveryAddress` -> TypeScript checks whether the object matches the inferred type. If  misspell customerName, for example, TypeScript will report an error.
 
     validators: {
-      onBlur: deliveryAddressSchema,
+      onChange: deliveryAddressSchema,
       onSubmit: deliveryAddressSchema,
-      // we are telling form when to  run  Zod validation
-      // We use onBlur and onSubmit so the form does not need to show errors with every keystroke.
+      // Revalidate edits so corrected errors clear before the submit button moves.
     },
 
-    onSubmit: async ({ value }) => {
-      setMessage(`Address checked for ${value.customerName}.`)
-      console.log(value)
+    onSubmit: ({ value }) => {
+      const data = deliveryAddressSchema.safeParse(value)
+      if (!data.success) {
+        setMessage("Please correct the errors in the form.")
+        return
+      }
+      // Send the parsed output so trim() changes reach the parent too.
+      // The page stores this address and replaces the form with a summary.
+      onConfirm(data.data)
     },
   })
 
   return (
     <form
-      className="mx-auto w-full max-w-2xl"
+      className={embedded ? "w-full" : "mx-auto w-full max-w-2xl"}
       noValidate
       // stop the browser from doing its own validation and showing its own error messages.
       onSubmit={(e) => {
@@ -114,19 +141,33 @@ export function DeliveryAddressForm() {
       }}
     >
       {/* Reuse the same card and field components as the login forms. */}
-      <Card className="border border-border/70 shadow-xl shadow-foreground/5">
-        <CardHeader className="gap-1.5">
-          <CardTitle>
-            <h2 className="text-2xl">Billing address</h2>
-          </CardTitle>
-          <CardDescription>
-            Enter your billing address and contact details.
-          </CardDescription>
-        </CardHeader>
+      <Card
+        className={
+          embedded
+            ? "gap-0 rounded-none border-0 bg-white p-0 text-zinc-700 shadow-none ring-0 dark:ring-0"
+            : "border border-border/70 shadow-xl shadow-foreground/5"
+        }
+      >
+        {!embedded ? (
+          <CardHeader className="gap-1.5">
+            <CardTitle>
+              <h2 className="text-2xl">Delivery address</h2>
+            </CardTitle>
+            <CardDescription>
+              Enter your delivery address and contact details.
+            </CardDescription>
+          </CardHeader>
+        ) : null}
 
-        <CardContent>
+        <CardContent className={embedded ? "px-0" : undefined}>
           {/* Keep shared field spacing and use two columns on wider screens. */}
-          <FieldGroup className="grid grid-cols-1 sm:grid-cols-2">
+          <FieldGroup
+            className={
+              embedded
+                ? "grid grid-cols-1 gap-4 sm:grid-cols-2"
+                : "grid grid-cols-1 sm:grid-cols-2"
+            }
+          >
             {addressFields.map(({ name, label, type, placeholder }) => (
               <form.Field key={name} name={name}>
                 {(field) => {
@@ -144,8 +185,11 @@ export function DeliveryAddressForm() {
                     onChange: (
                       event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
                     ) => {
-                      // Remove the previous success message after an edit.
+                      // Edits change only the draft. Cancel can still restore
+                      // the parent's last confirmed address.
                       setMessage(null)
+
+                      // Store the new text in TanStack Form.
                       field.handleChange(event.target.value)
                     },
                     onBlur: field.handleBlur,
@@ -159,17 +203,36 @@ export function DeliveryAddressForm() {
                     <Field
                       data-invalid={hasError}
                       className={
-                        name === "billingAddress" ? "sm:col-span-2" : undefined
+                        embedded
+                          ? name === "billingAddress"
+                            ? "gap-2 sm:col-span-2"
+                            : "gap-2"
+                          : name === "billingAddress"
+                            ? "sm:col-span-2"
+                            : undefined
                       }
                     >
                       <FieldLabel htmlFor={inputId}>{label}</FieldLabel>
 
                       {type === "textarea" ? (
-                        <Textarea {...inputProps} rows={3} />
+                        <Textarea
+                          {...inputProps}
+                          rows={embedded ? 2 : 3}
+                          className={
+                            embedded
+                              ? "min-h-20 rounded-xl border-zinc-300 bg-white text-sm text-zinc-700 placeholder:text-zinc-500 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 dark:bg-white"
+                              : undefined
+                          }
+                        />
                       ) : (
                         <Input
                           {...inputProps}
                           type={type}
+                          className={
+                            embedded
+                              ? "min-h-11 rounded-xl border-zinc-300 bg-white text-sm text-zinc-700 placeholder:text-zinc-500 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 dark:bg-white"
+                              : undefined
+                          }
                           inputMode={
                             name === "postalCode"
                               ? "numeric"
@@ -183,6 +246,7 @@ export function DeliveryAddressForm() {
                       {hasError && (
                         <FieldError
                           id={errorId}
+                          className={embedded ? "text-red-700" : undefined}
                           errors={field.state.meta.errors}
                         />
                       )}
@@ -192,41 +256,71 @@ export function DeliveryAddressForm() {
               </form.Field>
             ))}
             {message ? (
-              // Match the success used by the signup form.
-              <p
-                role="status"
-                className="text-sm text-emerald-700 sm:col-span-2"
-              >
-                {message}
-              </p>
+              // Report a parsing error without changing the confirmed address.
+              <div className="sm:col-span-2">
+                <span role="alert" className="text-sm text-destructive">
+                  {message}
+                </span>
+              </div>
             ) : null}
             <form.Subscribe selector={(state) => state.isSubmitting}>
               {(isSubmitting) => (
-                <div className="grid gap-2 sm:col-span-2">
+                <div
+                  className={
+                    embedded
+                      ? "grid gap-2 sm:col-span-2 sm:flex sm:flex-wrap"
+                      : "grid gap-2 sm:col-span-2"
+                  }
+                >
                   <Button
-                    className="w-full"
+                    className={
+                      embedded
+                        ? "min-h-11 w-full rounded-xl bg-orange-700 text-white hover:bg-orange-800 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
+                        : "w-full"
+                    }
                     type="submit"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Checking..." : "Use this address"}
+                    {isSubmitting ? "Checking..." : "Confirm address"}
                   </Button>
-                  <Button
-                    className="w-full"
-                    type="button"
-                    variant="outline"
-                    disabled={isSubmitting}
-                    onClick={() => {
-                      // Update TanStack's values so the inputs show the samples.
-                      for (const { name } of addressFields) {
-                        form.setFieldValue(name, testDeliveryAddress[name])
+                  {onCancel ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className={
+                        embedded
+                          ? "min-h-11 w-full rounded-xl border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-white dark:hover:bg-zinc-50 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
+                          : undefined
                       }
-                      // Clear old feedback and recheck any displayed errors.
-                      setMessage(null)
-                      void form.validate("blur")
-                    }}
-                  >
-                    Fill test details
-                  </Button>
+                      disabled={isSubmitting}
+                      onClick={onCancel}
+                    >
+                      Cancel
+                    </Button>
+                  ) : null}
+                  {showTestDetails ? (
+                    <Button
+                      className={
+                        embedded
+                          ? "min-h-11 w-full rounded-xl border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-white dark:hover:bg-zinc-50 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
+                          : "w-full"
+                      }
+                      type="button"
+                      variant="outline"
+                      disabled={isSubmitting}
+                      onClick={() => {
+                        // Update TanStack's values so the inputs show the samples.
+                        for (const { name } of addressFields) {
+                          form.setFieldValue(name, testDeliveryAddress[name])
+                        }
+                        // Clear old feedback and recheck any displayed errors.
+                        setMessage(null)
+                        void form.validate("change")
+                      }}
+                    >
+                      Add test details
+                    </Button>
+                  ) : null}
                 </div>
               )}
             </form.Subscribe>

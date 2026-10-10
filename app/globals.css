@@ -73,6 +73,14 @@
     --sidebar-ring: oklch(0.556 0 0);
 }
 
+@theme {
+    --color-brand-orange: #ff5200;
+    --color-brand-orange-hover: #ee4c00;
+    --color-brand-green: #087f5b;
+    --color-checkout-background: #f0eff5;
+    --spacing-safe: env(safe-area-inset-bottom, 0px);
+}
+
 @theme inline {
     --font-sans: "Nunito Sans", "Nunito Sans Fallback", ui-sans-serif, system-ui, sans-serif;
     --font-heading: "Noto Sans", "Noto Sans Fallback", ui-sans-serif, system-ui, sans-serif;

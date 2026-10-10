@@ -82,6 +82,7 @@ export function MenuItemCard({ item, restaurant }: MenuItemCardProps) {
           item={{
             id: item.id,
             restaurantId: restaurant.id,
+            restaurantName: restaurant.name,
             name: item.name,
             priceInPaise: item.priceInPaise,
             veg: item.isVeg,
