@@ -1,7 +1,11 @@
+import { sql } from "drizzle-orm"
 import {
   boolean,
+  check,
   doublePrecision,
+  index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   primaryKey,
@@ -10,6 +14,7 @@ import {
   unique,
   uuid,
 } from "drizzle-orm/pg-core"
+import type { deliveryAddress } from "@/lib/checkout/address-schema"
 import {
   menuItemAvailabilities,
   menuItemCuisines,
@@ -51,19 +56,7 @@ export const menuItemFoodTypeEnum = pgEnum(
 )
 export const menuItemCuisineEnum = pgEnum("menu_cuisine", menuItemCuisines)
 
-// email verification OTPs
-export const emailVerificationOtps = pgTable("email_verification_otps", {
-  profileId: integer("profile_id")
-    .primaryKey()
-    .references(() => profiles.id, { onDelete: "cascade" }),
-  codeHash: text("code_hash").notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
-  failedAttempts: integer("failed_attempts").notNull().default(0),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  lastSentAt: timestamp("last_sent_at").notNull().defaultNow(),
-})
-
-// profiles and roles
+// profiles and roles enums
 export const profiles = pgTable("profiles", {
   id: integer("id").generatedAlwaysAsIdentity().primaryKey(),
   username: text("username").notNull().unique(),
@@ -94,6 +87,31 @@ export const profileRoles = pgTable(
     }),
   ]
 )
+
+// razorpay payment realted enums
+export const foodOrderPaymentStatusEnum = pgEnum("food_order_payment_status", [
+  "PENDING",
+  "PAID",
+])
+
+export const paymentAttemptStatusEnum = pgEnum("payment_attempt_status", [
+  "CREATED", // Razorpay created the payment
+  "AUTHORIZED", // Payment approved; capture is pending
+  "CAPTURED", // Payment captured successfully
+  "FAILED", // Razorpay confirmed the payment failed
+])
+
+// email verification OTPs
+export const emailVerificationOtps = pgTable("email_verification_otps", {
+  profileId: integer("profile_id")
+    .primaryKey()
+    .references(() => profiles.id, { onDelete: "cascade" }),
+  codeHash: text("code_hash").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  failedAttempts: integer("failed_attempts").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  lastSentAt: timestamp("last_sent_at").notNull().defaultNow(),
+})
 
 // restaurants and their business details
 export const restaurants = pgTable("restaurants", {
@@ -255,4 +273,143 @@ export const profileSubscriptions = pgTable("profile_subscriptions", {
 
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
+})
+
+// razor pay payment related tables
+
+// food orders table with customer, restaurant, and payment details and razorpay order id
+export const foodOrders = pgTable(
+  "food_orders",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    customerId: integer("customer_id")
+      .notNull()
+      .references(() => profiles.id, { onDelete: "restrict" }),
+
+    restaurantId: uuid("restaurant_id")
+      .notNull()
+      .references(() => restaurants.id, { onDelete: "restrict" }),
+
+    checkoutRequestId: uuid("checkout_request_id").notNull(),
+
+    deliveryAddress: jsonb("delivery_address")
+      .$type<deliveryAddress>()
+      .notNull(),
+
+    subtotalInPaise: integer("subtotal_in_paise").notNull(),
+    deliveryFeeInPaise: integer("delivery_fee_in_paise").notNull(),
+    taxInPaise: integer("tax_in_paise").notNull(),
+    discountInPaise: integer("discount_in_paise").notNull(),
+    amountInPaise: integer("amount_in_paise").notNull(),
+
+    currency: text("currency").notNull().default("INR"),
+
+    razorpayOrderId: text("razorpay_order_id").unique(),
+
+    paymentStatus: foodOrderPaymentStatusEnum("payment_status")
+      .notNull()
+      .default("PENDING"),
+
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+
+    paidAt: timestamp("paid_at", { withTimezone: true }),
+  },
+  (table) => [
+    unique("food_orders_checkout_request_unique").on(
+      table.customerId,
+      table.checkoutRequestId
+    ),
+
+    index("food_orders_customer_idx").on(table.customerId),
+    // index : adds a database index for faster lookups on the customerId column
+    check("food_orders_amount_positive", sql`${table.amountInPaise} > 0`),
+    // check : adds database rules, such as “quantity must be positive
+    check(
+      "food_orders_amounts_check",
+      // sql: Allows us to write SQL expressions. When used inside check(), the expression must evaluate to TRUE (or UNKNOWN/NULL) for PostgreSQL to accept an INSERT or UPDATE.
+      sql`${table.subtotalInPaise} >= 0
+        AND ${table.deliveryFeeInPaise} >= 0
+        AND ${table.taxInPaise} >= 0
+        AND ${table.discountInPaise} >= 0`
+    ),
+
+    check(
+      "food_orders_total_matches",
+      sql`${table.amountInPaise} =
+        ${table.subtotalInPaise}
+        + ${table.deliveryFeeInPaise}
+        + ${table.taxInPaise}
+        - ${table.discountInPaise}`
+    ),
+  ]
+)
+
+// food order items table
+export const foodOrderItems = pgTable(
+  "food_order_items",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    foodOrderId: uuid("food_order_id")
+      .notNull()
+      .references(() => foodOrders.id, { onDelete: "restrict" }),
+
+    menuItemId: integer("menu_item_id").references(() => menuItems.id, {
+      onDelete: "set null",
+    }),
+
+    itemName: text("item_name").notNull(), // copy of the menu item name at the time of order, in case the menu item is deleted or renamed later
+
+    unitPriceInPaise: integer("unit_price_in_paise").notNull(), // copy of the menu item price at the time of order, in case the menu item price changes later
+
+    quantity: integer("quantity").notNull(),
+  },
+  (table) => [
+    index("food_order_items_order_idx").on(table.foodOrderId),
+
+    check("food_order_items_quantity_positive", sql`${table.quantity} > 0`),
+
+    check("food_order_items_price_check", sql`${table.unitPriceInPaise} >= 0`),
+  ]
+)
+
+// payment attempts table for tracking payment attempts for each food order
+export const paymentAttempts = pgTable(
+  "payment_attempts",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+
+    foodOrderId: uuid("food_order_id")
+      .notNull()
+      .references(() => foodOrders.id, { onDelete: "restrict" }),
+
+    razorpayPaymentId: text("razorpay_payment_id").notNull().unique(),
+
+    status: paymentAttemptStatusEnum("payment_status").notNull(),
+
+    amountInPaise: integer("amount_in_paise").notNull(),
+
+    currency: text("currency").notNull(),
+
+    failureReason: text("failure_reason"),
+
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [index("payment_attempts_order_idx").on(table.foodOrderId)]
+)
+
+// payment webhook so we don't process the same payment event multiple times
+export const paymentWebhookEvents = pgTable("payment_webhook_events", {
+  eventId: text("event_id").primaryKey(),
+
+  eventType: text("event_type").notNull(),
+
+  processedAt: timestamp("processed_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 })
