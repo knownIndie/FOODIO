@@ -1,4 +1,5 @@
 "use client"
+import { Lock } from "lucide-react"
 import Link from "next/link"
 import Script from "next/script"
 import { useState } from "react"
@@ -181,24 +182,52 @@ export function PaymentCheckout() {
         onError={() => setScriptStatus("error")}
       />
 
-      <h1 className="text-2xl font-semibold">Payment</h1>
+      <div className="rounded-3xl border border-zinc-200/70 bg-white p-5 shadow-sm sm:p-6">
+        <div className="mb-5 flex items-start gap-4">
+          <span
+            aria-hidden="true"
+            className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-zinc-900 text-white"
+          >
+            <Lock className="size-6" />
+          </span>
+          <div className="min-w-0">
+            <h2 className="font-heading text-lg font-bold text-zinc-900">
+              Payment
+            </h2>
+            <p className="mt-1 text-zinc-500">
+              Pay securely to confirm your order.
+            </p>
+          </div>
+        </div>
 
-      <Button
-        type="button"
-        onClick={handlePreparePayment}
-        disabled={
-          !isReady ||
-          scriptStatus !== "ready" ||
-          isSubmitting ||
-          paymentResult !== null
-        }
+        <Button
+          type="button"
+          onClick={handlePreparePayment}
+          disabled={
+            !isReady ||
+            scriptStatus !== "ready" ||
+            isSubmitting ||
+            paymentResult !== null
+          }
+          className="h-12 w-full rounded-xl bg-brand-green text-base font-bold text-white hover:bg-brand-green-hover"
+        >
+          {isSubmitting ? "Payment in progress…" : "Continue to payment"}
+        </Button>
+
+        {message && (
+          <p
+            role="status"
+            className="mt-4 rounded-xl bg-page-background px-4 py-3 text-zinc-700"
+          >
+            {message}
+          </p>
+        )}
+      </div>
+
+      <Link
+        className="block text-center font-semibold text-brand-orange underline underline-offset-4"
+        href="/customer/order/review"
       >
-        {isSubmitting ? "Payment in progress…" : "Continue to payment"}
-      </Button>
-
-      {message && <p role="status">{message}</p>}
-
-      <Link className="inline-block underline" href="/customer/order/review">
         Back to order review
       </Link>
     </section>
