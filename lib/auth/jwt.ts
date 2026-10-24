@@ -75,7 +75,7 @@ export async function verifyAccessToken(
       throw new Error("INVALID_ACCESS_TOKEN")
     }
     return { authentication: true, profileId }
-  } catch (_error) {
+  } catch {
     return { authentication: false }
   }
 }

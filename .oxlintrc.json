@@ -1,0 +1,25 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc", "react", "nextjs", "jsx-a11y"],
+  "categories": {
+    "correctness": "error"
+  },
+  "ignorePatterns": [
+    ".next/**",
+    "out/**",
+    "build/**",
+    "coverage/**",
+    "next-env.d.ts"
+  ],
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "unicorn/no-document-cookie": "error",
+    "react/set-state-in-effect": "warn",
+    "react/purity": "warn",
+    "react/refs": "warn",
+    "jsx-a11y/prefer-tag-over-role": "warn",
+    "jsx-a11y/control-has-associated-label": "warn",
+    "unicorn/no-empty-file": "warn"
+  }
+}
