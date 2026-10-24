@@ -1,0 +1,23 @@
+import "server-only"
+import Razorpay from "razorpay"
+
+let razorpayClient: Razorpay | undefined
+
+export function getRazorpayClient() {
+  if (razorpayClient) return razorpayClient
+  const keyId = process.env.RAZORPAY_KEY_ID
+  const keySecret = process.env.RAZORPAY_KEY_SECRET
+
+  if (!keyId || !keySecret) {
+    throw new Error(
+      "Razorpay key id or secret is not set in environment variables"
+    )
+  }
+
+  razorpayClient = new Razorpay({
+    key_id: keyId,
+    key_secret: keySecret,
+  })
+
+  return razorpayClient
+}

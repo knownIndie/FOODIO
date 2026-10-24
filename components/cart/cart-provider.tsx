@@ -8,6 +8,7 @@ import {
   useState,
 } from "react"
 import type { deliveryAddress } from "@/lib/checkout/address-schema"
+import { clearCheckoutId } from "@/lib/checkout/checkout-key"
 
 // createContext creates a shared place for data.
 // useContext reads data from that shared place.
@@ -44,6 +45,7 @@ interface cartContextValue {
   isReady: boolean
   address: deliveryAddress | null
   updateAddress: (address: deliveryAddress) => void
+  clearCart: () => void
 }
 
 // The context starts as null because there is no provider value yet.
@@ -121,6 +123,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, loadedFromStorage])
 
   function addItem(newItem: CartItemInput) {
+    clearCheckoutId()
     // Use the state updater form so the change is based on the latest cart.
     setItems((currentItems) => {
       const firstItem = currentItems[0]
@@ -146,12 +149,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function replaceCart(newItem: CartItemInput) {
+    clearCheckoutId()
     setAddress(null)
     // Discard the existing cart and store only this item at quantity 1.
     return setItems([{ ...newItem, quantity: 1 }])
   }
 
   function updateQuantity(id: number, change: number) {
+    clearCheckoutId()
     // Update only the item with this ID. Do not allow quantity below 1.
     return setItems((currentItems) => {
       return currentItems.map((item) =>
@@ -163,6 +168,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function removeItem(id: number) {
+    clearCheckoutId()
     if (items.length === 1 && items[0]?.id === id) {
       setAddress(null)
     }
@@ -173,7 +179,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }
 
   function updateAddress(confirmedAddress: deliveryAddress) {
+    clearCheckoutId()
     setAddress(confirmedAddress)
+  }
+
+  function clearCart() {
+    clearCheckoutId()
+    setAddress(null)
+    setItems([])
+    window.localStorage.removeItem(CART_STORAGE_KEY)
   }
 
   return (
@@ -187,7 +201,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         isReady: loadedFromStorage,
         address,
         updateAddress,
-        // we use isRea
+        clearCart,
       }}
     >
       {children}

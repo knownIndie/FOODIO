@@ -156,7 +156,6 @@ export function RestaurantOnboardingForm({
   )
 
   // Move keyboard focus to the heading when switching between editing and review.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: review changes the visible view.
   useEffect(() => {
     heading.current?.focus()
   }, [review])

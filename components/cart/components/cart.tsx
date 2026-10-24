@@ -183,7 +183,7 @@ export default function Cart() {
             ? "Check your order and bill on the next page"
             : "Confirm your phone number and delivery address to continue"
         }
-        label="Proceed with Phone Number"
+        label="Proceed with Review"
         href={canReview ? "/customer/order/review" : undefined}
       />
     </CheckoutPage>

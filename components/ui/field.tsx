@@ -74,8 +74,8 @@ function Field({
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof fieldVariants>) {
   return (
-    // biome-ignore lint/a11y/useSemanticElements: This reusable field wrapper intentionally preserves div props and layout behavior.
     <div
+      // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role -- This reusable field wrapper preserves div props and layout behavior.
       role="group"
       data-slot="field"
       data-orientation={orientation}

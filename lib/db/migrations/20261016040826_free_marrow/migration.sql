@@ -1,0 +1,1 @@
+ALTER TABLE "food_orders" ADD COLUMN "razorpay_order_creation_started_at" timestamp with time zone;
