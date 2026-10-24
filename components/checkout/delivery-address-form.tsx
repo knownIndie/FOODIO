@@ -23,6 +23,7 @@ const addressFields = [
     type: "text",
     inputMode: "text",
     placeholder: "Enter your full name",
+    span: "sm:col-span-3",
   },
   {
     name: "phone",
@@ -30,6 +31,7 @@ const addressFields = [
     type: "tel",
     inputMode: "tel",
     placeholder: "Enter your 10-digit phone number",
+    span: "sm:col-span-3",
   },
   {
     name: "billingAddress",
@@ -37,6 +39,7 @@ const addressFields = [
     type: "textarea",
     inputMode: "text",
     placeholder: "House or flat number, street, area, and landmark",
+    span: "sm:col-span-6",
   },
   {
     name: "city",
@@ -44,6 +47,7 @@ const addressFields = [
     type: "text",
     inputMode: "text",
     placeholder: "e.g. Bengaluru",
+    span: "sm:col-span-2",
   },
   {
     name: "state",
@@ -51,6 +55,7 @@ const addressFields = [
     type: "text",
     inputMode: "text",
     placeholder: "e.g. Karnataka",
+    span: "sm:col-span-2",
   },
   {
     name: "postalCode",
@@ -58,6 +63,7 @@ const addressFields = [
     type: "text",
     inputMode: "numeric",
     placeholder: "Enter your 6-digit PIN code",
+    span: "sm:col-span-2",
   },
 ] as const
 
@@ -115,69 +121,71 @@ export function DeliveryAddressForm({
 
   return (
     <form className="w-full text-zinc-700" noValidate onSubmit={handleSubmit}>
-      <FieldGroup className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {addressFields.map(({ name, label, type, inputMode, placeholder }) => (
-          <form.Field key={name} name={name}>
-            {(field) => {
-              const hasError =
-                field.state.meta.isTouched && !field.state.meta.isValid
-              const inputId = `delivery-${field.name}`
-              const errorId = `${inputId}-error`
-              const inputProps = {
-                id: inputId,
-                name: field.name,
-                placeholder,
-                value: field.state.value,
-                onChange: (
-                  event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-                ) => field.handleChange(event.target.value),
-                onBlur: field.handleBlur,
-                "aria-invalid": hasError,
-                "aria-describedby": hasError ? errorId : undefined,
-              }
+      <FieldGroup className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-6">
+        {addressFields.map(
+          ({ name, label, type, inputMode, placeholder, span }) => (
+            <form.Field key={name} name={name}>
+              {(field) => {
+                const hasError =
+                  field.state.meta.isTouched && !field.state.meta.isValid
+                const inputId = `delivery-${field.name}`
+                const errorId = `${inputId}-error`
+                const inputProps = {
+                  id: inputId,
+                  name: field.name,
+                  placeholder,
+                  value: field.state.value,
+                  onChange: (
+                    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+                  ) => field.handleChange(event.target.value),
+                  onBlur: field.handleBlur,
+                  "aria-invalid": hasError,
+                  "aria-describedby": hasError ? errorId : undefined,
+                }
 
-              return (
-                <Field
-                  data-invalid={hasError}
-                  className={
-                    name === "billingAddress" ? "gap-2 sm:col-span-2" : "gap-2"
-                  }
-                >
-                  <FieldLabel htmlFor={inputId}>{label}</FieldLabel>
-                  {type === "textarea" ? (
-                    <Textarea
-                      {...inputProps}
-                      rows={2}
-                      className="min-h-20 rounded-xl border-zinc-300 bg-white text-sm text-zinc-700 placeholder:text-zinc-500 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 dark:bg-white"
-                    />
-                  ) : (
-                    <Input
-                      {...inputProps}
-                      type={type}
-                      inputMode={inputMode}
-                      className="min-h-11 rounded-xl border-zinc-300 bg-white text-sm text-zinc-700 placeholder:text-zinc-500 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 dark:bg-white"
-                    />
-                  )}
-                  {hasError && (
-                    <FieldError
-                      id={errorId}
-                      className="text-red-700"
-                      errors={field.state.meta.errors}
-                    />
-                  )}
-                </Field>
-              )
-            }}
-          </form.Field>
-        ))}
+                return (
+                  <Field data-invalid={hasError} className={`gap-2 ${span}`}>
+                    <FieldLabel
+                      htmlFor={inputId}
+                      className="font-bold text-zinc-900"
+                    >
+                      {label}
+                    </FieldLabel>
+                    {type === "textarea" ? (
+                      <Textarea
+                        {...inputProps}
+                        rows={2}
+                        className="min-h-28 rounded-xl border-zinc-200 bg-white px-3.5 py-3 text-sm text-zinc-900 placeholder:text-zinc-500 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30"
+                      />
+                    ) : (
+                      <Input
+                        {...inputProps}
+                        type={type}
+                        inputMode={inputMode}
+                        className="h-12 rounded-xl border-zinc-200 bg-white px-3.5 text-sm text-zinc-900 placeholder:text-zinc-500 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30"
+                      />
+                    )}
+                    {hasError && (
+                      <FieldError
+                        id={errorId}
+                        className="text-red-700"
+                        errors={field.state.meta.errors}
+                      />
+                    )}
+                  </Field>
+                )
+              }}
+            </form.Field>
+          )
+        )}
 
         <form.Subscribe selector={(state) => state.isSubmitting}>
           {(isSubmitting) => (
-            <div className="grid gap-2 sm:col-span-2 sm:flex sm:flex-wrap">
+            <div className="grid gap-2 sm:col-span-6 sm:flex sm:flex-wrap">
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="min-h-11 w-full rounded-xl bg-orange-700 text-white hover:bg-orange-800 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
+                className="h-12 w-full rounded-xl bg-brand-green text-base font-bold text-white hover:bg-brand-green-hover focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
               >
                 {isSubmitting ? "Checking..." : "Confirm address"}
               </Button>
@@ -187,7 +195,7 @@ export function DeliveryAddressForm({
                   variant="outline"
                   disabled={isSubmitting}
                   onClick={onCancel}
-                  className="min-h-11 w-full rounded-xl border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-white dark:hover:bg-zinc-50 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
+                  className="h-12 w-full rounded-xl border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
                 >
                   Cancel
                 </Button>
@@ -197,7 +205,7 @@ export function DeliveryAddressForm({
                 variant="outline"
                 disabled={isSubmitting}
                 onClick={handleFillTestDetails}
-                className="min-h-11 w-full rounded-xl border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-white dark:hover:bg-zinc-50 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
+                className="h-12 w-full rounded-xl border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 focus-visible:border-brand-orange focus-visible:ring-brand-orange/30 sm:w-auto sm:flex-1"
               >
                 Add test details
               </Button>
