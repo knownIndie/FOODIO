@@ -1,13 +1,5 @@
-import { LeafIcon, UtensilsIcon } from "lucide-react"
 import { AddToCartButton } from "@/components/cart/components/AddToCartButton"
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { FoodMark } from "@/components/cart/components/food-mark"
 import { formatMenuItemOption } from "../entries/menuFormData"
 
 type MenuItemType = {
@@ -36,61 +28,52 @@ const priceFormatter = new Intl.NumberFormat("en-IN", {
 })
 
 export function MenuItemCard({ item, restaurant }: MenuItemCardProps) {
-  const itemType = item.foodTypes[0] ?? "OTHER"
   const cuisine = item.cuisines[0] ?? "OTHER"
 
   return (
-    <Card className="h-full border-border/70">
-      <CardHeader className="gap-4">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <UtensilsIcon className="size-5" />
-          </div>
-          <div className="flex flex-col gap-2">
-            <Badge variant="outline" className="text-xs">
-              {restaurant.name}
-            </Badge>
-            <Badge
-              variant="outline"
-              className={
-                item.isVeg
-                  ? "border-emerald-600/30 text-emerald-700 dark:text-emerald-400"
-                  : "border-rose-600/30 text-rose-700 dark:text-rose-400"
-              }
-            >
-              {item.isVeg ? <LeafIcon /> : null}
-              {item.isVeg ? "Vegetarian" : "Non-vegetarian"}
-            </Badge>
-          </div>
+    <article className="flex flex-col">
+      <div className="relative">
+        <div
+          aria-hidden="true"
+          className="flex aspect-4/3 flex-col items-center justify-center gap-1 rounded-3xl bg-brand-cream px-4 text-center text-brand-cream-foreground"
+        >
+          <span className="font-heading text-base font-bold">{item.name}</span>
+          <span className="text-xs opacity-75">Dish photo</span>
         </div>
-        <div className="space-y-1.5">
-          <CardTitle className="flex items-start justify-between gap-3 text-lg">
-            <span>{item.name}</span>
-            <span className="shrink-0 text-base font-semibold text-primary">
-              {priceFormatter.format(item.priceInPaise / 100)}
-            </span>
-          </CardTitle>
-          <CardDescription>{item.description}</CardDescription>
+
+        <div className="absolute inset-x-0 -bottom-5 flex justify-center">
+          <AddToCartButton
+            item={{
+              id: item.id,
+              restaurantId: restaurant.id,
+              restaurantName: restaurant.name,
+              name: item.name,
+              priceInPaise: item.priceInPaise,
+              veg: item.isVeg,
+              caloriesKcal: item.caloriesKcal,
+              description: item.description,
+            }}
+          />
         </div>
-      </CardHeader>
-      <CardContent className="mt-auto flex items-center justify-between">
-        <div className="flex gap-2">
-          <Badge variant="secondary">{formatMenuItemOption(itemType)}</Badge>
-          <Badge variant="secondary">{formatMenuItemOption(cuisine)}</Badge>
+      </div>
+
+      <div className="mt-8 space-y-1">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <FoodMark veg={item.isVeg} />
+          <span>{formatMenuItemOption(cuisine)}</span>
         </div>
-        <AddToCartButton
-          item={{
-            id: item.id,
-            restaurantId: restaurant.id,
-            restaurantName: restaurant.name,
-            name: item.name,
-            priceInPaise: item.priceInPaise,
-            veg: item.isVeg,
-            caloriesKcal: item.caloriesKcal,
-            description: item.description,
-          }}
-        />
-      </CardContent>
-    </Card>
+        <h3 className="font-heading text-lg leading-tight font-bold">
+          {item.name}
+        </h3>
+        <p className="font-semibold">
+          {priceFormatter.format(item.priceInPaise / 100)}
+        </p>
+        {item.description && (
+          <p className="line-clamp-2 text-sm text-muted-foreground">
+            {item.description}
+          </p>
+        )}
+      </div>
+    </article>
   )
 }
