@@ -1,7 +1,13 @@
 import { currentProfile } from "@/lib/auth/current-profile"
+import { RazorpayOrderError } from "@/lib/payments/create-razorpay-order"
 import { orderSchemaCheck } from "@/lib/payments/order-schema"
 import { CheckoutError } from "@/lib/payments/prepare-order"
+import {
+  prepareRazorpayPaymenSetupError,
+  prepareRazorpayPayment,
+} from "@/lib/payments/prepare-razorpay-payment"
 import { SaveOrderError, savePendingOrder } from "@/lib/payments/save-order"
+import { saveRazorpayOrderError } from "@/lib/payments/save-razorpay-order"
 import z from "zod"
 
 export const runtime = "nodejs" // as this make sure where our code runs it has the most-compatability as this is super important
@@ -10,8 +16,12 @@ export async function POST(request: Request) {
   try {
     const requestOrigin = request.headers.get("origin") // used to get the origin from the request headers
     const appOrigin = new URL(request.url).origin // used to get the application origin from the request URL
+
     if (!requestOrigin || requestOrigin !== appOrigin) {
-      return new Response("Invalid origin", { status: 403 })
+      return Response.json(
+        { success: false, error: "Invalid origin" },
+        { status: 403 }
+      )
     }
     const contentType = request.headers.get("content-type")
     if (
@@ -57,35 +67,85 @@ export async function POST(request: Request) {
       return Response.json(
         {
           success: false,
-          error: z.treeifyError(valdiatedResult.error),
+          error: "Invalid checkout details",
+          details: z.treeifyError(valdiatedResult.error),
         },
         { status: 400 }
       )
     }
 
     const orderData = valdiatedResult.data
+    const razorpayKeyId = process.env.RAZORPAY_KEY_ID
 
-    const runSaveOrder = await savePendingOrder(
+    if (!razorpayKeyId) {
+      throw new Error("Razorpay key ID is not configured")
+    }
+
+    const pendingOrder = await savePendingOrder(
       currentUserProfile.id,
       orderData
+    )
+
+    const order = await prepareRazorpayPayment(
+      currentUserProfile.id,
+      pendingOrder.id
     )
 
     return Response.json(
       {
         success: true,
-        foodOrderId: runSaveOrder.id,
-        paymentStatus: runSaveOrder.paymentStatus,
-        amountInPaise: runSaveOrder.amountInPaise,
+        razorpayKeyId,
+        foodOrderId: order.id,
+        razorpayOrderId: order.razorpayOrderId,
+        paymentStatus: order.paymentStatus,
+        amountInPaise: order.amountInPaise,
+        currency: order.currency,
+        bill: {
+          subtotalInPaise: order.subtotalInPaise,
+          deliveryFeeInPaise: order.deliveryFeeInPaise,
+          taxInPaise: order.taxInPaise,
+          discountInPaise: order.discountInPaise,
+        },
       },
       {
         status: 200,
-        headers: {
-          "cache-control": "no-store",
-          // to make sure the response is not cached
-        },
+        headers: { "Cache-Control": "no-store" },
       }
     )
   } catch (error) {
+    if (error instanceof prepareRazorpayPaymenSetupError) {
+      return Response.json(
+        {
+          success: false,
+          code: "PAYMENT_SETUP_BLOCKED",
+          error: error.message,
+        },
+        {
+          status: 409,
+          headers: { "Cache-Control": "no-store" },
+        }
+      )
+    }
+
+    if (
+      error instanceof RazorpayOrderError ||
+      error instanceof saveRazorpayOrderError
+    ) {
+      console.error("Payment setup could not be confirmed:", error)
+
+      return Response.json(
+        {
+          success: false,
+          code: "PAYMENT_SETUP_UNCONFIRMED",
+          error:
+            "Payment setup could not be confirmed. Check this checkout before retrying.",
+        },
+        {
+          status: 500,
+          headers: { "Cache-Control": "no-store" },
+        }
+      )
+    }
     if (error instanceof CheckoutError) {
       return Response.json(
         {

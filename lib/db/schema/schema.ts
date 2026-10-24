@@ -306,6 +306,10 @@ export const foodOrders = pgTable(
     currency: text("currency").notNull().default("INR"),
 
     razorpayOrderId: text("razorpay_order_id").unique(),
+    razorpayOrderCreationStartedAt: timestamp(
+      "razorpay_order_creation_started_at",
+      { withTimezone: true }
+    ),
 
     paymentStatus: foodOrderPaymentStatusEnum("payment_status")
       .notNull()

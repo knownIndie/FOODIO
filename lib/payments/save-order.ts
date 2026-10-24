@@ -111,3 +111,6 @@ export async function savePendingOrder(
     return createOrder
   })
 }
+
+export type SavedPendingOrder = Awaited<ReturnType<typeof savePendingOrder>>
+// allows us to get type of the order returned by savePendingOrder
