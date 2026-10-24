@@ -19,7 +19,7 @@ export function DeliveryRegistrationButton({ endpoint }: SignupEndpoint) {
   }
 
   return (
-    <Button onClick={handleClick}>
+    <Button onClick={handleClick} className="h-11 w-full rounded-xl font-bold">
       Apply for FoodIO Delivery Partner Account
     </Button>
   )

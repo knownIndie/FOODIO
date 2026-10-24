@@ -31,10 +31,12 @@ export default async function SignupPage() {
     )
   }
   return (
-    <main className="flex min-h-svh items-center justify-center bg-muted/30 p-6">
-      <Card className="w-full max-w-md">
+    <main className="flex min-h-svh items-center justify-center bg-page-background p-6">
+      <Card className="w-full max-w-md rounded-3xl border border-border/70 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Create your account</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">
+            Create your account
+          </CardTitle>
           <CardDescription>
             Join FoodIO as a user or restaurant owner.
           </CardDescription>
