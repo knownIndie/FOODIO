@@ -23,7 +23,7 @@ export function CustomerShell({
   }
 
   return (
-    <div className="mx-auto flex min-h-svh flex-col bg-page-background">
+    <div className="flex min-h-svh flex-col overflow-x-clip bg-page-background">
       {header}
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
         {children}

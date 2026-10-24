@@ -55,23 +55,40 @@ export function AddToCartButton({ item }: { item: CartItemInput }) {
   return (
     <>
       {quantity === 0 ? (
-        <Button variant="secondary" onClick={handleAddToCartButton}>
-          {" "}
-          Add To Cart
+        <Button
+          variant="ghost"
+          aria-label={`Add ${item.name} to cart`}
+          onClick={handleAddToCartButton}
+          className="h-10 rounded-full bg-white px-6 font-heading text-sm font-bold text-brand-orange shadow-md ring-1 ring-black/5 hover:bg-brand-orange-soft hover:text-brand-orange"
+        >
+          ADD
         </Button>
       ) : (
-        <div className="flex items-center gap-2">
+        <div className="flex h-10 items-center gap-1 rounded-full bg-white px-1 shadow-md ring-1 ring-black/5">
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
+            aria-label={`Decrease ${item.name} quantity`}
             onClick={handleDecreaseQuantity}
+            className="rounded-full text-brand-orange hover:bg-brand-orange-soft hover:text-brand-orange"
           >
             <Minus />
           </Button>
 
-          <span className="min-w-8 text-center">{quantity}</span>
+          <span
+            aria-live="polite"
+            className="min-w-6 text-center font-heading text-sm font-bold"
+          >
+            {quantity}
+          </span>
 
-          <Button variant="outline" size="icon" onClick={handleAddToCartButton}>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={`Increase ${item.name} quantity`}
+            onClick={handleAddToCartButton}
+            className="rounded-full text-brand-orange hover:bg-brand-orange-soft hover:text-brand-orange"
+          >
             <Plus />
           </Button>
         </div>
