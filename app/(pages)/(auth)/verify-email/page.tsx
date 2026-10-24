@@ -39,10 +39,12 @@ export default async function VerifyEmailPage({
   }
 
   return (
-    <main className="flex min-h-svh items-center justify-center bg-muted/30 p-6">
-      <Card className="w-full max-w-md">
+    <main className="flex min-h-svh items-center justify-center bg-page-background p-6">
+      <Card className="w-full max-w-md rounded-3xl border border-border/70 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Verify your email</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">
+            Verify your email
+          </CardTitle>
           <CardDescription>
             Enter the code from the FoodIO message in your Mailtrap sandbox.
           </CardDescription>

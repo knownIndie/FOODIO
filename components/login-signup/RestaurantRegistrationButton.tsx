@@ -19,7 +19,7 @@ export function RestaurantRegistrationButton({ endpoint }: SignupEndpoint) {
   }
 
   return (
-    <Button onClick={handleClick}>
+    <Button onClick={handleClick} className="h-11 w-full rounded-xl font-bold">
       Apply for FoodIO Restaurant Owner Account
     </Button>
   )

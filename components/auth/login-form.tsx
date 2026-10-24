@@ -96,7 +96,9 @@ export function LoginForm({
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                <FieldLabel htmlFor={field.name} className="font-bold">
+                  Email
+                </FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -107,6 +109,7 @@ export function LoginForm({
                   aria-invalid={isInvalid}
                   autoComplete="email"
                   placeholder="you@example.com"
+                  className="h-11 rounded-xl border-border bg-card px-3.5"
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
@@ -120,7 +123,9 @@ export function LoginForm({
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                <FieldLabel htmlFor={field.name} className="font-bold">
+                  Password
+                </FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -130,6 +135,7 @@ export function LoginForm({
                   onChange={(event) => field.handleChange(event.target.value)}
                   aria-invalid={isInvalid}
                   autoComplete="current-password"
+                  className="h-11 rounded-xl border-border bg-card px-3.5"
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
@@ -141,7 +147,7 @@ export function LoginForm({
           <p
             className={
               message.type === "success"
-                ? "text-sm text-emerald-700"
+                ? "text-sm text-brand-green"
                 : "text-sm text-destructive"
             }
           >
@@ -152,13 +158,18 @@ export function LoginForm({
         <form.Subscribe selector={(state) => state.isSubmitting}>
           {(isSubmitting) => (
             <div className="grid gap-2">
-              <Button type="submit" disabled={isSubmitting} className="w-full">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="h-11 w-full rounded-xl font-bold"
+              >
                 {isSubmitting ? "Logging in..." : "Log in"}
               </Button>
               {testDetails ? (
                 <Button
                   type="button"
                   variant="outline"
+                  className="h-11 rounded-xl bg-card font-bold"
                   disabled={isSubmitting}
                   onClick={() => {
                     form.setFieldValue("email", testDetails.email)
@@ -178,7 +189,7 @@ export function LoginForm({
             Need an account?{" "}
             <Link
               href={signupHref}
-              className="font-medium text-foreground underline"
+              className="font-semibold text-brand-orange underline underline-offset-4 hover:text-brand-orange-hover"
             >
               {signupLabel}
             </Link>

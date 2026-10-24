@@ -93,7 +93,7 @@ const pricingPlans: PricingPlan[] = [
 ]
 
 const billingTriggerClassName =
-  "h-8 min-w-24 rounded-full px-4 hover:bg-background/70 hover:text-foreground data-active:bg-foreground data-active:text-background data-active:hover:bg-foreground data-active:hover:text-background dark:data-active:border-transparent dark:data-active:bg-foreground dark:data-active:text-background dark:data-active:hover:bg-foreground dark:data-active:hover:text-background"
+  "h-8 min-w-24 rounded-full px-4 font-bold hover:bg-brand-orange-soft hover:text-foreground data-active:bg-brand-orange data-active:text-white data-active:hover:bg-brand-orange-hover data-active:hover:text-white dark:data-active:border-transparent dark:data-active:bg-brand-orange dark:data-active:text-white dark:data-active:hover:bg-brand-orange-hover dark:data-active:hover:text-white"
 
 type PricingCardProps = {
   billingPeriod: BillingPeriod
@@ -103,16 +103,14 @@ type PricingCardProps = {
 function PricingCard({ billingPeriod, plan }: PricingCardProps) {
   const isEnterprise = plan.enterprise === true
   const ctaClassName = cn(
-    "h-9 w-full rounded-xl",
-    isEnterprise
-      ? "bg-background text-foreground hover:bg-background/90"
-      : "bg-foreground text-background hover:bg-foreground/90"
+    "h-9 w-full rounded-xl font-bold",
+    isEnterprise && "bg-background text-foreground hover:bg-background/90"
   )
 
   return (
     <Card
       className={cn(
-        "grid h-full min-h-[420px] grid-rows-[auto_1fr] rounded-2xl border-border/80 bg-card py-0 shadow-none",
+        "grid h-full min-h-[420px] grid-rows-[auto_1fr] rounded-3xl border-border/80 bg-card py-0 shadow-sm",
         plan.popular && "border-2 border-primary bg-card ring-primary/20",
         isEnterprise &&
           "border-foreground/10 bg-foreground text-background [background-image:linear-gradient(to_right,rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.07)_1px,transparent_1px)] [background-size:45px_45px] dark:[background-image:linear-gradient(to_right,rgba(0,0,0,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.05)_1px,transparent_1px)]"
@@ -122,7 +120,7 @@ function PricingCard({ billingPeriod, plan }: PricingCardProps) {
         <div className="flex items-center gap-2">
           <h2
             className={cn(
-              "font-heading text-lg font-medium",
+              "font-heading text-lg font-bold",
               isEnterprise && "text-background"
             )}
           >
@@ -139,7 +137,7 @@ function PricingCard({ billingPeriod, plan }: PricingCardProps) {
         <div className="space-y-0.5">
           <p
             className={cn(
-              "font-heading text-4xl font-normal tracking-tight sm:text-5xl",
+              "font-heading text-4xl font-bold tracking-tight sm:text-5xl",
               isEnterprise && "text-background"
             )}
           >
@@ -181,9 +179,7 @@ function PricingCard({ billingPeriod, plan }: PricingCardProps) {
                 <CircleCheckIcon
                   className={cn(
                     "mt-0.5 size-4 shrink-0",
-                    isEnterprise
-                      ? "text-background/75"
-                      : "text-muted-foreground"
+                    isEnterprise ? "text-background/75" : "text-brand-green"
                   )}
                   aria-hidden="true"
                 />
@@ -213,7 +209,7 @@ export const PricingPageComponent = () => {
   return (
     <section className="space-y-10">
       <header className="mx-auto max-w-3xl space-y-4 text-center">
-        <h1 className="font-heading text-4xl font-normal tracking-tight sm:text-6xl">
+        <h1 className="font-heading text-4xl font-bold tracking-tight sm:text-6xl">
           Plans and Pricing
         </h1>
         <p className="text-base text-muted-foreground sm:text-lg">
@@ -223,7 +219,7 @@ export const PricingPageComponent = () => {
       </header>
 
       <div className="flex justify-center">
-        <div className="flex items-center gap-1 rounded-full border border-border/80 bg-muted/40 p-1">
+        <div className="flex items-center gap-1 rounded-full border border-border/80 bg-card p-1 shadow-sm">
           <Tabs
             value={billingPeriod}
             onValueChange={(value) => {
@@ -245,7 +241,7 @@ export const PricingPageComponent = () => {
               </TabsTrigger>
             </TabsList>
           </Tabs>
-          <Badge className="pointer-events-none h-7 rounded-full bg-foreground px-3 text-xs text-background">
+          <Badge className="pointer-events-none h-7 rounded-full bg-brand-green px-3 text-xs text-white">
             Save 35%
           </Badge>
         </div>

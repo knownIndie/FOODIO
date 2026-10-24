@@ -19,10 +19,12 @@ export default async function LoginPage({
   const { returnTo } = await searchParams
 
   return (
-    <main className="flex min-h-svh items-center justify-center bg-muted/30 p-6">
-      <Card className="w-full max-w-md">
+    <main className="flex min-h-svh items-center justify-center bg-page-background p-6">
+      <Card className="w-full max-w-md rounded-3xl border border-border/70 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Welcome back</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">
+            Welcome back
+          </CardTitle>
           <CardDescription>Enter your details to continue.</CardDescription>
         </CardHeader>
         <CardContent>

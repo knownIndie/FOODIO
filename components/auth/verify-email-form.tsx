@@ -119,7 +119,9 @@ export function VerifyEmailForm({
 
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Verification code</FieldLabel>
+                <FieldLabel htmlFor={field.name} className="font-bold">
+                  Verification code
+                </FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -135,6 +137,7 @@ export function VerifyEmailForm({
                   inputMode="numeric"
                   maxLength={6}
                   placeholder="000000"
+                  className="h-11 rounded-xl border-border bg-card px-3.5 text-lg tracking-[0.3em]"
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
@@ -145,7 +148,7 @@ export function VerifyEmailForm({
         <p
           className={
             message.type === "success"
-              ? "text-sm text-emerald-700"
+              ? "text-sm text-brand-green"
               : "text-sm text-destructive"
           }
           role="status"
@@ -156,12 +159,17 @@ export function VerifyEmailForm({
         <form.Subscribe selector={(state) => state.isSubmitting}>
           {(isSubmitting) => (
             <div className="grid gap-2">
-              <Button type="submit" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="h-11 w-full rounded-xl font-bold"
+              >
                 {isSubmitting ? "Verifying..." : "Verify email"}
               </Button>
               <Button
                 type="button"
                 variant="outline"
+                className="h-11 w-full rounded-xl bg-card font-bold"
                 disabled={isSubmitting || isResending}
                 onClick={() => void resendCode()}
               >
