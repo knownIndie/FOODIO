@@ -65,12 +65,12 @@ export function AccountMenu({
         render={
           <Button
             variant="ghost"
-            className="h-11 gap-2 rounded-full px-2 pr-3"
+            className="h-10 gap-2 rounded-full border border-border bg-white px-1.5 pr-3 shadow-sm"
           />
         }
       >
         <Avatar className="size-8">
-          <AvatarFallback className="bg-primary/10 font-medium text-primary">
+          <AvatarFallback className="bg-brand-orange-soft font-semibold text-brand-orange">
             {initials(name) || "F"}
           </AvatarFallback>
         </Avatar>
