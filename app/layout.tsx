@@ -1,13 +1,13 @@
-import { Geist_Mono, Noto_Sans, Nunito_Sans } from "next/font/google"
+import { Geist_Mono, Nunito_Sans, Outfit } from "next/font/google"
 import "./globals.css"
 import { CartProvider } from "@/components/cart/cart-provider"
 import { ThemeProvider } from "@/components/ui/theme-provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 
-const notoSansHeading = Noto_Sans({
+const outfitHeading = Outfit({
   subsets: ["latin"],
-  variable: "--font-noto-heading",
+  variable: "--font-outfit",
 })
 
 const nunitoSans = Nunito_Sans({
@@ -33,7 +33,7 @@ export default function RootLayout({
         "font-sans antialiased",
         fontMono.variable,
         nunitoSans.variable,
-        notoSansHeading.variable
+        outfitHeading.variable
       )}
     >
       <body>
