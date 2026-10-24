@@ -1,10 +1,20 @@
-import { UtensilsCrossedIcon } from "lucide-react"
+import {
+  ChevronDownIcon,
+  HandshakeIcon,
+  LinkIcon,
+  SearchIcon,
+  UserIcon,
+  UtensilsCrossedIcon,
+} from "lucide-react"
 import Link from "next/link"
+import { CartLink } from "@/components/customer-homepage/cart-link"
 import { AccountMenu } from "@/components/customer-homepage/account-menu"
-import { containerWidth } from "@/components/extras/classname-extras"
+import {
+  containerWidth,
+  headerLinkClass,
+} from "@/components/extras/classname-extras"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import TakeMeToCart from "../menu/components/take-me-to-cart"
 
 type HeaderProfile = {
   email: string
@@ -31,51 +41,87 @@ function dashboardHref(roles: string[]) {
 
 export function CustomerHeader({ profile }: { profile: HeaderProfile | null }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border bg-white">
       <div
         className={cn(
           containerWidth,
-          "flex h-16 items-center justify-between gap-6"
+          "flex h-16 max-w-6xl items-center justify-between gap-6"
         )}
       >
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex size-9 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-            <UtensilsCrossedIcon className="size-4" />
-          </span>
-          <span className="font-heading text-xl font-semibold tracking-tight">
-            Food<span className="text-primary">IO</span>
-          </span>
-        </Link>
-        <Link href="/links" className="flex items-center gap-2">
-          <span className="font-heading text-sm font-semibold tracking-tight">
-            All Links
-          </span>
-        </Link>
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-6">
+          <Link
+            href="/"
+            aria-label="FoodIO home"
+            className="flex shrink-0 items-center gap-2 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
+          >
+            <span className="flex size-9 items-center justify-center rounded-xl bg-brand-orange text-white">
+              <UtensilsCrossedIcon className="size-4" aria-hidden="true" />
+            </span>
+            <span className="font-heading text-xl font-extrabold tracking-tight text-foreground">
+              Food<span className="text-brand-orange">IO</span>
+            </span>
+          </Link>
+
+          <div className="hidden items-center gap-1 text-sm md:flex">
+            <span className="font-bold">Bengaluru</span>
+            <span className="hidden text-muted-foreground xl:inline">
+              Karnataka, India
+            </span>
+            <ChevronDownIcon
+              className="size-4 text-muted-foreground"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1 sm:gap-2">
+          <button
+            type="button"
+            className={cn(headerLinkClass, "hidden sm:inline-flex")}
+          >
+            <SearchIcon className="size-5" aria-hidden="true" />
+            <span className="sr-only lg:not-sr-only">Search</span>
+          </button>
+          <Link
+            href="/partnerOnboarding"
+            className={cn(headerLinkClass, "hidden md:inline-flex")}
+          >
+            <HandshakeIcon className="size-5" aria-hidden="true" />
+            <span className="sr-only lg:not-sr-only">Partner with us</span>
+          </Link>
+          <Link
+            href="/links"
+            className={cn(headerLinkClass, "hidden md:inline-flex")}
+          >
+            <LinkIcon className="size-5" aria-hidden="true" />
+            <span className="sr-only lg:not-sr-only">All Links</span>
+          </Link>
+
           {profile ? (
-            <div className="flex items-center gap-2">
-              <AccountMenu
-                dashboardHref={dashboardHref(profile.roles)}
-                email={profile.email}
-                name={profile.name}
-                username={profile.username}
-              />
-              <TakeMeToCart />
-            </div>
+            <AccountMenu
+              dashboardHref={dashboardHref(profile.roles)}
+              email={profile.email}
+              name={profile.name}
+              username={profile.username}
+            />
           ) : (
-            <div className="flex items-center gap-2">
+            <>
+              <Link href="/login/customer" className={headerLinkClass}>
+                <UserIcon className="size-5" aria-hidden="true" />
+                <span className="sr-only lg:not-sr-only">Sign in</span>
+              </Link>
               <Button
                 nativeButton={false}
-                variant="ghost"
-                render={<Link href="/login/customer" />}
+                size="lg"
+                className="rounded-full bg-brand-green px-4 text-white hover:bg-brand-green-hover"
+                render={<Link href="/signup" />}
               >
-                Log in
-              </Button>
-              <Button nativeButton={false} render={<Link href="/signup" />}>
                 Sign up
               </Button>
-            </div>
+            </>
           )}
+
+          <CartLink />
         </div>
       </div>
     </header>
@@ -88,19 +134,23 @@ export function RestaurantOwnerHeader({
   profile: HeaderProfile | null
 }) {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-border bg-white">
       <div
         className={cn(
           containerWidth,
-          "flex h-16 items-center justify-between gap-6"
+          "flex h-16 max-w-6xl items-center justify-between gap-6"
         )}
       >
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex size-9 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-            <UtensilsCrossedIcon className="size-4" />
+        <Link
+          href="/"
+          aria-label="FoodIO home"
+          className="flex items-center gap-2 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
+        >
+          <span className="flex size-9 items-center justify-center rounded-xl bg-brand-orange text-white">
+            <UtensilsCrossedIcon className="size-4" aria-hidden="true" />
           </span>
-          <span className="font-heading text-xl font-semibold tracking-tight">
-            Food<span className="text-primary">IO</span>
+          <span className="font-heading text-xl font-extrabold tracking-tight text-foreground">
+            Food<span className="text-brand-orange">IO</span>
           </span>
         </Link>
 
@@ -147,7 +197,12 @@ export function RestaurantOwnerHeader({
             >
               Log in
             </Button>
-            <Button nativeButton={false} render={<Link href="/signup" />}>
+            <Button
+              nativeButton={false}
+              size="lg"
+              className="rounded-full bg-brand-green px-4 text-white hover:bg-brand-green-hover"
+              render={<Link href="/signup" />}
+            >
               Sign up
             </Button>
           </div>
