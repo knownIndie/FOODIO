@@ -1,14 +1,13 @@
 import {
-  ChevronDownIcon,
   HandshakeIcon,
   LinkIcon,
-  SearchIcon,
   UserIcon,
   UtensilsCrossedIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { CartLink } from "@/components/customer-homepage/cart-link"
 import { AccountMenu } from "@/components/customer-homepage/account-menu"
+import { LocationChip } from "@/components/customer-homepage/location-chip"
 import {
   containerWidth,
   headerLinkClass,
@@ -62,26 +61,10 @@ export function CustomerHeader({ profile }: { profile: HeaderProfile | null }) {
             </span>
           </Link>
 
-          <div className="hidden items-center gap-1 text-sm md:flex">
-            <span className="font-bold">Bengaluru</span>
-            <span className="hidden text-muted-foreground xl:inline">
-              Karnataka, India
-            </span>
-            <ChevronDownIcon
-              className="size-4 text-muted-foreground"
-              aria-hidden="true"
-            />
-          </div>
+          <LocationChip />
         </div>
 
         <div className="flex items-center gap-1 sm:gap-2">
-          <button
-            type="button"
-            className={cn(headerLinkClass, "hidden sm:inline-flex")}
-          >
-            <SearchIcon className="size-5" aria-hidden="true" />
-            <span className="sr-only lg:not-sr-only">Search</span>
-          </button>
           <Link
             href="/partnerOnboarding"
             className={cn(headerLinkClass, "hidden md:inline-flex")}
@@ -121,7 +104,7 @@ export function CustomerHeader({ profile }: { profile: HeaderProfile | null }) {
             </>
           )}
 
-          <CartLink />
+          {profile && <CartLink />}
         </div>
       </div>
     </header>

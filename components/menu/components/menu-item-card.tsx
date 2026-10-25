@@ -1,4 +1,7 @@
-import { AddToCartButton } from "@/components/cart/components/AddToCartButton"
+import {
+  AddToCartButton,
+  QuantitySelector,
+} from "@/components/cart/components/AddToCartButton"
 import { FoodMark } from "@/components/cart/components/food-mark"
 import { formatMenuItemOption } from "../entries/menuFormData"
 
@@ -18,6 +21,7 @@ type RestaurantType = {
 }
 type MenuItemCardProps = {
   item: MenuItemType
+  isLoggedIn: boolean
   restaurant: RestaurantType
 }
 
@@ -27,8 +31,22 @@ const priceFormatter = new Intl.NumberFormat("en-IN", {
   style: "currency",
 })
 
-export function MenuItemCard({ item, restaurant }: MenuItemCardProps) {
+export function MenuItemCard({
+  item,
+  isLoggedIn,
+  restaurant,
+}: MenuItemCardProps) {
   const cuisine = item.cuisines[0] ?? "OTHER"
+  const cartItem = {
+    id: item.id,
+    restaurantId: restaurant.id,
+    restaurantName: restaurant.name,
+    name: item.name,
+    priceInPaise: item.priceInPaise,
+    veg: item.isVeg,
+    caloriesKcal: item.caloriesKcal,
+    description: item.description,
+  }
 
   return (
     <article className="flex flex-col">
@@ -42,18 +60,7 @@ export function MenuItemCard({ item, restaurant }: MenuItemCardProps) {
         </div>
 
         <div className="absolute inset-x-0 -bottom-5 flex justify-center">
-          <AddToCartButton
-            item={{
-              id: item.id,
-              restaurantId: restaurant.id,
-              restaurantName: restaurant.name,
-              name: item.name,
-              priceInPaise: item.priceInPaise,
-              veg: item.isVeg,
-              caloriesKcal: item.caloriesKcal,
-              description: item.description,
-            }}
-          />
+          <AddToCartButton item={cartItem} isLoggedIn={isLoggedIn} />
         </div>
       </div>
 
@@ -65,9 +72,12 @@ export function MenuItemCard({ item, restaurant }: MenuItemCardProps) {
         <h3 className="font-heading text-lg leading-tight font-bold">
           {item.name}
         </h3>
-        <p className="font-semibold">
-          {priceFormatter.format(item.priceInPaise / 100)}
-        </p>
+        <div className="flex items-center justify-between gap-3">
+          <p className="font-semibold">
+            {priceFormatter.format(item.priceInPaise / 100)}
+          </p>
+          {isLoggedIn && <QuantitySelector item={cartItem} />}
+        </div>
         {item.description && (
           <p className="line-clamp-2 text-sm text-muted-foreground">
             {item.description}

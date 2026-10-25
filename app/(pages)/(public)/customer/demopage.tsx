@@ -6,9 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { currentProfile } from "@/lib/auth/current-profile"
 import { getDemoHomeData } from "@/lib/demo-home-data/get-demo-home-data"
 
 export default async function CustomerPage() {
+  const profile = await currentProfile()
   const demoHomeData = await getDemoHomeData()
 
   return (
@@ -41,6 +43,7 @@ export default async function CustomerPage() {
                 <MenuItemCard
                   key={item.id}
                   item={item}
+                  isLoggedIn={profile !== null}
                   restaurant={demoHomeData.restaurant}
                 />
               ))}

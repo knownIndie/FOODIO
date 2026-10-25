@@ -7,6 +7,7 @@ export default function TestPage2() {
       <div className="flex gap-4">
         {/* First click adds a dish from restaurant A. */}
         <AddToCartButton
+          isLoggedIn
           item={{
             id: 9001,
             restaurantId: "test-restaurant-a",
@@ -20,6 +21,7 @@ export default function TestPage2() {
 
         {/* Clicking this after A should open the replacement dialog. */}
         <AddToCartButton
+          isLoggedIn
           item={{
             id: 9002,
             restaurantId: "test-restaurant-b",
