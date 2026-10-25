@@ -6,10 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-
-function safeReturnTo(value?: string) {
-  return value?.startsWith("/") && !value.startsWith("//") ? value : undefined
-}
+import { safeReturnTo } from "@/lib/auth/safe-return-to"
 
 export default async function LoginPage({
   searchParams,

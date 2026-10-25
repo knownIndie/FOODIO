@@ -1,6 +1,6 @@
 "use client"
 
-import { ChevronDownIcon, LayoutDashboardIcon, LogOutIcon } from "lucide-react"
+import { LayoutDashboardIcon, LogOutIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -65,7 +65,8 @@ export function AccountMenu({
         render={
           <Button
             variant="ghost"
-            className="h-10 gap-2 rounded-full border border-border bg-white px-1.5 pr-3 shadow-sm"
+            aria-label={`Account menu for @${username}`}
+            className="size-10 rounded-full border border-border bg-white p-1 shadow-sm"
           />
         }
       >
@@ -74,10 +75,6 @@ export function AccountMenu({
             {initials(name) || "F"}
           </AvatarFallback>
         </Avatar>
-        <span className="hidden max-w-32 truncate font-medium sm:inline">
-          @{username}
-        </span>
-        <ChevronDownIcon className="size-4 text-muted-foreground" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-64">

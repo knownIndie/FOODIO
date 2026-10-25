@@ -5,6 +5,7 @@ import {
   UserRoundIcon,
 } from "lucide-react"
 import Link from "next/link"
+import { LocationProvider } from "@/components/customer-homepage/location-provider"
 import { CustomerHeader } from "@/components/customer-homepage/site-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -63,7 +64,9 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-svh bg-background">
-      <CustomerHeader profile={profile} />
+      <LocationProvider>
+        <CustomerHeader profile={profile} />
+      </LocationProvider>
 
       <main>
         <section

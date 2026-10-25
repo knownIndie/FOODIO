@@ -2,18 +2,19 @@ import { BikeIcon, StoreIcon, UserRoundIcon } from "lucide-react"
 import Link from "next/link"
 import { NearbyRestaurants } from "@/components/customer-homepage/nearby-restaurants"
 import { containerWidth } from "@/components/extras/classname-extras"
+import { currentProfile } from "@/lib/auth/current-profile"
 import { nearlocationData } from "@/lib/home-data/queries"
 
 const DEFAULT_CITY = {
   // label: "Delhi",
   // latitude: 28.6139,
   // longitude: 77.209,
-  label: "Bengaluru",
   latitude: 12.9716,
   longitude: 77.5946,
 }
 
 export default async function CustomerPage() {
+  const profile = await currentProfile()
   const initialRestaurants = await nearlocationData({
     latitude: DEFAULT_CITY.latitude,
     longitude: DEFAULT_CITY.longitude,
@@ -23,8 +24,8 @@ export default async function CustomerPage() {
   return (
     <>
       <NearbyRestaurants
-        initialLocationLabel={DEFAULT_CITY.label}
         initialRestaurants={initialRestaurants}
+        isLoggedIn={profile !== null}
       />
 
       <section

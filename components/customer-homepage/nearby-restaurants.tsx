@@ -10,10 +10,11 @@ import {
   ShoppingBagIcon,
 } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useCart } from "@/components/cart/cart-provider"
 import { FoodMark } from "@/components/cart/components/food-mark"
 import { formatPrice } from "@/components/cart/components/order-price"
+import { useLocation } from "@/components/customer-homepage/location-provider"
 import { containerWidth } from "@/components/extras/classname-extras"
 import { MenuItemCard } from "@/components/menu/components/menu-item-card"
 import { formatMenuItemOption } from "@/components/menu/entries/menuFormData"
@@ -30,27 +31,11 @@ import type {
 import { cn } from "@/lib/utils"
 
 type NearbyRestaurantsProps = {
-  initialLocationLabel: string
   initialRestaurants: nearbyRestaurant[]
+  isLoggedIn: boolean
 }
 
-type Status = "idle" | "locating" | "loading" | "error"
-
-function getLocationErrorMessage(error: GeolocationPositionError) {
-  if (error.code === error.PERMISSION_DENIED) {
-    return "Location permission was denied. Allow location access in your browser and try again."
-  }
-
-  if (error.code === error.POSITION_UNAVAILABLE) {
-    return "Your current location is unavailable."
-  }
-
-  if (error.code === error.TIMEOUT) {
-    return "Finding your location took too long. Try again."
-  }
-
-  return "Could not find your current location."
-}
+type LoadStatus = "idle" | "loading" | "error"
 
 function getCuisines(restaurant: nearbyRestaurant) {
   const cuisines = new Set(restaurant.items.flatMap((item) => item.cuisines))
@@ -62,100 +47,93 @@ function getCuisines(restaurant: nearbyRestaurant) {
 }
 
 export function NearbyRestaurants({
-  initialLocationLabel,
   initialRestaurants,
+  isLoggedIn,
 }: NearbyRestaurantsProps) {
   const { items: cartItems } = useCart()
+  const {
+    city,
+    coords,
+    status: locationStatus,
+    errorMessage: locationErrorMessage,
+    locate,
+  } = useLocation()
 
   const [restaurants, setRestaurants] = useState(initialRestaurants)
 
-  const [locationLabel, setLocationLabel] = useState(initialLocationLabel)
+  const [loadStatus, setLoadStatus] = useState<LoadStatus>("idle")
+  const [loadErrorMessage, setLoadErrorMessage] = useState("")
 
-  const [status, setStatus] = useState<Status>("idle")
-  const [errorMessage, setErrorMessage] = useState("")
+  const loadNearbyRestaurants = useCallback(
+    async (latitude: number, longitude: number) => {
+      setLoadStatus("loading")
 
-  async function loadNearbyRestaurants(latitude: number, longitude: number) {
-    setStatus("loading")
+      try {
+        const searchParams = new URLSearchParams({
+          lat: String(latitude),
+          lng: String(longitude),
+        })
 
-    try {
-      const searchParams = new URLSearchParams({
-        lat: String(latitude),
-        lng: String(longitude),
-      })
+        const response = await fetch(
+          `/api/restaurants/nearby?${searchParams}`,
+          {
+            cache: "no-store",
+          }
+        )
 
-      const response = await fetch(`/api/restaurants/nearby?${searchParams}`, {
-        cache: "no-store",
-      })
+        const body: unknown = await response.json()
 
-      const body: unknown = await response.json()
+        if (!response.ok) {
+          const errorBody = body as {
+            error?: string
+          }
 
-      if (!response.ok) {
-        const errorBody = body as {
-          error?: string
+          throw new Error(
+            errorBody.error ?? "Could not load nearby restaurants."
+          )
         }
 
-        throw new Error(errorBody.error ?? "Could not load nearby restaurants.")
-      }
+        const data = body as nearbyRestaurantsResponse
 
-      const data = body as nearbyRestaurantsResponse
-
-      setRestaurants(data.restaurants)
-      setLocationLabel("your location")
-      setErrorMessage("")
-      setStatus("idle")
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Could not load nearby restaurants."
-      )
-
-      /*
-       * Keep showing the existing restaurants
-       * when the location request fails.
-       */
-      setStatus("error")
-    }
-  }
-
-  function useCurrentLocation() {
-    if (!navigator.geolocation) {
-      setErrorMessage("Your browser does not support location access.")
-      setStatus("error")
-      return
-    }
-
-    setErrorMessage("")
-    setStatus("locating")
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        void loadNearbyRestaurants(
-          position.coords.latitude,
-          position.coords.longitude
+        setRestaurants(data.restaurants)
+        setLoadErrorMessage("")
+        setLoadStatus("idle")
+      } catch (error) {
+        setLoadErrorMessage(
+          error instanceof Error
+            ? error.message
+            : "Could not load nearby restaurants."
         )
-      },
-      (error) => {
-        setErrorMessage(getLocationErrorMessage(error))
-        setStatus("error")
-      },
-      {
-        enableHighAccuracy: false,
-        maximumAge: 5 * 60 * 1000,
-        timeout: 10_000,
-      }
-    )
-  }
 
-  const isBusy = status === "locating" || status === "loading"
+        /*
+         * Keep showing the existing restaurants
+         * when the location request fails.
+         */
+        setLoadStatus("error")
+      }
+    },
+    []
+  )
+
+  // Load restaurants for the new location each time the browser reports one.
+  useEffect(() => {
+    if (coords) {
+      void loadNearbyRestaurants(coords.latitude, coords.longitude)
+    }
+  }, [coords, loadNearbyRestaurants])
+
+  const isBusy = locationStatus === "locating" || loadStatus === "loading"
+  const hasError = locationStatus === "error" || loadStatus === "error"
+  const errorMessage =
+    locationStatus === "error" ? locationErrorMessage : loadErrorMessage
 
   let buttonLabel = "Use my current location"
 
-  if (status === "locating") {
+  if (locationStatus === "locating") {
     buttonLabel = "Finding your location..."
   }
 
-  if (status === "loading") {
+  if (loadStatus === "loading") {
     buttonLabel = "Loading restaurants..."
   }
 
@@ -192,8 +170,8 @@ export function NearbyRestaurants({
             </h1>
 
             <p className="max-w-md text-lg font-semibold text-white/95">
-              Discover food from local kitchens in {locationLabel}, or join the
-              people behind your next meal.
+              Discover food from local kitchens in {city}, or join the people
+              behind your next meal.
             </p>
 
             <div className="max-w-xl space-y-4">
@@ -203,7 +181,7 @@ export function NearbyRestaurants({
                     aria-hidden="true"
                     className="size-4 text-brand-orange"
                   />
-                  {locationLabel}
+                  {city}
                 </span>
 
                 <input
@@ -223,7 +201,7 @@ export function NearbyRestaurants({
                 <button
                   type="button"
                   disabled={isBusy}
-                  onClick={useCurrentLocation}
+                  onClick={locate}
                   className="inline-flex items-center gap-2 rounded-lg text-sm font-bold text-white underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white disabled:opacity-80"
                 >
                   {isBusy ? (
@@ -238,13 +216,13 @@ export function NearbyRestaurants({
                   {buttonLabel}
                 </button>
 
-                {status === "locating" && (
+                {locationStatus === "locating" && (
                   <output className="block text-sm text-white/90">
                     Asking your browser for your location...
                   </output>
                 )}
 
-                {status === "loading" && (
+                {loadStatus === "loading" && (
                   <output className="block text-sm text-white/90">
                     Updating the restaurant list...
                   </output>
@@ -282,9 +260,7 @@ export function NearbyRestaurants({
                     {restaurants.length}{" "}
                     {restaurants.length === 1 ? "kitchen" : "kitchens"} nearby
                   </span>
-                  <span className="block text-xs text-zinc-500">
-                    in {locationLabel}
-                  </span>
+                  <span className="block text-xs text-zinc-500">in {city}</span>
                 </span>
               </div>
             )}
@@ -334,15 +310,20 @@ export function NearbyRestaurants({
         </section>
       )}
 
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
+      <div
+        className={cn(
+          "grid gap-10",
+          isLoggedIn && "lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start"
+        )}
+      >
         <div className="min-w-0 space-y-12">
-          {status === "error" && (
+          {hasError && (
             <Card className="border-destructive/40">
               <CardHeader>
                 <CardTitle>Location was not updated</CardTitle>
                 <CardDescription>
                   {errorMessage} You can continue browsing the restaurants near{" "}
-                  {locationLabel}.
+                  {city}.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -351,7 +332,7 @@ export function NearbyRestaurants({
           {restaurants.length === 0 ? (
             <Card>
               <CardHeader>
-                <CardTitle>No restaurants found near {locationLabel}</CardTitle>
+                <CardTitle>No restaurants found near {city}</CardTitle>
                 <CardDescription>
                   No active restaurants with available dishes were found near
                   this location.
@@ -375,7 +356,7 @@ export function NearbyRestaurants({
 
                       <p className="text-sm text-muted-foreground">
                         {cuisines && `${cuisines} · `}About{" "}
-                        {restaurant.distanceKm} km from {locationLabel}
+                        {restaurant.distanceKm} km from {city}
                       </p>
                     </div>
 
@@ -398,6 +379,7 @@ export function NearbyRestaurants({
                     {restaurant.items.map((item) => (
                       <MenuItemCard
                         item={item}
+                        isLoggedIn={isLoggedIn}
                         key={item.id}
                         restaurant={restaurant}
                       />
@@ -409,79 +391,81 @@ export function NearbyRestaurants({
           )}
         </div>
 
-        <aside
-          aria-label="Cart summary"
-          className="hidden lg:sticky lg:top-24 lg:block"
-        >
-          <section className="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-black/5">
-            <div className="flex items-center gap-3">
-              <span
-                aria-hidden="true"
-                className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-brand-orange-soft text-brand-orange"
-              >
-                <ShoppingBagIcon className="size-5" />
-              </span>
+        {isLoggedIn && (
+          <aside
+            aria-label="Cart summary"
+            className="hidden lg:sticky lg:top-24 lg:block"
+          >
+            <section className="rounded-3xl bg-white p-5 shadow-lg ring-1 ring-black/5">
+              <div className="flex items-center gap-3">
+                <span
+                  aria-hidden="true"
+                  className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-brand-orange-soft text-brand-orange"
+                >
+                  <ShoppingBagIcon className="size-5" />
+                </span>
 
-              <div className="min-w-0">
-                <h2 className="truncate font-heading text-lg font-bold">
-                  {cartItems[0]?.restaurantName ?? "Your cart"}
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  {cartCount === 0
-                    ? "No items yet"
-                    : `${cartCount} ${cartCount === 1 ? "item" : "items"}`}
-                </p>
+                <div className="min-w-0">
+                  <h2 className="truncate font-heading text-lg font-bold">
+                    {cartItems[0]?.restaurantName ?? "Your cart"}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {cartCount === 0
+                      ? "No items yet"
+                      : `${cartCount} ${cartCount === 1 ? "item" : "items"}`}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {cartItems.length === 0 ? (
-              <p className="mt-5 border-t border-border pt-5 text-sm text-muted-foreground">
-                Add dishes from a kitchen to start your order.
-              </p>
-            ) : (
-              <>
-                <ul className="mt-5 space-y-3 border-t border-border pt-5 text-sm">
-                  {cartItems.map((item) => (
-                    <li
-                      className="flex items-start justify-between gap-3"
-                      key={item.id}
-                    >
-                      <span className="flex min-w-0 items-start gap-2">
-                        <FoodMark veg={item.veg} />
-                        <span>
-                          {item.name}{" "}
-                          <span className="text-muted-foreground">
-                            × {item.quantity}
+              {cartItems.length === 0 ? (
+                <p className="mt-5 border-t border-border pt-5 text-sm text-muted-foreground">
+                  Add dishes from a kitchen to start your order.
+                </p>
+              ) : (
+                <>
+                  <ul className="mt-5 space-y-3 border-t border-border pt-5 text-sm">
+                    {cartItems.map((item) => (
+                      <li
+                        className="flex items-start justify-between gap-3"
+                        key={item.id}
+                      >
+                        <span className="flex min-w-0 items-start gap-2">
+                          <FoodMark veg={item.veg} />
+                          <span>
+                            {item.name}{" "}
+                            <span className="text-muted-foreground">
+                              × {item.quantity}
+                            </span>
                           </span>
                         </span>
-                      </span>
-                      <span className="font-semibold whitespace-nowrap">
-                        {formatPrice(item.priceInPaise * item.quantity)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                        <span className="font-semibold whitespace-nowrap">
+                          {formatPrice(item.priceInPaise * item.quantity)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
 
-                <div className="mt-5 flex items-center justify-between border-t border-border pt-5 font-bold">
-                  <span>Item total</span>
-                  <span>{formatPrice(cartTotal)}</span>
-                </div>
+                  <div className="mt-5 flex items-center justify-between border-t border-border pt-5 font-bold">
+                    <span>Item total</span>
+                    <span>{formatPrice(cartTotal)}</span>
+                  </div>
 
-                <Link
-                  href="/customer/order"
-                  className="mt-4 flex h-12 items-center justify-between rounded-2xl bg-brand-green px-5 font-bold text-white hover:bg-brand-green-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-orange"
-                >
-                  Checkout
-                  <ArrowRightIcon aria-hidden="true" className="size-5" />
-                </Link>
+                  <Link
+                    href="/customer/order"
+                    className="mt-4 flex h-12 items-center justify-between rounded-2xl bg-brand-green px-5 font-bold text-white hover:bg-brand-green-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-orange"
+                  >
+                    Checkout
+                    <ArrowRightIcon aria-hidden="true" className="size-5" />
+                  </Link>
 
-                <p className="mt-3 text-center text-xs text-muted-foreground">
-                  Final taxes &amp; delivery charges shown before payment
-                </p>
-              </>
-            )}
-          </section>
-        </aside>
+                  <p className="mt-3 text-center text-xs text-muted-foreground">
+                    Final taxes &amp; delivery charges shown before payment
+                  </p>
+                </>
+              )}
+            </section>
+          </aside>
+        )}
       </div>
     </>
   )
