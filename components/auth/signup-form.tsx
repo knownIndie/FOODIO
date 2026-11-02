@@ -119,7 +119,9 @@ export function SignupForm({
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                <FieldLabel htmlFor={field.name} className="font-bold">
+                  Name
+                </FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -129,6 +131,7 @@ export function SignupForm({
                   aria-invalid={isInvalid}
                   autoComplete="name"
                   placeholder="Aryan "
+                  className="h-11 rounded-xl border-border bg-card px-3.5"
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
@@ -142,7 +145,9 @@ export function SignupForm({
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Username</FieldLabel>
+                <FieldLabel htmlFor={field.name} className="font-bold">
+                  Username
+                </FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -152,6 +157,7 @@ export function SignupForm({
                   aria-invalid={isInvalid}
                   autoComplete="username"
                   placeholder="username001"
+                  className="h-11 rounded-xl border-border bg-card px-3.5"
                 />
                 <FieldDescription>
                   Use 3 to 30 letters, numbers, or underscores.
@@ -168,7 +174,9 @@ export function SignupForm({
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                <FieldLabel htmlFor={field.name} className="font-bold">
+                  Email
+                </FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -179,6 +187,7 @@ export function SignupForm({
                   aria-invalid={isInvalid}
                   autoComplete="email"
                   placeholder="you@example.com"
+                  className="h-11 rounded-xl border-border bg-card px-3.5"
                 />
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
               </Field>
@@ -192,7 +201,9 @@ export function SignupForm({
               field.state.meta.isTouched && !field.state.meta.isValid
             return (
               <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                <FieldLabel htmlFor={field.name} className="font-bold">
+                  Password
+                </FieldLabel>
                 <Input
                   id={field.name}
                   name={field.name}
@@ -202,6 +213,7 @@ export function SignupForm({
                   onChange={(event) => field.handleChange(event.target.value)}
                   aria-invalid={isInvalid}
                   autoComplete="new-password"
+                  className="h-11 rounded-xl border-border bg-card px-3.5"
                 />
                 <FieldDescription>Use at least 8 characters.</FieldDescription>
                 {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -214,7 +226,7 @@ export function SignupForm({
           <p
             className={
               message.type === "success"
-                ? "text-sm text-emerald-700"
+                ? "text-sm text-brand-green"
                 : "text-sm text-destructive"
             }
             role="status"
@@ -226,12 +238,17 @@ export function SignupForm({
         <form.Subscribe selector={(state) => state.isSubmitting}>
           {(isSubmitting) => (
             <div className="grid gap-2">
-              <Button type="submit" disabled={isSubmitting} className="w-full">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="h-11 w-full rounded-xl font-bold"
+              >
                 {isSubmitting ? "Creating account..." : "Create account"}
               </Button>
               <Button
                 type="button"
                 variant="outline"
+                className="h-11 rounded-xl bg-card font-bold"
                 disabled={isSubmitting}
                 onClick={() => {
                   form.setFieldValue("name", testDetails.name)
@@ -251,7 +268,7 @@ export function SignupForm({
           Already have an account?{" "}
           <Link
             href={loginHref}
-            className="font-medium text-foreground underline"
+            className="font-semibold text-brand-orange underline underline-offset-4 hover:text-brand-orange-hover"
           >
             Log in
           </Link>

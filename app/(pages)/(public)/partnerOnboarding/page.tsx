@@ -74,7 +74,7 @@ export default async function PartnerOnboardingPage() {
           </p>
           <h1
             id="partner-heading"
-            className="font-heading text-4xl font-semibold tracking-tight text-balance sm:text-5xl lg:text-6xl"
+            className="font-heading text-4xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl"
           >
             Good food starts with people like you.
           </h1>
@@ -93,7 +93,7 @@ export default async function PartnerOnboardingPage() {
               className="flex flex-col rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8"
             >
               <div className="mb-6 flex items-center gap-3">
-                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-brand-orange-soft text-brand-orange">
                   <partner.icon className="size-6" aria-hidden="true" />
                 </span>
                 <p className="text-sm font-medium text-muted-foreground">
@@ -102,7 +102,7 @@ export default async function PartnerOnboardingPage() {
               </div>
               <h2
                 id={`${partner.id}-heading`}
-                className="font-heading text-2xl font-semibold tracking-tight sm:text-3xl"
+                className="font-heading text-2xl font-bold tracking-tight sm:text-3xl"
               >
                 {partner.title}
               </h2>
@@ -115,7 +115,7 @@ export default async function PartnerOnboardingPage() {
                 {partner.benefits.map((benefit) => (
                   <li key={benefit} className="flex gap-3 text-sm leading-6">
                     <CheckIcon
-                      className="mt-1 size-4 shrink-0 text-primary"
+                      className="mt-1 size-4 shrink-0 text-brand-green"
                       aria-hidden="true"
                     />
                     <span>{benefit}</span>
@@ -123,7 +123,7 @@ export default async function PartnerOnboardingPage() {
                 ))}
               </ul>
 
-              <div className="mt-8 rounded-2xl bg-muted/50 p-5">
+              <div className="mt-8 rounded-2xl bg-page-background p-5">
                 <h3 className="text-base font-semibold">How to join</h3>
                 <ol className="mt-4 space-y-4">
                   {partner.steps.map((step, index) => (
@@ -144,7 +144,7 @@ export default async function PartnerOnboardingPage() {
                 <Button
                   nativeButton={false}
                   size="lg"
-                  className="h-auto min-h-11 w-full whitespace-normal py-3"
+                  className="h-auto min-h-11 w-full whitespace-normal rounded-xl py-3 font-bold"
                   render={<Link href={partner.signup} />}
                 >
                   {partner.button}
@@ -154,7 +154,7 @@ export default async function PartnerOnboardingPage() {
                   Already joined?{" "}
                   <Link
                     href={partner.login}
-                    className="font-medium text-foreground underline underline-offset-4 hover:text-primary"
+                    className="font-semibold text-brand-orange underline underline-offset-4 hover:text-brand-orange-hover"
                   >
                     {partner.loginLabel}
                   </Link>
@@ -168,7 +168,7 @@ export default async function PartnerOnboardingPage() {
           Looking for a restaurant plan?{" "}
           <Link
             href="/pricing"
-            className="font-medium text-foreground underline underline-offset-4 hover:text-primary"
+            className="font-semibold text-brand-orange underline underline-offset-4 hover:text-brand-orange-hover"
           >
             Compare plans and limits
           </Link>

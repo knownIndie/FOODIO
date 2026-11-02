@@ -1,6 +1,7 @@
 "use client"
 
 import { Minus, Plus } from "lucide-react"
+import Link from "next/link"
 import { useState } from "react"
 import { type CartItemInput, useCart } from "@/components/cart/cart-provider"
 import { Button } from "@/components/ui/button"
@@ -14,19 +15,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 
-export function AddToCartButton({ item }: { item: CartItemInput }) {
-  const { items, addItem, replaceCart, removeItem, updateQuantity } = useCart()
+export function AddToCartButton({
+  item,
+  isLoggedIn,
+}: {
+  item: CartItemInput
+  isLoggedIn: boolean
+}) {
+  const { items, addItem, replaceCart } = useCart()
   /*
  it is supposed to do the followings
  - add the item to the cart if it is from the first restaurant only
  - if a new item from a new restaurant is added , ask if the user want to replace the cart and make it add the current item only
   */
   const [dialogOpen, setDialogOpen] = useState(false)
-  // this tells us if the cart has the item already in the cart or not
-  const cartItem = items.find((cartItem) => cartItem.id === item.id)
-
-  // this tells us how many of the item are already in the cart
-  const quantity = cartItem?.quantity ?? 0
 
   function handleAddToCartButton() {
     const firstItemInCart = items[0]
@@ -39,43 +41,35 @@ export function AddToCartButton({ item }: { item: CartItemInput }) {
     addItem(item)
   }
 
-  function handleDecreaseQuantity() {
-    if (quantity === 1) {
-      removeItem(item.id)
-      return
-    }
-    updateQuantity(item.id, -1)
-  }
-
   function handleReplaceCart() {
     replaceCart(item)
     setDialogOpen(false)
   }
 
+  if (!isLoggedIn) {
+    return (
+      <Button
+        variant="ghost"
+        nativeButton={false}
+        aria-label={`Log in to add ${item.name} to cart`}
+        render={<Link href="/login/customer?returnTo=%2Fcustomer" />}
+        className="h-10 rounded-full bg-white px-6 font-heading text-sm font-bold text-brand-orange shadow-md ring-1 ring-black/5 hover:bg-brand-orange-soft hover:text-brand-orange"
+      >
+        ADD
+      </Button>
+    )
+  }
+
   return (
     <>
-      {quantity === 0 ? (
-        <Button variant="secondary" onClick={handleAddToCartButton}>
-          {" "}
-          Add To Cart
-        </Button>
-      ) : (
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleDecreaseQuantity}
-          >
-            <Minus />
-          </Button>
-
-          <span className="min-w-8 text-center">{quantity}</span>
-
-          <Button variant="outline" size="icon" onClick={handleAddToCartButton}>
-            <Plus />
-          </Button>
-        </div>
-      )}
+      <Button
+        variant="ghost"
+        aria-label={`Add ${item.name} to cart`}
+        onClick={handleAddToCartButton}
+        className="h-10 rounded-full bg-white px-6 font-heading text-sm font-bold text-brand-orange shadow-md ring-1 ring-black/5 hover:bg-brand-orange-soft hover:text-brand-orange"
+      >
+        ADD
+      </Button>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
@@ -105,5 +99,57 @@ export function AddToCartButton({ item }: { item: CartItemInput }) {
         </DialogContent>
       </Dialog>
     </>
+  )
+}
+
+// Shows how many of this dish are in the cart, with − and + buttons.
+export function QuantitySelector({ item }: { item: CartItemInput }) {
+  const { items, removeItem, updateQuantity } = useCart()
+
+  // this tells us how many of the item are already in the cart
+  const quantity =
+    items.find((cartItem) => cartItem.id === item.id)?.quantity ?? 0
+
+  if (quantity === 0) {
+    return null
+  }
+
+  function handleDecreaseQuantity() {
+    if (quantity === 1) {
+      removeItem(item.id)
+      return
+    }
+    updateQuantity(item.id, -1)
+  }
+
+  return (
+    <div className="flex h-9 items-center gap-1 rounded-full border border-border bg-white px-1">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label={`Decrease ${item.name} quantity`}
+        onClick={handleDecreaseQuantity}
+        className="rounded-full text-brand-orange hover:bg-brand-orange-soft hover:text-brand-orange"
+      >
+        <Minus />
+      </Button>
+
+      <span
+        aria-live="polite"
+        className="min-w-6 text-center font-heading text-sm font-bold"
+      >
+        {quantity}
+      </span>
+
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label={`Increase ${item.name} quantity`}
+        onClick={() => updateQuantity(item.id, 1)}
+        className="rounded-full text-brand-orange hover:bg-brand-orange-soft hover:text-brand-orange"
+      >
+        <Plus />
+      </Button>
+    </div>
   )
 }
