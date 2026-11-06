@@ -57,6 +57,14 @@ const portals = [
     badge: "Restricted access",
     actions: [{ label: "Admin login", href: "/login/admin", primary: true }],
   },
+  {
+    title: "Restaurant Admin",
+    description: "Restricted access for FoodIO administrators.",
+    icon: ShieldCheckIcon,
+    badge: "Restricted access",
+    actions: [{ label: "Admin login", href: "/login/admin", primary: true }],
+  },
+
 ]
 
 export default async function HomePage() {
