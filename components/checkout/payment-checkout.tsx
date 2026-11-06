@@ -211,7 +211,7 @@ export function PaymentCheckout() {
           }
           className="h-12 w-full rounded-xl bg-brand-green text-base font-bold text-white hover:bg-brand-green-hover"
         >
-          {isSubmitting ? "Payment in progress…" : "Continue to payment"}
+          {isSubmitting ? "Payment in progress…" : "Pay now"}
         </Button>
 
         {message && (
