@@ -1,4 +1,9 @@
-import { Settings2Icon, StoreIcon, TerminalSquareIcon } from "lucide-react"
+import {
+  ReceiptIcon,
+  Settings2Icon,
+  StoreIcon,
+  TerminalSquareIcon,
+} from "lucide-react"
 
 export type NavItem = {
   title: string
@@ -33,5 +38,11 @@ export const adminNav: NavItem[] = [
     icon: <StoreIcon />,
     isActive: true,
     items: [{ title: "Review applications", url: "/dashboard/admin" }],
+  },
+  {
+    title: "Orders",
+    url: "",
+    icon: <ReceiptIcon />,
+    items: [{ title: "All orders", url: "/dashboard/admin/orders" }],
   },
 ]

@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutDashboardIcon, LogOutIcon } from "lucide-react"
+import { LayoutDashboardIcon, LogOutIcon, ReceiptIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -89,6 +89,10 @@ export function AccountMenu({
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        <DropdownMenuItem render={<Link href="/customer/orders" />}>
+          <ReceiptIcon />
+          My orders
+        </DropdownMenuItem>
         <DropdownMenuItem render={<Link href={dashboardHref} />}>
           <LayoutDashboardIcon />
           Open dashboard
