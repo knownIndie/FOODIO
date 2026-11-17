@@ -1,6 +1,5 @@
 "use client"
 
-import { Settings2Icon, TerminalSquareIcon } from "lucide-react"
 import type * as React from "react"
 import { NavMain } from "@/components/ui/nav-main"
 import { NavUser } from "@/components/ui/nav-user"
@@ -12,14 +11,21 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { TeamSwitcher } from "@/components/ui/team-switcher"
+import type { NavItem } from "@/lib/navigation/nav-config"
 import type { currentProfileType } from "@/lib/types/type"
 
-// This is sample data.
-
+// The menu comes from the caller (see lib/navigation/nav-config.tsx),
+// so admin and restaurant areas can share this component.
 export function AppSidebar({
   profile,
+  navMain,
+  navLabel,
   ...props
-}: React.ComponentProps<typeof Sidebar> & { profile: currentProfileType }) {
+}: React.ComponentProps<typeof Sidebar> & {
+  profile: currentProfileType
+  navMain: NavItem[]
+  navLabel?: string
+}) {
   const { name, email } = profile
 
   const data = {
@@ -28,121 +34,16 @@ export function AppSidebar({
       email,
       avatar: "/avatars/shadcn.jpg",
     },
-    teams: [
-      // {
-      //   name: "Acme Inc",
-      //   logo: <GalleryVerticalEndIcon />,
-      //   plan: "Enterprise",
-      // },
-      // {
-      //   name: "Acme Corp.",
-      //   logo: <AudioLinesIcon />,
-      //   plan: "Startup",
-      // },
-      // {
-      //   name: "Evil Corp.",
-      //   logo: <TerminalIcon />,
-      //   plan: "Free",
-      // },
-    ],
-    navMain: [
-      {
-        title: "Restraurant",
-        url: "",
-        icon: <TerminalSquareIcon />,
-        isActive: true,
-        items: [
-          {
-            title: "All",
-            url: "/dashboard/",
-          },
-          // {
-          //   title: "Starred",
-          //   url: "#",
-          // },
-          // {
-          //   title: "Settings",
-          //   url: "#",
-          // },
-        ],
-      },
-      /*
-      {
-        title: "placeholder1",
-        url: "#",
-        icon: <BotIcon />,
-        items: [
-          {
-            title: "Genesis",
-            url: "#",
-          },
-          {
-            title: "Explorer",
-            url: "#",
-          },
-          {
-            title: "Quantum",
-            url: "#",
-          },
-        ],
-      },
-      {
-        title: "placeholder2",
-        url: "#",
-        icon: <BookOpenIcon />,
-        items: [
-          {
-            title: "Introduction",
-            url: "#",
-          },
-          {
-            title: "Get Started",
-            url: "#",
-          },
-          {
-            title: "Tutorials",
-            url: "#",
-          },
-          {
-            title: "Changelog",
-            url: "#",
-          },
-        ],
-      },
-      */
-      {
-        title: "Settings",
-        url: "#",
-        icon: <Settings2Icon />,
-        items: [
-          // {
-          //   title: "General",
-          //   url: "#",
-          // },
-          // {
-          //   title: "Team",
-          //   url: "#",
-          // },
-          // {
-          //   title: "Billing",
-          //   url: "#",
-          // },
-          // {
-          //   title: "Limits",
-          //   url: "#",
-          // },
-        ],
-      },
-    ],
+    teams: [],
   }
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        {/*<NavProjects projects={data.projects} />*/}
+        <NavMain items={navMain} label={navLabel} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />

@@ -69,6 +69,17 @@ export default async function AdminRestaurantReviewPage({
         Back to admin dashboard
       </Button>
 
+      <Button
+        nativeButton={false}
+        variant="outline"
+        className="w-fit"
+        render={
+          <Link href={`/dashboard/admin/restaurants/${restaurantId}/orders`} />
+        }
+      >
+        View orders
+      </Button>
+
       <Card>
         <CardHeader className="border-b">
           <div className="mb-2 flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">

@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation"
 import { AppSidebar } from "@/components/ui/app-sidebar"
 import {
   Breadcrumb,
@@ -12,24 +11,25 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { currentProfile } from "@/lib/auth/current-profile"
+import type { NavItem } from "@/lib/navigation/nav-config"
+import type { currentProfileType } from "@/lib/types/type"
 
-export default async function DashboardLayout({
+// Shared shell for every logged-in area: sidebar, header and page content.
+// Each area passes its own menu through `navMain`.
+export function AppShell({
+  profile,
+  navMain,
+  navLabel,
   children,
-}: Readonly<{ children: React.ReactNode }>) {
-  const profile = await currentProfile()
-
-  if (!profile) {
-    redirect("/login")
-  }
-
-  if (!profile.emailVerifiedAt) {
-    redirect("/verify-email?returnTo=/dashboard")
-  }
-
+}: Readonly<{
+  profile: currentProfileType
+  navMain: NavItem[]
+  navLabel?: string
+  children: React.ReactNode
+}>) {
   return (
     <SidebarProvider>
-      <AppSidebar profile={profile} />
+      <AppSidebar profile={profile} navMain={navMain} navLabel={navLabel} />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 border-b">
           <div className="flex items-center gap-2 px-3">
@@ -45,10 +45,6 @@ export default async function DashboardLayout({
                     {profile.username}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                {/*<BreadcrumbSeparator className="hidden md:block" />*/}
-                {/*<BreadcrumbItem>
-                  <BreadcrumbPage>{profile}</BreadcrumbPage>
-                </BreadcrumbItem>*/}
               </BreadcrumbList>
             </Breadcrumb>
           </div>

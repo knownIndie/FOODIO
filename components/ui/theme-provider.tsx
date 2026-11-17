@@ -1,34 +1,23 @@
 "use client"
 
-import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes"
-import * as React from "react"
+import { ThemeProvider as NextThemesProvider } from "next-themes"
+import type * as React from "react"
 
+// FoodIO is light-only: every page is designed on the light palette in
+// app/globals.css, so the theme is forced to light regardless of the OS setting.
 function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="system"
-      enableSystem
+      forcedTheme="light"
+      enableSystem={false}
       enableColorScheme
       storageKey="foodio-theme"
       disableTransitionOnChange
     >
-      <SystemThemeSync />
       {children}
     </NextThemesProvider>
   )
-}
-
-function SystemThemeSync() {
-  const { theme, setTheme } = useTheme()
-
-  React.useEffect(() => {
-    if (theme !== "system") {
-      setTheme("system")
-    }
-  }, [setTheme, theme])
-
-  return null
 }
 
 export { ThemeProvider }

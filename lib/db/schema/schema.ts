@@ -94,6 +94,13 @@ export const foodOrderPaymentStatusEnum = pgEnum("food_order_payment_status", [
   "PAID",
 ])
 
+// Demo delivery result, picked at random when a partner claims the order and
+// revealed to everyone DELIVERY_SIMULATION_MS later (see lib/orders/delivery-status.ts).
+export const deliveryOutcomeEnum = pgEnum("delivery_outcome", [
+  "DELIVERED",
+  "CANCELLED",
+])
+
 export const paymentAttemptStatusEnum = pgEnum("payment_attempt_status", [
   "CREATED", // Razorpay created the payment
   "AUTHORIZED", // Payment approved; capture is pending
@@ -320,6 +327,14 @@ export const foodOrders = pgTable(
       .defaultNow(),
 
     paidAt: timestamp("paid_at", { withTimezone: true }),
+
+    // Set when a delivery partner claims the order. NULL means nobody has it yet.
+    deliveryPartnerId: integer("delivery_partner_id").references(
+      () => profiles.id,
+      { onDelete: "restrict" }
+    ),
+    claimedAt: timestamp("claimed_at", { withTimezone: true }),
+    deliveryOutcome: deliveryOutcomeEnum("delivery_outcome"),
   },
   (table) => [
     unique("food_orders_checkout_request_unique").on(
@@ -328,6 +343,7 @@ export const foodOrders = pgTable(
     ),
 
     index("food_orders_customer_idx").on(table.customerId),
+    index("food_orders_delivery_partner_idx").on(table.deliveryPartnerId),
     // index : adds a database index for faster lookups on the customerId column
     check("food_orders_amount_positive", sql`${table.amountInPaise} > 0`),
     // check : adds database rules, such as “quantity must be positive

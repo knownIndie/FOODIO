@@ -47,7 +47,7 @@ export default async function AdminDashboardPage() {
     )
   }
   return (
-    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 py-6">
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 py-4">
       <PortalPlaceholder
         label="Admin"
         title="Admin dashboard"
